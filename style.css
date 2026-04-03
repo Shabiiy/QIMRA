@@ -1424,4 +1424,10 @@ p {
     backdrop-filter: blur(var(--blur-amt, 10px));
     -webkit-backdrop-filter: blur(var(--blur-amt, 10px));
   }
+
+  .feature-item.touch-active, .dev-link-btn:active, .dev-link-btn.touch-active {
+    background: rgba(255, 215, 0, 0.1);
+    transform: scale(0.96);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  }
 }
