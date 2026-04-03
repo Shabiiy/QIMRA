@@ -1152,8 +1152,9 @@ p {
   }
   
   .side-logo-wrapper {
-    width: 60vw;
+    width: 40vw; /* Smaller as requested */
     right: 5vw;
+    left: auto;
     top: 50%;
     transform: translateY(-50%);
     opacity: 0.15;
@@ -1162,7 +1163,7 @@ p {
 
   .side-hero-logo {
     height: auto;
-    max-width: 50vw; /* Much smaller to fit screen */
+    max-width: 40vw;
   }
 
   .interactive-square {
@@ -1249,13 +1250,25 @@ p {
 /* Tweaks for landscape phones */
 @media screen and (max-height: 500px) and (orientation: landscape) {
   .logo-switcher {
-    max-width: 150px;
-    height: 60px;
-    margin-left: auto;
-    margin-right: 5vw;
+    max-width: 130px;
+    height: 50px;
     position: absolute;
-    right: 5vw;
-    top: 5vh;
+    left: 5vw !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+  }
+  
+  /* Shrink bulb components on mobile */
+  #loader-content {
+    transform: scale(0.7);
+    transform-origin: center center;
+  }
+  
+  .hold-text {
+    font-size: 1.2rem !important;
+    letter-spacing: 2px !important;
   }
   
   .hero-text-container {
@@ -1434,31 +1447,5 @@ p {
     background: rgba(255, 215, 0, 0.1);
     transform: scale(0.96);
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-  }
-}
-
-/* ========================================= */
-/* 📱 MOBILE STILL BACKGROUNDS */
-/* ========================================= */
-
-#mobile-stills-container {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.mobile-still-bg {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-@media (max-width: 1024px) {
-  #mobile-stills-container {
-    display: block;
   }
 }
