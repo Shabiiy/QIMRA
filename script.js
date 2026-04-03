@@ -1,6 +1,112 @@
 gsap.registerPlugin(ScrollTrigger);
 
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+// --- MOBILE CANVAS SEQUENCE LOGIC ---
+class MobileSequence {
+    constructor() {
+        this.canvas = document.getElementById('mobile-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.frames = {
+            1: [], 2: [], 3: [], 4: []
+        };
+        this.totalFrames = 240;
+        this.currentSlide = 1;
+        this.isLoaded = false;
+        
+        if (isMobile) {
+            this.init();
+        }
+    }
+
+    async init() {
+        // Preload first frames immediately
+        await this.preloadSlide(1);
+        this.draw(1, 1);
+        // Preload rest in background
+        for (let i = 2; i <= 4; i++) {
+            this.preloadSlide(i);
+        }
+    }
+
+    async preloadSlide(slideIndex) {
+        if (this.frames[slideIndex].length > 0) return;
+        
+        const promises = [];
+        for (let i = 1; i <= this.totalFrames; i++) {
+            const num = String(i).padStart(3, '0');
+            const path = `mobileview/SLIDE${slideIndex}/ezgif-frame-${num}.jpg`;
+            promises.push(this.loadImage(path));
+        }
+        
+        this.frames[slideIndex] = await Promise.all(promises);
+        if (slideIndex === 1) this.isLoaded = true;
+    }
+
+    loadImage(src) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null); // Handle missing frames gracefully
+            img.src = src;
+        });
+    }
+
+    draw(slideIndex, frameIndex) {
+        if (!this.canvas || !this.ctx) return;
+        
+        // Ensure frameIndex is within 1-240
+        frameIndex = Math.max(1, Math.min(this.totalFrames, Math.round(frameIndex)));
+        const img = this.frames[slideIndex][frameIndex - 1];
+        
+        if (!img) return;
+
+        // Cover logic
+        const canvasWidth = window.innerWidth;
+        const canvasHeight = window.innerHeight;
+        this.canvas.width = canvasWidth;
+        this.canvas.height = canvasHeight;
+        
+        const imgRatio = img.width / img.height;
+        const canvasRatio = canvasWidth / canvasHeight;
+        
+        let drawWidth, drawHeight, x, y;
+        
+        if (canvasRatio > imgRatio) {
+            drawWidth = canvasWidth;
+            drawHeight = canvasWidth / imgRatio;
+            x = 0;
+            y = (canvasHeight - drawHeight) / 2;
+        } else {
+            drawWidth = canvasHeight * imgRatio;
+            drawHeight = canvasHeight;
+            x = (canvasWidth - drawWidth) / 2;
+            y = 0;
+        }
+        
+        this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        this.ctx.drawImage(img, x, y, drawWidth, drawHeight);
+    }
+
+    async animate(slideIndex, direction = 'forward', onComplete) {
+        this.currentSlide = slideIndex;
+        let start = (direction === 'forward') ? 1 : this.totalFrames;
+        let end = (direction === 'forward') ? this.totalFrames : 1;
+        
+        gsap.to({ frame: start }, {
+            frame: end,
+            duration: 1.5, // Match desktop video duration approx
+            ease: "none",
+            onUpdate: function() {
+                mobileSeq.draw(slideIndex, this.targets()[0].frame);
+            },
+            onComplete: onComplete
+        });
+    }
+}
+
+const mobileSeq = new MobileSequence();
 
 const customCursor = document.getElementById("cursor");
 const cursorFollower = document.getElementById("cursor-follower");
@@ -149,7 +255,9 @@ function revealMainContent() {
   gsap.set([".logo-switcher", ".side-hero-logo", ".features-list", "#off-button", ".interactive-square"], { opacity: 0 });
   
   gsap.set(sectionElements[0], { opacity: 1, visibility: "visible", pointerEvents: "auto" });
-  if (videos[0]) {
+  if (isMobile) {
+      mobileSeq.draw(1, 1);
+  } else if (videos[0]) {
       videos[0].style.opacity = 1;
       // Force a frame on mobile by seeking slightly past zero
       videos[0].currentTime = 0.05; 
@@ -394,6 +502,30 @@ function goToNextSlide() {
 
   const activeVideo = videos[currentSectionIndex];
   const nextVideo = videos[nextSectionIndex];
+
+  if (isMobile) {
+      // 📱 MOBILE: Frame-based Canvas Animation
+      mobileSeq.animate(currentSectionIndex + 1, 'forward', () => {
+          currentSectionIndex = nextSectionIndex;
+          gsap.set(nextSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
+          setTimeout(() => { scrollingLocked = false; }, 800);
+      });
+
+      // Trigger UI entrance halfway through
+      setTimeout(() => {
+          gsap.set(nextSec, { visibility: "visible", opacity: 1 });
+          if (nextContent) {
+              const enterFrom = { opacity: 0, top: 200, left: 0, scale: 0.95 };
+              if (nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4')) {
+                enterFrom.left = 200; enterFrom.top = 0;
+              }
+              gsap.fromTo(nextContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "left,top,scale" });
+              nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+          }
+      }, 750);
+      
+      return; 
+  }
   
   if (nextVideo) {
       nextVideo.pause();
@@ -505,6 +637,35 @@ function goToPrevSlide() {
   const revVideo = revVideos[prevSectionIndex];
   const targetForwardVideo = videos[prevSectionIndex];
 
+  if (isMobile) {
+      // 📱 MOBILE: Frame-based Canvas Animation (BACKWARD)
+      mobileSeq.animate(prevSectionIndex + 1, 'backward', () => {
+          currentSectionIndex = prevSectionIndex;
+          gsap.set(prevSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
+          setTimeout(() => { scrollingLocked = false; }, 800);
+      });
+
+      // Trigger UI entrance halfway through
+      setTimeout(() => {
+          if (prevSectionIndex === 0) {
+              gsap.to("#off-button", { opacity: 1, duration: 1.5, ease: "power3.out" });
+              gsap.fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              animateSquaresIn();
+          } else if (prevContent) {
+              const enterFrom = { opacity: 0, top: -200, left: 0, scale: 0.95 };
+              if (prevSec.classList.contains('sec-2') || prevSec.classList.contains('sec-4')) {
+                enterFrom.left = -200; enterFrom.top = 0;
+              }
+              gsap.fromTo(prevContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "left,top,scale" });
+              prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+          }
+      }, 750);
+      
+      return;
+  }
+  
   if (revVideo) {
       activeTransitionVideo = revVideo;
       revVideo.style.opacity = 1;
@@ -528,7 +689,7 @@ function goToPrevSlide() {
                  gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
                  animateSquaresIn();
               } else if (prevContent) {
-                 gsap.set(prevContent, { position: "relative" });
+                 gsap.set(prevContent, { position: "relative", cursor: "pointer", transition: "all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)", overflow: "visible" });
                  const enterFrom = { opacity: 0, top: -250, left: 0, scale: 0.95 };
                  if (prevSec.classList.contains('sec-2') || prevSec.classList.contains('sec-4')) {
                     enterFrom.left = -500; enterFrom.top = 0; // Mirror exit direction
@@ -666,23 +827,29 @@ function skipToSection(targetIdx) {
     gsap.set(currentSec, { visibility: "hidden", pointerEvents: "none" });
 
     // Switch background videos
-    const targetVideoIdx = Math.min(targetIdx, videos.length - 1);
-    const isLastSlide = (targetIdx >= videos.length);
-    
-    // Hide ALL videos first
-    videos.forEach(v => { if(v) v.style.opacity = 0; });
-    revVideos.forEach(rv => { if(rv) rv.style.opacity = 0; });
+    if (isMobile) {
+        const slideToDraw = Math.min(targetIdx + 1, 4);
+        const frameToDraw = (targetIdx === 4) ? 240 : 1;
+        mobileSeq.draw(slideToDraw, frameToDraw);
+    } else {
+        const targetVideoIdx = Math.min(targetIdx, videos.length - 1);
+        const isLastSlide = (targetIdx >= videos.length);
+        
+        // Hide ALL videos first
+        videos.forEach(v => { if(v) v.style.opacity = 0; });
+        revVideos.forEach(rv => { if(rv) rv.style.opacity = 0; });
 
-    const v = isLastSlide ? revVideos[targetVideoIdx] : videos[targetVideoIdx];
-    
-    if (v) {
-       v.pause();
-       // Use first frame of Slide4_Rev (which corresponds to Slide4_End/Section 5)
-       v.currentTime = 0; 
-       
-       setTimeout(() => {
-          gsap.to(v, { opacity: 1, duration: 0.8 });
-       }, 250);
+        const v = isLastSlide ? revVideos[targetVideoIdx] : videos[targetVideoIdx];
+        
+        if (v) {
+           v.pause();
+           // Use first frame of Slide4_Rev (which corresponds to Slide4_End/Section 5)
+           v.currentTime = 0; 
+           
+           setTimeout(() => {
+              gsap.to(v, { opacity: 1, duration: 0.8 });
+           }, 250);
+        }
     }
 
     // Fade in next section UI
@@ -812,9 +979,75 @@ function initFooterLinks() {
   }
 }
 
+function initBookshelfLogic() {
+  const books = document.querySelectorAll('.book');
+  
+  books.forEach(book => {
+    book.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      const isOpen = book.classList.contains('open');
+      const cupboard = book.closest('.cupboard');
+      
+      // Close all other books first
+      document.querySelectorAll('.book.open').forEach(b => {
+        b.classList.remove('open');
+        const c = b.closest('.cupboard');
+        if (c) c.style.zIndex = "10";
+      });
+      
+      if (!isOpen && cupboard) {
+        // Calculate center of the cupboard for the book to land in
+        const cupboardRect = cupboard.getBoundingClientRect();
+        const bookRect = book.getBoundingClientRect();
+        
+        const cupCenterX = cupboardRect.left + (cupboardRect.width / 2);
+        const cupCenterY = cupboardRect.top + (cupboardRect.height / 2);
+        
+        const bookCenterX = bookRect.left + (bookRect.width / 2);
+        const bookCenterY = bookRect.top + (bookRect.height / 2);
+        
+        // Calculate the centered move but nudge UP by 50px
+        let moveX = cupCenterX - bookCenterX;
+        let moveY = (cupCenterY - bookCenterY) - 50; 
+        
+        // Custom: If it's the LEFTMOST cupboard, nudge it slightly to the RIGHT (+70px) 
+        // to move it away from the screen edge
+        const shelves = document.querySelectorAll('.cupboard');
+        if (cupboard === shelves[0]) {
+           moveX += 70;
+        }
+        
+        book.classList.add('open');
+        
+        // Apply the offset
+        book.style.setProperty('--center-x', `${moveX}px`);
+        book.style.setProperty('--center-y', `${moveY}px`);
+        
+        // Bring cupboard to the front
+        cupboard.style.zIndex = "3000";
+      } else {
+        book.classList.remove('open');
+        if (cupboard) cupboard.style.zIndex = "10";
+      }
+    });
+  });
+
+  // Close book when clicked elsewhere
+  window.addEventListener('click', () => {
+    document.querySelectorAll('.book.open').forEach(b => {
+      b.classList.remove('open');
+      const cupboard = b.closest('.cupboard');
+      if (cupboard) cupboard.style.zIndex = "10";
+    });
+  });
+}
+
 // Run on boot
 initFooterLinks();
+initBookshelfLogic();
 function preloadVideosForIndex(idx) {
+  if (isMobile) return;
   // Always ensure current, next, and prev are loading
   const targets = [idx, idx + 1, idx - 1];
   targets.forEach(i => {

@@ -39,14 +39,15 @@
 
   <!-- BG Videos instead of sequence -->
   <div id="video-container">
-    <video id="vid-1" src="assets/SLIDE 1.mp4" poster="assets/BULBON still.png" muted playsinline preload="auto" class="bg-vid"></video>
-    <video id="vid-1-rev" src="assets/SLIDE 1 Reverse.mp4" poster="assets/Behind the magic still.jpeg" muted playsinline preload="auto" class="bg-vid"></video>
-    <video id="vid-2" src="assets/SLIDE2.mp4" poster="assets/Behind the magic still.jpeg" muted playsinline preload="none" class="bg-vid"></video>
-    <video id="vid-2-rev" src="assets/SLIDE2 Reverse.mp4" poster="assets/playground still.png" muted playsinline preload="none" class="bg-vid"></video>
-    <video id="vid-3" src="assets/SLIDE3.mp4" poster="assets/playground still.png" muted playsinline preload="none" class="bg-vid"></video>
-    <video id="vid-3-rev" src="assets/SLIDE3 Reverse.mp4" poster="assets/made with magic still.png" muted playsinline preload="none" class="bg-vid"></video>
-    <video id="vid-4" src="assets/SLIDE4.mp4" poster="assets/made with magic still.png" muted playsinline preload="none" class="bg-vid"></video>
-    <video id="vid-4-rev" src="assets/SLIDE4 Reverse.mp4" poster="assets/Knock on our door still.jpeg" muted playsinline preload="none" class="bg-vid"></video>
+    <canvas id="mobile-canvas"></canvas>
+    <video id="vid-1" src="assets/SLIDE 1.mp4" poster="assets/BULBON still.png" muted playsinline preload="auto" class="bg-vid desktop-only-vid"></video>
+    <video id="vid-1-rev" src="assets/SLIDE 1 Reverse.mp4" poster="assets/Behind the magic still.jpeg" muted playsinline preload="auto" class="bg-vid desktop-only-vid"></video>
+    <video id="vid-2" src="assets/SLIDE2.mp4" poster="assets/Behind the magic still.jpeg" muted playsinline preload="none" class="bg-vid desktop-only-vid"></video>
+    <video id="vid-2-rev" src="assets/SLIDE2 Reverse.mp4" poster="assets/playground still.png" muted playsinline preload="none" class="bg-vid desktop-only-vid"></video>
+    <video id="vid-3" src="assets/SLIDE3.mp4" poster="assets/playground still.png" muted playsinline preload="none" class="bg-vid desktop-only-vid"></video>
+    <video id="vid-3-rev" src="assets/SLIDE3 Reverse.mp4" poster="assets/made with magic still.png" muted playsinline preload="none" class="bg-vid desktop-only-vid"></video>
+    <video id="vid-4" src="assets/SLIDE4.mp4" poster="assets/made with magic still.png" muted playsinline preload="none" class="bg-vid desktop-only-vid"></video>
+    <video id="vid-4-rev" src="assets/SLIDE4 Reverse.mp4" poster="assets/Knock on our door still.jpeg" muted playsinline preload="none" class="bg-vid desktop-only-vid"></video>
   </div>
 
   <!-- Content Container -->
@@ -131,26 +132,64 @@
             </p>
           </div>
           <div class="cupboard-grid">
+            <!-- Cupboard 1: Digital Craft -->
             <div class="cupboard floating glowing-hover" style="--d: 0.2s;">
               <div class="glow-bg"></div>
-              <img src="assets/pendant_light.png" alt="Light"
-                style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem;">
-              <h3 style="color: var(--gold); font-size: 1.8rem;">Design</h3>
-              <p class="service-text">Crafting beautiful aesthetics without constraints.</p>
+              <div class="shelf-label">DESIGN</div>
+              <div class="bookshelf">
+                <div class="book book-1" data-desc="Tailored interfaces with precision.">
+                  <div class="book-cover"><span class="spine-text">UI / UX</span></div>
+                  <div class="book-page">Tailored interfaces with precision.</div>
+                </div>
+                <div class="book book-2" data-desc="Creating your visual legacy.">
+                  <div class="book-cover"><span class="spine-text">BRANDING</span></div>
+                  <div class="book-page">Creating your visual legacy.</div>
+                </div>
+                <div class="book book-3" data-desc="Adding depth to your brand.">
+                  <div class="book-cover"><span class="spine-text">3D ART</span></div>
+                  <div class="book-page">Adding depth to your brand.</div>
+                </div>
+              </div>
             </div>
+
+            <!-- Cupboard 2: Technical Hub -->
             <div class="cupboard floating glowing-hover" style="--d: 0.8s;">
               <div class="glow-bg"></div>
-              <img src="assets/wall_lamp.png" alt="Light"
-                style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem;">
-              <h3 style="color: var(--gold); font-size: 1.8rem;">Engineering</h3>
-              <p class="service-text">Robust code that scales the invisible boundaries.</p>
+              <div class="shelf-label">ENGINEERING</div>
+              <div class="bookshelf">
+                <div class="book book-1" data-desc="Snappy, high-performance web apps.">
+                  <div class="book-cover"><span class="spine-text">FRONTEND</span></div>
+                  <div class="book-page">Snappy, high-performance web apps.</div>
+                </div>
+                <div class="book book-2" data-desc="Secure, robust server-side logic.">
+                  <div class="book-cover"><span class="spine-text">BACKEND</span></div>
+                  <div class="book-page">Secure, robust server-side logic.</div>
+                </div>
+                <div class="book book-3" data-desc="Scaling your ideas globally.">
+                  <div class="book-cover"><span class="spine-text">CLOUD</span></div>
+                  <div class="book-page">Scaling your ideas globally.</div>
+                </div>
+              </div>
             </div>
+
+            <!-- Cupboard 3: Vision Hub -->
             <div class="cupboard floating glowing-hover" style="--d: 0.5s;">
               <div class="glow-bg"></div>
-              <img src="assets/vintage_lantern.png" alt="Light"
-                style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem;">
-              <h3 style="color: var(--gold); font-size: 1.8rem;">Strategy</h3>
-              <p class="service-text">Planning and plotting a frictionless future.</p>
+              <div class="shelf-label">STRATEGY</div>
+              <div class="bookshelf">
+                <div class="book book-1" data-desc="Strategic growth and outreach.">
+                  <div class="book-cover"><span class="spine-text">MARKETING</span></div>
+                  <div class="book-page">Strategic growth and outreach.</div>
+                </div>
+                <div class="book book-2" data-desc="Be found where it matters.">
+                  <div class="book-cover"><span class="spine-text">SEO</span></div>
+                  <div class="book-page">Be found where it matters.</div>
+                </div>
+                <div class="book book-3" data-desc="Insights that drive decisions.">
+                  <div class="book-cover"><span class="spine-text">DATA</span></div>
+                  <div class="book-page">Insights that drive decisions.</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
