@@ -36,15 +36,9 @@ function setupInteraction() {
       if (!holdFill) return;
       holdTween = gsap.to(holdFill, {
         scale: 1, duration: 1.5, ease: "power1.inOut",
-        onUpdate: () => {
-          // Subtle ticking haptics during the progress on supported devices
-          if (isMobile && holdTween.progress() % 0.2 < 0.05) { 
-             window.navigator.vibrate(5); 
-          }
-        },
         onComplete: () => {
-          // Strong confirmation vibration
-          if (isMobile) window.navigator.vibrate(200);
+          // One nice haptic pulse on completion
+          if (isMobile && window.navigator.vibrate) window.navigator.vibrate(100);
           turnOn();
           holdBtn.removeEventListener('mousedown', startHold);
           holdBtn.removeEventListener('touchstart', startHold);
@@ -53,15 +47,6 @@ function setupInteraction() {
         }
       });
     };
-  }
-
-  // Adding touch feedback logic for mobile elements
-  if (isMobile) {
-    document.querySelectorAll('.feature-item, .dev-link-btn, #off-button').forEach(el => {
-      el.addEventListener('touchstart', () => el.classList.add('touch-active'), {passive: true});
-      el.addEventListener('touchend', () => el.classList.remove('touch-active'), {passive: true});
-      el.addEventListener('touchcancel', () => el.classList.remove('touch-active'), {passive: true});
-    });
   }
 
   if (!endHold) {
@@ -267,6 +252,15 @@ function setupGlobalEventListeners() {
     if (touchStartY - touchEndY > 40) goToNextSlide();
     else if (touchEndY - touchStartY > 40) goToPrevSlide();
   });
+
+  // Attach mobile touch effects once
+  if (isMobile) {
+    document.querySelectorAll('.feature-item, .dev-link-btn, #off-button').forEach(el => {
+      el.addEventListener('touchstart', () => el.classList.add('touch-active'), {passive: true});
+      el.addEventListener('touchend', () => el.classList.remove('touch-active'), {passive: true});
+      el.addEventListener('touchcancel', () => el.classList.remove('touch-active'), {passive: true});
+    });
+  }
 
   initOrbitNavigation();
 }
