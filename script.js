@@ -137,8 +137,19 @@ function turnOn() {
   }
 }
 
+function updateMobileStills(index) {
+  if (!isMobile) return;
+  const stills = document.querySelectorAll('.mobile-still-bg');
+  stills.forEach((img, i) => {
+    gsap.to(img, { opacity: (i === index) ? 1 : 0, duration: 0.6 });
+  });
+}
+
 function revealMainContent() {
   const tl = gsap.timeline();
+  
+  // Set initial still on mobile
+  updateMobileStills(0);
   
   // Ensure section 1 and background are ready
   sectionElements = document.querySelectorAll('.sec');
@@ -443,6 +454,7 @@ function goToNextSlide() {
          }
 
          currentSectionIndex = nextSectionIndex;
+         updateMobileStills(currentSectionIndex);
          
          if (!uiTriggered) {
              gsap.set(nextSec, { visibility: "visible", opacity: 1 });
@@ -558,6 +570,7 @@ function goToPrevSlide() {
           }
 
           currentSectionIndex = prevSectionIndex;
+          updateMobileStills(currentSectionIndex);
           gsap.set(prevSec, { pointerEvents: "auto" });
           
           // Prevent double-skipping from trackpad inertia and let UI finish revealing
@@ -683,6 +696,8 @@ function skipToSection(targetIdx) {
 
     // Fade in next section UI
     currentSectionIndex = targetIdx;
+    updateMobileStills(currentSectionIndex);
+    
     gsap.set(nextSec, { visibility: "visible", opacity: 0, pointerEvents: "auto" });
     gsap.to(nextSec, { opacity: 1, duration: 1.2, ease: "power2.out" });
 
