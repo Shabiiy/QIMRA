@@ -613,41 +613,48 @@ function skipToSection(targetIdx) {
   const currentContent = currentSec.querySelector('.hero-text-container, .content-wrapper');
   const nextContent = nextSec.querySelector('.content-wrapper');
 
-  // Fade out current section UI
-  gsap.to(currentSec, { opacity: 0, duration: 0.6, onComplete: () => {
+  // Fade out current section UI AND Background
+  gsap.to(currentSec, { opacity: 0, duration: 0.4 });
+  gsap.to(videos, { opacity: 0, duration: 0.4 });
+
+  setTimeout(() => {
+    // Hide old UI instantly
     gsap.set(currentSec, { visibility: "hidden", pointerEvents: "none" });
-  }});
 
-  // Switch background videos instantly
-  const targetVideoIdx = Math.min(targetIdx, videos.length - 1);
-  videos.forEach((v, idx) => {
-    if (v) {
-       const isTarget = (idx === targetVideoIdx);
-       if (isTarget) {
-          v.pause();
-          v.currentTime = (targetIdx >= videos.length) ? v.duration : 0;
-          // Small delay ensures the seek is ready before we fade it in
-          setTimeout(() => {
-            gsap.to(v, { opacity: 1, duration: 0.4 });
-          }, 50);
-       } else {
-          gsap.to(v, { opacity: 0, duration: 0.4 });
-       }
+    // Switch background videos
+    const targetVideoIdx = Math.min(targetIdx, videos.length - 1);
+    videos.forEach((v, idx) => {
+      if (v) {
+         const isTarget = (idx === targetVideoIdx);
+         if (isTarget) {
+            v.pause();
+            // If jumping to section 5 (index 4) or beyond, show final frame of Slide 4 video
+            v.currentTime = (targetIdx >= videos.length) ? v.duration : 0;
+            
+            // Allow buffer time for seeking before reveal
+            setTimeout(() => {
+              gsap.to(v, { opacity: 1, duration: 0.8 });
+            }, 250);
+         } else {
+            v.style.opacity = 0;
+            v.pause();
+         }
+      }
+    });
+
+    // Fade in next section UI
+    currentSectionIndex = targetIdx;
+    gsap.set(nextSec, { visibility: "visible", opacity: 0, pointerEvents: "auto" });
+    gsap.to(nextSec, { opacity: 1, duration: 1.2, ease: "power2.out" });
+
+    if (nextContent) {
+      const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
+      gsap.fromTo(nextContent, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" });
+      if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power2.out" });
     }
-  });
 
-  // Fade in next section UI
-  currentSectionIndex = targetIdx;
-  gsap.set(nextSec, { visibility: "visible", opacity: 0, pointerEvents: "auto" });
-  gsap.to(nextSec, { opacity: 1, duration: 0.8 });
-
-  if (nextContent) {
-    const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
-    gsap.fromTo(nextContent, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" });
-    if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power2.out" });
-  }
-
-  setTimeout(() => { scrollingLocked = false; }, 1200);
+    setTimeout(() => { scrollingLocked = false; }, 1800);
+  }, 500);
 }
 
 function initModalLogic() {
