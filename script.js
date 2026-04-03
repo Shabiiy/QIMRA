@@ -623,11 +623,15 @@ function skipToSection(targetIdx) {
   videos.forEach((v, idx) => {
     if (v) {
        const isTarget = (idx === targetVideoIdx);
-       v.style.opacity = isTarget ? 1 : 0;
-       v.pause();
        if (isTarget) {
-         // If jumping forward, use the start or end of video depending on direction
-         v.currentTime = (targetIdx >= videos.length) ? v.duration : 0;
+          v.pause();
+          v.currentTime = (targetIdx >= videos.length) ? v.duration : 0;
+          // Small delay ensures the seek is ready before we fade it in
+          setTimeout(() => {
+            gsap.to(v, { opacity: 1, duration: 0.4 });
+          }, 50);
+       } else {
+          gsap.to(v, { opacity: 0, duration: 0.4 });
        }
     }
   });
