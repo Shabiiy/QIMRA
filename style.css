@@ -1347,4 +1347,61 @@ p {
   }
   .project-card h3 { font-size: 1.2rem; }
   .project-card p { font-size: 0.8rem; }
+  
+  .footer {
+    padding-bottom: 2rem;
+  }
+}
+
+/* ========================================= */
+/* 💛 FOOTER / DEVELOPER LINK */
+/* ========================================= */
+
+.footer {
+  width: 100%;
+  padding-bottom: 3rem;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  font-family: 'Inter', sans-serif;
+}
+
+.dev-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--gold); /* Themed Yellow/Gold */
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0.8;
+  padding: 8px 16px;
+}
+
+.dev-link-btn svg {
+  transition: transform 0.4s ease;
+}
+
+.dev-link-btn:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.dev-link-btn:hover svg {
+  transform: rotate(15deg) scale(1.1);
+  filter: drop-shadow(0 0 10px var(--gold));
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding-bottom: 6vh;
+  }
+  .dev-link-btn {
+    font-size: 0.9rem;
+  }
 }

@@ -246,6 +246,8 @@ function setupGlobalEventListeners() {
     if (touchStartY - touchEndY > 40) goToNextSlide();
     else if (touchEndY - touchStartY > 40) goToPrevSlide();
   });
+
+  initOrbitNavigation();
 }
 setupGlobalEventListeners();
 
@@ -588,6 +590,62 @@ function initSquaresInteraction() {
   }
 }
 
+function initOrbitNavigation() {
+  const orbitItems = document.querySelectorAll('.feature-item');
+  orbitItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      if (scrollingLocked) return;
+      // Orbit 1 is Section 2 (index 1), Orbit 2 is Section 3 (index 2), etc.
+      skipToSection(index + 1);
+    });
+    // Add hover states for cursor
+    item.addEventListener('mouseenter', () => cursorFollower.classList.add('hover-active'));
+    item.addEventListener('mouseleave', () => cursorFollower.classList.remove('hover-active'));
+  });
+}
+
+function skipToSection(targetIdx) {
+  if (targetIdx === currentSectionIndex) return;
+  scrollingLocked = true;
+  
+  const currentSec = sectionElements[currentSectionIndex];
+  const nextSec = sectionElements[targetIdx];
+  const currentContent = currentSec.querySelector('.hero-text-container, .content-wrapper');
+  const nextContent = nextSec.querySelector('.content-wrapper');
+
+  // Fade out current section UI
+  gsap.to(currentSec, { opacity: 0, duration: 0.6, onComplete: () => {
+    gsap.set(currentSec, { visibility: "hidden", pointerEvents: "none" });
+  }});
+
+  // Switch background videos instantly
+  const targetVideoIdx = Math.min(targetIdx, videos.length - 1);
+  videos.forEach((v, idx) => {
+    if (v) {
+       const isTarget = (idx === targetVideoIdx);
+       v.style.opacity = isTarget ? 1 : 0;
+       v.pause();
+       if (isTarget) {
+         // If jumping forward, use the start or end of video depending on direction
+         v.currentTime = (targetIdx >= videos.length) ? v.duration : 0;
+       }
+    }
+  });
+
+  // Fade in next section UI
+  currentSectionIndex = targetIdx;
+  gsap.set(nextSec, { visibility: "visible", opacity: 0, pointerEvents: "auto" });
+  gsap.to(nextSec, { opacity: 1, duration: 0.8 });
+
+  if (nextContent) {
+    const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
+    gsap.fromTo(nextContent, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" });
+    if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power2.out" });
+  }
+
+  setTimeout(() => { scrollingLocked = false; }, 1200);
+}
+
 function initModalLogic() {
   const modal = document.getElementById('projects-modal');
   const openBtn = document.getElementById('open-gallery');
@@ -678,3 +736,19 @@ function animateSquaresOut() {
     ease: "power2.in"
   });
 }
+
+// 📱 Footer Link Handler
+function initFooterLinks() {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const instaLink = document.getElementById('insta-dev-link');
+  if (instaLink) {
+    if (isMobile) {
+      instaLink.href = "https://www.instagram.com/intellex.web?igsh=MXR5dGZjNWF5b2E=5.437";
+    } else {
+      instaLink.href = "https://www.instagram.com/intellex.web?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==";
+    }
+  }
+}
+
+// Run on boot
+initFooterLinks();
