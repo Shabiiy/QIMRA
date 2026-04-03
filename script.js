@@ -1007,9 +1007,9 @@ function initBookshelfLogic() {
         const bookCenterX = bookRect.left + (bookRect.width / 2);
         const bookCenterY = bookRect.top + (bookRect.height / 2);
         
-        // Calculate the centered move but nudge UP by 50px
+        // Deep nudge upwards to place the opened book in the upper half of the cupboard
         let moveX = cupCenterX - bookCenterX;
-        let moveY = (cupCenterY - bookCenterY) - 50; 
+        let moveY = (cupCenterY - bookCenterY) - 140; 
         
         // Custom: If it's the LEFTMOST cupboard, nudge it slightly to the RIGHT (+70px) 
         // to move it away from the screen edge
