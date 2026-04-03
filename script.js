@@ -140,6 +140,9 @@ function turnOn() {
 function revealMainContent() {
   const tl = gsap.timeline();
   
+  // Lazy load: ensure first 2 videos are ready
+  preloadVideosForIndex(0);
+  
   // Ensure section 1 and background are ready
   sectionElements = document.querySelectorAll('.sec');
   // Hide contents BEFORE making section visible to prevent flashing
@@ -442,6 +445,7 @@ function goToNextSlide() {
          }
 
          currentSectionIndex = nextSectionIndex;
+         preloadVideosForIndex(currentSectionIndex);
          
          if (!uiTriggered) {
              gsap.set(nextSec, { visibility: "visible", opacity: 1 });
@@ -557,6 +561,7 @@ function goToPrevSlide() {
           }
 
           currentSectionIndex = prevSectionIndex;
+          preloadVideosForIndex(currentSectionIndex);
           gsap.set(prevSec, { pointerEvents: "auto" });
           
           // Prevent double-skipping from trackpad inertia and let UI finish revealing
@@ -685,6 +690,8 @@ function skipToSection(targetIdx) {
     
     gsap.set(nextSec, { visibility: "visible", opacity: 0, pointerEvents: "auto" });
     gsap.to(nextSec, { opacity: 1, duration: 1.2, ease: "power2.out" });
+    
+    preloadVideosForIndex(targetIdx);
 
     if (nextContent) {
       if (!isMobile) {
@@ -807,3 +814,13 @@ function initFooterLinks() {
 
 // Run on boot
 initFooterLinks();
+function preloadVideosForIndex(idx) {
+  // Always ensure current, next, and prev are loading
+  const targets = [idx, idx + 1, idx - 1];
+  targets.forEach(i => {
+    if (i >= 0 && i < videos.length) {
+      if (videos[i]) videos[i].preload = "auto";
+      if (revVideos[i]) revVideos[i].preload = "auto";
+    }
+  });
+}
