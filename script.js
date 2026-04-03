@@ -1,5 +1,7 @@
 gsap.registerPlugin(ScrollTrigger);
 
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 const customCursor = document.getElementById("cursor");
 const cursorFollower = document.getElementById("cursor-follower");
 
@@ -171,6 +173,8 @@ let isSpeedKeyHeld = false;
 
 // Update playback rate based on scroll intensity
 gsap.ticker.add(() => {
+  if (isMobile) return; // Disable intensity speedup on mobile for performance
+
   if (scrollingLocked && isSpeedKeyHeld) {
     // Inject artificial scroll delta every frame (60fps) if key is held
     handleIntensiveScroll(25);
@@ -387,14 +391,19 @@ function goToNextSlide() {
               gsap.set(nextSec, { visibility: "visible", opacity: 1 });
               
               if (nextContent) {
-                 gsap.set(nextContent, { position: "relative" }); 
-                 const enterFrom = { opacity: 0, top: 300, left: 0, scale: 0.95 };
-                 if (nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4')) {
+                  gsap.set(nextContent, { position: "relative" }); 
+                  const enterFrom = { opacity: 0, top: 300, left: 0, scale: 0.95 };
+                  if (nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4')) {
                     enterFrom.left = 500; enterFrom.top = 0;
-                 }
-                 gsap.fromTo(nextContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 2, ease: "power3.out", clearProps: "left,top,scale" });
-                 const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
-                 if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power3.out", clearProps: "--blur-amt" });
+                  }
+                  gsap.fromTo(nextContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 2, ease: "power3.out", clearProps: "left,top,scale" });
+                  
+                  if (!isMobile) {
+                    const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
+                    if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power3.out", clearProps: "--blur-amt" });
+                  } else {
+                    nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+                  }
               }
           }
       };
@@ -417,9 +426,14 @@ function goToNextSlide() {
          if (!uiTriggered) {
              gsap.set(nextSec, { visibility: "visible", opacity: 1 });
              if (nextContent) {
-                 gsap.fromTo(nextContent, { opacity: 0, top: 100 }, { opacity: 1, top: 0, duration: 1.5, clearProps: "all" });
-                 const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard');
-                 if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power3.out", clearProps: "--blur-amt" });
+                  gsap.fromTo(nextContent, { opacity: 0, top: 100 }, { opacity: 1, top: 0, duration: 1.5, clearProps: "all" });
+                  
+                  if (!isMobile) {
+                    const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard');
+                    if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power3.out", clearProps: "--blur-amt" });
+                  } else {
+                    nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+                  }
              }
          }
          
@@ -496,8 +510,13 @@ function goToPrevSlide() {
                     enterFrom.left = -500; enterFrom.top = 0; // Mirror exit direction
                  }
                  gsap.fromTo(prevContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 2, ease: "power3.out", clearProps: "left,top,scale" });
-                 const glass = prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
-                 if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power3.out", clearProps: "--blur-amt" });
+                 
+                 if (!isMobile) {
+                    const glass = prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
+                    if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power3.out", clearProps: "--blur-amt" });
+                 } else {
+                    prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+                 }
               }
           }
       };
@@ -647,9 +666,14 @@ function skipToSection(targetIdx) {
     gsap.to(nextSec, { opacity: 1, duration: 1.2, ease: "power2.out" });
 
     if (nextContent) {
-      const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
-      gsap.fromTo(nextContent, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" });
-      if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power2.out" });
+      if (!isMobile) {
+        const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
+        gsap.fromTo(nextContent, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" });
+        if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power2.out" });
+      } else {
+        gsap.fromTo(nextContent, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 });
+        nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+      }
     }
 
     setTimeout(() => { scrollingLocked = false; }, 1800);

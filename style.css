@@ -1405,3 +1405,23 @@ p {
     font-size: 0.9rem;
   }
 }
+
+/* ========================================= */
+/* 📱 MOBILE OPTIMIZATIONS (PERFORMANCE) */
+/* ========================================= */
+
+@media (max-width: 1024px) {
+  #cursor, #cursor-follower {
+    display: none !important;
+  }
+  
+  * {
+    cursor: auto !important;
+  }
+
+  /* Reduce filter complexity for mobile browsers */
+  .glass-panel, .glass-window, .cupboard, .levitating-door {
+    backdrop-filter: blur(var(--blur-amt, 10px));
+    -webkit-backdrop-filter: blur(var(--blur-amt, 10px));
+  }
+}
