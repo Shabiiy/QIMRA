@@ -1,0 +1,1350 @@
+:root {
+  --bg-color: #030200;
+  --text-color: #fffaea;
+  --font-main: 'Inter', sans-serif;
+  --glass-bg: rgba(20, 15, 5, 0.25);
+  --glass-border: rgba(255, 220, 100, 0.12);
+  --accent-glow: rgba(255, 180, 50, 0.4);
+  /* Custom Cursor Colors */
+  --gold: #ffc436;
+  --gold-dim: rgba(255, 196, 54, 0.4);
+  --glow-color: rgba(255, 196, 54, 0.6);
+
+  /* ------------------------------------------- */
+  /* 🛠️ ALIGNMENT TUNING VARIABLES FOR SLIDE 3 */
+  /* Adjust these values to fit the new video */
+  /* ------------------------------------------- */
+  --cupboard-gap: 14vw;
+  /* Horizontal space between the 3 text boxes */
+  --cupboard-width: 17vw;
+  /* Width of each text box */
+  --cupboard-y-offset: -2vh;
+  /* Move the grid up (negative) or down (positive) */
+  --cupboard-x-offset: 03vw;
+  /* Move the grid left (negative) or right (positive) */
+
+  /* ------------------------------------------- */
+  /* 💡 BULB ON & OFF BUTTONS POSITIONING        */
+  /* Adjust these values to move the buttons     */
+  /* ------------------------------------------- */
+  --on-btn-bottom: 10vh;
+  /* Move ON button up (higher) or down (lower) */
+  --on-btn-left: 48.8%;
+  /* Move ON button left (lower %) or right (higher %) */
+
+  --off-btn-bottom: 6vh;
+  /* Move OFF button up (higher) or down (lower) */
+  --off-btn-left: 50.6%;
+  /* Move OFF button left (lower %) or right (higher %) */
+
+  /* ------------------------------------------- */
+  /* 🪐 BULB ORBIT MENU POSITIONS (Slide 1)      */
+  /* Calculated from the uploaded image          */
+  /* ------------------------------------------- */
+  --orbit-center-x: 50.5%;
+  --orbit-center-y: 52.5%;
+  /* Midpoint lowered to bring the entire cluster visually down */
+  --orbit-radius: 15.5vh;
+  /* Lowered, so it closely hugs the glass bounds */
+
+  /* Static Placement Around the Bulb */
+  /* 0deg = centered top arc. Adjust to tilt the entire train left or right */
+  --orbit-static-angle: 0deg;
+
+  /* ------------------------------------------- */
+  /* 🚂 THE TRAIN (Clustered tightly together)    */
+  /* Values are mathematically placed on the arc */
+  /* ------------------------------------------- */
+  /* Item 1 (-54 degrees) */
+  --orbit-1-top: calc(var(--orbit-center-y) - var(--orbit-radius) * 0.5878);
+  --orbit-1-left: calc(var(--orbit-center-x) - var(--orbit-radius) * 0.8090);
+
+  /* Item 2 (-18 degrees) */
+  --orbit-2-top: calc(var(--orbit-center-y) - var(--orbit-radius) * 0.9511);
+  --orbit-2-left: calc(var(--orbit-center-x) - var(--orbit-radius) * 0.3090);
+
+  /* Item 3 (+18 degrees) */
+  --orbit-3-top: calc(var(--orbit-center-y) - var(--orbit-radius) * 0.9511);
+  --orbit-3-left: calc(var(--orbit-center-x) + var(--orbit-radius) * 0.3090);
+
+  /* Item 4 (+54 degrees) */
+  --orbit-4-top: calc(var(--orbit-center-y) - var(--orbit-radius) * 0.5878);
+  --orbit-4-left: calc(var(--orbit-center-x) + var(--orbit-radius) * 0.8090);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-main);
+  overflow-x: hidden;
+  /* locked until the spark is ignited */
+  overflow-y: hidden;
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+  /* Hide default cursor */
+}
+
+/* Animations for floating */
+.floating {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+  will-change: transform;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Base UI Elements */
+.glass-panel,
+.glass-window,
+.cupboard {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amt, 20px));
+  -webkit-backdrop-filter: blur(var(--blur-amt, 20px));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  will-change: transform, backdrop-filter, -webkit-backdrop-filter;
+  /* Force keep blur during motion */
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  color: #fffaea;
+  text-shadow: 0 4px 20px rgba(255, 180, 50, 0.2);
+}
+
+p {
+  color: rgba(255, 245, 225, 0.85);
+  line-height: 1.7;
+  font-weight: 300;
+  font-size: 1.05rem;
+}
+
+/* Custom Cursor Elements */
+#cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100000;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px var(--glow-color);
+  will-change: transform;
+}
+
+#cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background 0.3s;
+  will-change: transform;
+}
+
+#cursor-follower.hover-active {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+/* BG Videos */
+#video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0;
+  /* Hidden initially, reveals after bulb turn on */
+}
+
+.bg-vid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Loader / Section 1 */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Center the hold button */
+  z-index: 100;
+  background-color: #000;
+}
+
+.loader-bulb-fullscreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0;
+  /* Hidden by default to prevent flashes */
+}
+
+#loader-content {
+  position: absolute;
+  bottom: var(--on-btn-bottom, 8vh);
+  left: var(--on-btn-left, 50%);
+  transform: translateX(-50%);
+  /* Moved further down below the bulb */
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hold-text {
+  margin-top: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 4px;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  pointer-events: none;
+  animation: pulse-opacity 2s infinite alternate;
+}
+
+@keyframes pulse-opacity {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+#hold-button {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 220, 100, 0.4);
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4), inset 0 0 5px rgba(255, 215, 0, 0.2);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.4), inset 0 0 5px rgba(255, 215, 0, 0.2); border-color: rgba(255, 220, 100, 0.4); }
+  to { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.5); border-color: rgba(255, 220, 100, 0.9); }
+}
+
+#hold-button:active {
+  transform: scale(0.9);
+}
+
+.hold-fill {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 215, 0, 0.9);
+  /* Yellow golden filler */
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+}
+
+#off-button {
+  position: absolute;
+  bottom: var(--off-btn-bottom, 8vh);
+  left: var(--off-btn-left, 49.3%);
+  /* Nudged slightly right from 48.5% */
+  transform: translateX(-50%);
+  width: 35px;
+  height: 35px;
+  border: 1.5px solid rgba(255, 80, 80, 0.4);
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex !important;
+  /* Managed by JS visibility */
+  opacity: 1;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#off-button:hover {
+  transform: translateX(-50%) scale(1.15);
+  border-color: rgba(255, 100, 100, 0.8);
+}
+
+.off-fill {
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 50, 50, 0.9);
+  /* Pure Red */
+  border-radius: 50%;
+  margin: auto;
+  box-shadow: 0 0 12px rgba(255, 50, 50, 0.6);
+  animation: pulse-red 2.5s infinite alternate;
+}
+
+@keyframes pulse-red {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  to {
+    transform: scale(1.3);
+    opacity: 1;
+    box-shadow: 0 0 18px rgba(255, 50, 50, 0.9);
+  }
+}
+
+/* Slider Container */
+#scrolly-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+}
+
+/* Each slide overlaps */
+.sec {
+  min-height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  padding: 0 10%;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Pull Hero text exceptionally close to the left monitor edge */
+.sec-1 {
+  padding-left: 0;
+  /* Pulled all the way to edge */
+}
+
+.hero-text-container {
+  padding-left: 1vw;
+  /* Tiny breather from edge */
+  text-align: left;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  transform-origin: left center;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2vh;
+  left: var(--off-btn-left, 49.3%);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+  animation: float-scroll 2s ease-in-out infinite alternate;
+}
+
+.scroll-indicator p {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  margin-top: 0;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.scroll-arrow {
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  transform: rotate(45deg);
+  box-shadow: 3px 3px 6px rgba(255, 215, 0, 0.1);
+}
+
+@keyframes float-scroll {
+  0% { transform: translate(-50%, 0); }
+  100% { transform: translate(-50%, 12px); }
+}
+
+.logo-switcher {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 180px;
+  /* Adjust based on logo height to prevent layout shift */
+  cursor: pointer;
+  margin-bottom: 2rem;
+  margin-left: -80px;
+  pointer-events: auto;
+  z-index: 100;
+  perspective: 1200px; /* added for 3D flip */
+  transform-style: preserve-3d;
+}
+
+.intellex-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.25));
+  transition: opacity 1.6s cubic-bezier(0.4, 0.0, 0.2, 1), transform 1.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  will-change: transform, opacity, filter;
+  padding: 0;
+  backface-visibility: hidden;
+}
+
+.logo-ara {
+  left: -40px;
+  /* Aligned relative to the new container margin */
+  transform: rotateX(0deg); /* Start flat */
+}
+
+.logo-eng {
+  left: 45px;
+  /* Nudge English logo further back right as requested */
+  width: 70%;
+  height: 70%;
+  top: 15%; /* Keep vertically centered */
+  opacity: 0;
+  transform: rotateX(-180deg); /* Start flipped upside down/backward */
+}
+
+.logo-switcher.active .logo-ara {
+  opacity: 0;
+  transform: rotateX(180deg);
+}
+
+.logo-switcher.active .logo-eng {
+  opacity: 1;
+  transform: rotateX(0deg);
+}
+
+.side-logo-wrapper {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 100vh;
+  width: 45vw;
+  /* Adjust to better fit the 'pattern' area on the side */
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.side-hero-logo {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 110vh;
+  width: auto;
+  max-width: 65vw;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.1));
+  pointer-events: none;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+
+/* 🎨 Interactive Squares */
+.interactive-square {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  transform: rotate(45deg);
+  z-index: 10;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 1s ease, box-shadow 0.3s ease;
+  pointer-events: auto;
+}
+
+.interactive-square.sq-green {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+  top: 46.95%;
+  /* 50.95 - 4.0 */
+  left: 51.1%;
+}
+
+.interactive-square.sq-orange {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  box-shadow: 0 0 15px rgba(251, 146, 60, 0.5);
+  top: 50.95%;
+  /* Aligned with horizontal center */
+  left: 30.4%;
+}
+
+.interactive-square.sq-blue {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+  top: 50.95%;
+  left: 47.1%;
+  /* 51.1 - 4.0 */
+}
+
+.interactive-square.sq-yellow {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+  top: 50.95%;
+  left: 55.1%;
+  /* 51.1 + 4.0 */
+}
+
+.interactive-square.sq-pink {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  box-shadow: 0 0 15px rgba(251, 146, 60, 0.5);
+  top: 54.95%;
+  /* 50.95 + 4.0 */
+  left: 51.1%;
+}
+
+.interactive-square:hover {
+  box-shadow: 0 0 25px currentColor;
+}
+
+.features-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* Center anchor for orbiting items */
+  z-index: 20;
+  pointer-events: none;
+  /* GSAP animation applies to this container */
+  opacity: 0;
+  rotate: var(--orbit-static-angle);
+  animation: orbit-wobble 6s ease-in-out infinite alternate;
+  transform-origin: center center;
+}
+
+@keyframes orbit-wobble {
+  from {
+    rotate: calc(var(--orbit-static-angle) - 2.5deg);
+  }
+
+  to {
+    rotate: calc(var(--orbit-static-angle) + 2.5deg);
+  }
+}
+
+@keyframes counter-wobble {
+  from {
+    rotate: calc((var(--orbit-static-angle) - 2.5deg) * -1);
+  }
+
+  to {
+    rotate: calc((var(--orbit-static-angle) + 2.5deg) * -1);
+  }
+}
+
+.features-list:hover,
+.features-list:hover .feature-item {
+  animation-play-state: paused;
+}
+
+.feature-item {
+  position: absolute;
+  translate: -50% -50%;
+  width: 55px;
+  /* Tiny starting circle */
+  height: 55px;
+  border-radius: 30px;
+  /* Pill shape */
+  background: rgba(15, 10, 5, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 220, 100, 0.4);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  transition: background 0.5s, border-color 0.5s, box-shadow 0.5s, scale 0.5s;
+  cursor: none;
+  pointer-events: auto;
+  /* Re-enable clicks */
+  rotate: calc(var(--orbit-static-angle) * -1);
+  animation: counter-wobble 6s ease-in-out infinite alternate;
+}
+
+.feature-item:hover {
+  z-index: 100; /* Pop this specific item to the very front so its bubble overlaps all neighbors */
+  background: rgba(40, 30, 10, 0.5);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border-color: rgba(255, 220, 100, 0.9);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  scale: 1.15;
+  /* Bubble bounce scale */
+}
+
+/* Position each item individually using screen coordinates so you can tweak them exactly like the squares */
+.orbit-1 {
+  top: var(--orbit-1-top);
+  left: var(--orbit-1-left);
+}
+
+.orbit-2 {
+  top: var(--orbit-2-top);
+  left: var(--orbit-2-left);
+}
+
+.orbit-3 {
+  top: var(--orbit-3-top);
+  left: var(--orbit-3-left);
+}
+
+.orbit-4 {
+  top: var(--orbit-4-top);
+  left: var(--orbit-4-left);
+}
+
+/* The small glowing dot icon that is always visible */
+.orbit-icon {
+  min-width: 55px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit-icon::after {
+  content: '';
+  width: 22px;
+  height: 22px;
+  border-radius: 4px; /* slightly more rounded for a bigger size */
+  transform: rotate(45deg);
+  transition: transform 0.4s, opacity 0.4s, box-shadow 0.4s;
+  opacity: 0.5; /* Dimmed */
+}
+
+.orbit-1 .orbit-icon::after {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+}
+
+.orbit-2 .orbit-icon::after {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 0 14px rgba(59, 130, 246, 0.5);
+}
+
+.orbit-3 .orbit-icon::after {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.5);
+}
+
+.orbit-4 .orbit-icon::after {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  box-shadow: 0 0 14px rgba(251, 146, 60, 0.5);
+}
+
+.feature-item:hover .orbit-icon::after {
+  transform: scale(0.85) rotate(45deg); /* Adjusted scale for bigger size */
+  opacity: 1;
+  /* Dot shrinks slightly when expanded */
+}
+
+/* The bouncy hover glass bubble tooltip effect */
+.feature-item span {
+  position: absolute;
+  left: 50%;
+  bottom: 110%; /* Place bubble directly above */
+  translate: -50% 12px;
+  width: max-content;
+  padding: 8px 18px;
+  
+  /* Liquid Glass Aesthetic */
+  background: rgba(40, 30, 10, 0.3); /* Translucent tinted glass */
+  backdrop-filter: blur(15px) saturate(150%);
+  -webkit-backdrop-filter: blur(15px) saturate(150%);
+  border: 1px solid rgba(255, 220, 100, 0.3); /* Subtle glass edge */
+  box-shadow: 
+    inset 0 0 20px rgba(255, 220, 100, 0.1), /* Inner volumetric glass glow */
+    0 10px 30px rgba(0, 0, 0, 0.8), /* Dropped shadow */
+    0 0 20px rgba(255, 215, 0, 0.3); /* Outer golden glow */
+    
+  border-radius: 20px;
+  color: var(--gold);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.3;
+  transform-origin: bottom center;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.5, 1.3); /* Elastic bouncy cubic bezier */
+  pointer-events: none;
+}
+
+/* Little speech bubble triangle tip connecting to the circle */
+.feature-item span::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  translate: -50% 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(255, 220, 100, 0.3); /* Match the subtle glass border */
+}
+
+.feature-item:hover span {
+  opacity: 1;
+  scale: 1;
+  translate: -50% 0;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  color: #ccc;
+}
+
+.right-panel {
+  margin-left: auto;
+  max-width: 450px;
+  padding: 50px;
+  border-radius: 30px;
+}
+
+.module-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+}
+
+.center-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cupboard-grid {
+  display: flex;
+  gap: var(--cupboard-gap, 14vw);
+  /* Precise gap to align with physical cupboard centers */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: var(--cupboard-y-offset, -2vh);
+  /* Nudge up more into the cupboard space */
+  margin-left: var(--cupboard-x-offset, 0vw);
+  /* Nudge left or right */
+}
+
+.cupboard {
+  padding: 35px 25px;
+  width: var(--cupboard-width, 17vw);
+  /* Fluid width to match the opening */
+  min-width: 240px;
+  max-width: 300px;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.4s ease;
+
+  /* Darker, more recessed look to feel 'inside' the wood */
+  background: rgba(15, 12, 8, 0.4);
+  border: 1px solid rgba(255, 220, 100, 0.1);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.glowing-hover:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.glowing-hover .glow-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  z-index: -1;
+}
+
+.glowing-hover:hover .glow-bg {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.cupboard span {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+.service-text {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.monitor-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.monitor-content {
+  width: 420px;
+  /* Wider to fill the monitor screen */
+  height: 310px;
+  padding: 3rem 2rem;
+  background: rgba(0, 0, 0, 0.5);
+  /* Slightly darker for better screen look */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 4px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -1vh;
+  margin-left: 5.5vw;
+  /* Even further LEFT from 8.5vw */
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 196, 54, 0.05);
+}
+
+.view-trigger {
+  padding: 12px 20px;
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid var(--gold-dim);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.view-trigger span {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+  color: var(--gold);
+  font-size: 1.1rem;
+}
+
+/* Modal System */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(15px);
+  /* BLURRY BACKGROUND */
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.modal-container {
+  position: relative;
+  width: 80vw;
+  max-width: 1000px;
+  max-height: 80vh;
+  padding: 60px;
+  border-radius: 40px;
+  overflow-y: auto;
+  z-index: 10;
+  transform: scale(0.9) translateY(40px);
+  transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modal.active .modal-container {
+  transform: scale(1) translateY(0);
+}
+
+.close-modal {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.close-modal:hover {
+  opacity: 1;
+}
+
+.gallery-track-container {
+  width: 100%;
+  padding: 40px 0;
+  overflow: hidden;
+  /* Mask the horizontal row */
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  cursor: ew-resize;
+  /* Show help that it slides */
+}
+
+.gallery-track {
+  display: flex;
+  gap: 3rem;
+  width: fit-content;
+  will-change: transform;
+}
+
+.project-card {
+  flex: 0 0 450px;
+  /* Fixed width for consistent loop */
+  padding: 50px 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--gold-dim);
+}
+
+.project-card h3 {
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.project-card p {
+  font-size: 1rem;
+  opacity: 0.6;
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.project-card:hover .card-glow {
+  opacity: 0.25;
+}
+
+.door-frame {
+  padding: 50px 60px;
+  text-align: center;
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 220, 100, 0.15);
+  max-width: 900px;
+  /* Wider to accommodate single line text */
+  margin: 0 auto;
+}
+
+.neon-text {
+  font-size: 2rem;
+  /* Balanced and elegant */
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 230, 150, 0.8);
+  text-shadow: 0 0 25px rgba(255, 190, 80, 0.5);
+  margin-bottom: 2rem;
+  font-weight: 300;
+  font-family: 'Montserrat', sans-serif;
+  white-space: nowrap;
+  /* Single line */
+}
+
+.glow-text {
+  color: #fffaea;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px rgba(255, 200, 100, 0.3);
+}
+
+.theme-glow {
+  color: var(--gold);
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  font-weight: 600;
+}
+
+.magic-list {
+  list-style: none;
+  margin-top: 1.5rem;
+}
+
+.magic-list li {
+  display: flex;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #fff;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.gold-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin-right: 12px;
+  box-shadow: 0 0 10px var(--gold);
+}
+
+/* ========================================= */
+/* 📱 RESPONSIVE DESIGN FOR FIRST PAGE IMAGES */
+/* ========================================= */
+
+@media (max-width: 1024px) {
+  .logo-switcher {
+    max-width: 350px;
+    height: 140px;
+    margin-left: -40px; 
+  }
+  
+  .side-hero-logo {
+    height: 80vh;
+    max-width: 65vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-text-container {
+    padding-left: 5vw;
+    padding-right: 5vw;
+    align-items: center; 
+    text-align: center;
+  }
+  
+  .logo-switcher {
+    max-width: 280px;
+    height: 100px;
+    margin-left: 0; 
+  }
+  
+  .logo-ara {
+    left: 0; 
+    width: 100%;
+    transform: rotateX(0deg) scale(0.9);
+  }
+  
+  .logo-eng {
+    left: 0;
+    width: 80%;
+    top: 10%;
+  }
+
+  .logo-switcher.active .logo-ara {
+    transform: rotateX(180deg) scale(0.9);
+  }
+  
+  .side-logo-wrapper {
+    width: 100vw;
+    right: 50%;
+    transform: translate(50%, -50%); 
+    opacity: 0.15; /* Wash it out so text is readable over it */
+    z-index: 1; 
+  }
+
+  .side-hero-logo {
+    height: auto;
+    max-width: 120vw; /* Bleed off edges */
+  }
+
+  .interactive-square {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* ========================================= */
+/* 🔄 FORCE LANDSCAPE OVERLAY (Mobiles) */
+/* ========================================= */
+
+#rotate-device-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: var(--bg-dark);
+  z-index: 9999999;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  padding: 2rem;
+}
+
+#rotate-device-overlay h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+#rotate-device-overlay p {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.rotate-phone-icon {
+  width: 50px;
+  height: 80px;
+  border: 3px solid #fff;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  position: relative;
+  animation: rotatePhone 2.5s infinite ease-in-out;
+}
+
+.rotate-phone-icon::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+@keyframes rotatePhone {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-90deg); }
+  100% { transform: rotate(-90deg); }
+}
+
+@media screen and (max-width: 900px) and (orientation: portrait) {
+  #rotate-device-overlay {
+    display: flex; /* Blocks access completely in portrait */
+  }
+  
+  body {
+    overflow: hidden; /* Prevent scrolling behind overlay */
+  }
+}
+
+/* ========================================= */
+/* 🏝️ HORIZONTAL MOBILE OPTIMIZATIONS */
+/* ========================================= */
+
+/* Tweaks for landscape phones */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .logo-switcher {
+    max-width: 180px;
+    height: 70px;
+    margin-left: 0;
+  }
+  
+  .hero-text-container {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+
+  .magic-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .features-list {
+    transform: scale(0.65);
+    transform-origin: center center;
+  }
+  
+  .scroll-indicator {
+    bottom: 2vh; 
+  }
+  
+  #off-button {
+    bottom: 4vh;
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Panel Optimizations */
+  .right-panel {
+    max-width: 320px;
+    padding: 20px;
+    margin-right: 5vw;
+  }
+  
+  .glass-panel, .glass-window, .cupboard {
+    padding: 1.5rem !important;
+  }
+  
+  .cupboard-grid {
+    gap: 8vw;
+    margin-top: -5vh;
+  }
+  
+  .cupboard {
+    width: 180px;
+    height: 120px;
+  }
+
+  h2 { font-size: 1.5rem; }
+  p { font-size: 0.9rem; line-height: 1.4; }
+
+  /* Interactive items scale */
+  .interactive-square {
+    width: 25px;
+    height: 25px;
+  }
+
+  /* Section 3 Scale */
+  .module-title { font-size: 1.8rem; margin-bottom: 1rem !important; }
+  .cupboard-grid { gap: 5vw; }
+  .cupboard {
+    width: 140px;
+    height: 100px;
+    padding: 10px;
+  }
+  .cupboard img { width: 40px !important; height: 40px !important; margin-bottom: 0.5rem !important; }
+  .cupboard h3 { font-size: 1.1rem !important; }
+  .service-text { font-size: 0.7rem !important; }
+
+  /* Section 4 monitor */
+  .monitor-content {
+     padding: 1rem !important;
+     max-width: 300px;
+  }
+
+  /* Section 5 Door */
+  .levitating-door {
+    padding: 1.5rem !important;
+    max-width: 80% !important;
+  }
+  .levitating-door p { margin-bottom: 1.5rem !important; }
+  .contact-info p { font-size: 1.1rem !important; }
+
+  /* Modal Gallery */
+  .modal-container {
+    width: 95vw;
+    height: 90vh;
+    padding: 1rem;
+  }
+  .project-card {
+    min-width: 180px;
+    height: 120px;
+    padding: 1rem;
+  }
+  .project-card h3 { font-size: 1.2rem; }
+  .project-card p { font-size: 0.8rem; }
+}

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luminary Journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Rotate Device Overlay -->
+  <div id="rotate-device-overlay">
+    <div class="rotate-phone-icon"></div>
+    <h2>Rotate your device</h2>
+    <p>Please turn your device to landscape.<br>This magical journey requires a wider perspective!</p>
+  </div>
+
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+
+  <!-- Loader / Interactive Hold Switch -->
+  <div id="loader">
+    <video id="loader-video" src="assets/BULB ON&OFF.mp4" muted playsinline preload="auto" class="loader-bulb-fullscreen"></video>
+    <video id="loader-video-rev" src="assets/BULB ON&OFF Reverse.mp4" muted playsinline preload="auto" class="loader-bulb-fullscreen" style="opacity: 0;"></video>
+    <div id="loader-content">
+      <div id="hold-button">
+        <div class="hold-fill"></div>
+      </div>
+      <p class="hold-text">HOLD TO UNFOLD</p>
+    </div>
+  </div>
+
+  <!-- BG Videos instead of sequence -->
+  <div id="video-container">
+    <video id="vid-1" src="assets/SLIDE 1.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+    <video id="vid-1-rev" src="assets/SLIDE 1 Reverse.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+    <video id="vid-2" src="assets/SLIDE2.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+    <video id="vid-2-rev" src="assets/SLIDE2 Reverse.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+    <video id="vid-3" src="assets/SLIDE3.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+    <video id="vid-3-rev" src="assets/SLIDE3 Reverse.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+    <video id="vid-4" src="assets/SLIDE4.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+    <video id="vid-4-rev" src="assets/SLIDE4 Reverse.mp4" muted playsinline preload="auto" class="bg-vid"></video>
+  </div>
+
+  <!-- Content Container -->
+  <div id="scrolly-container">
+
+    <!-- Section 1 (Hero) -->
+    <section class="sec sec-1" id="sec-1">
+      <div class="hero-text-container">
+        <div class="logo-switcher" onclick="this.classList.toggle('active')">
+          <img src="assets/qimra logo arabic.png" alt="Arabic Logo" class="intellex-title logo-ara">
+          <img src="assets/qimra logo eng.png" alt="English Logo" class="intellex-title logo-eng">
+        </div>
+        <div class="side-logo-wrapper">
+          <img src="assets/Side logo.png" alt="Featured Project" class="side-hero-logo">
+          <div class="interactive-square sq-green" data-color="#10b981"></div>
+          <div class="interactive-square sq-orange" data-color="#fb923c"></div>
+          <div class="interactive-square sq-blue" data-color="#3b82f6"></div>
+          <div class="interactive-square sq-yellow" data-color="#fbbf24"></div>
+          <div class="interactive-square sq-pink" data-color="#fb923c"></div>
+        </div>
+        <div class="features-list bulb-orbit">
+          <div class="feature-item orbit-1">
+            <div class="orbit-icon"></div>
+            <span>Behind the Magic</span>
+          </div>
+          <div class="feature-item orbit-2">
+            <div class="orbit-icon"></div>
+            <span>Our Playground</span>
+          </div>
+          <div class="feature-item orbit-3">
+            <div class="orbit-icon"></div>
+            <span>Made with Magic</span>
+          </div>
+          <div class="feature-item orbit-4">
+            <div class="orbit-icon"></div>
+            <span>Knock on our Door</span>
+          </div>
+        </div>
+        <div id="off-button" class="glowing-hover">
+          <div class="off-fill"></div>
+        </div>
+        
+        <div class="scroll-indicator">
+          <p>SWIPE DOWN TO REVEAL THE MAGIC</p>
+          <div class="scroll-arrow"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 (Behind the Magic) -->
+    <section class="sec sec-2" id="sec-2">
+      <div class="content-wrapper" style="width: 100%;">
+        <div class="sec-content glass-panel right-panel floating" style="--d: 0.4s;">
+          <h2 class="theme-glow">Behind the Magic</h2>
+          <p>Our company illuminates the path to success with incredibly innovative ideas and brilliant execution. We
+            strip away the unnecessary noise, focusing entirely on the essence of luxury minimalism.</p>
+          <br>
+          <p>Every great product begins with a single spark of inspiration. We nurture that spark, turning raw ambition
+            into a warm, glowing reality that guides users forward. By blending bleeding-edge technology with timeless
+            design principles, we achieve experiences that don't just function—they captivate.</p>
+          <ul class="magic-list">
+            <li><span class="gold-dot"></span> Vision Strategy</li>
+            <li><span class="gold-dot"></span> Immersive Storytelling</li>
+            <li><span class="gold-dot"></span> Digital Architecture</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 (The Kitchen of Ideas) -->
+    <section class="sec sec-3" id="sec-3">
+      <div class="content-wrapper">
+        <div class="sec-content center-panel" style="margin: auto;">
+          <h2 class="module-title floating theme-glow" style="--d: 0.1s; margin-bottom: 2rem;">Our Playground</h2>
+          <div class="glass-panel floating" style="--d: 0.3s; max-width: 800px; margin-bottom: 3.5rem; padding: 1.2rem 2.5rem; border-radius: 20px; text-align: center;">
+            <p style="margin: 0; font-size: 1.1rem;">In our metaphysical playground, we
+              slowly
+              brew groundbreaking concepts entirely from scratch. We take the raw ingredients of your ambition, simmer
+              them
+              strictly with technical wizardry, and serve up exquisite digital delicacies tailored flawlessly to your
+              brand.
+            </p>
+          </div>
+          <div class="cupboard-grid">
+            <div class="cupboard floating glowing-hover" style="--d: 0.2s;">
+              <div class="glow-bg"></div>
+              <img src="assets/pendant_light.png" alt="Light"
+                style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem;">
+              <h3 style="color: var(--gold); font-size: 1.8rem;">Design</h3>
+              <p class="service-text">Crafting beautiful aesthetics without constraints.</p>
+            </div>
+            <div class="cupboard floating glowing-hover" style="--d: 0.8s;">
+              <div class="glow-bg"></div>
+              <img src="assets/wall_lamp.png" alt="Light"
+                style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem;">
+              <h3 style="color: var(--gold); font-size: 1.8rem;">Engineering</h3>
+              <p class="service-text">Robust code that scales the invisible boundaries.</p>
+            </div>
+            <div class="cupboard floating glowing-hover" style="--d: 0.5s;">
+              <div class="glow-bg"></div>
+              <img src="assets/vintage_lantern.png" alt="Light"
+                style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 1rem;">
+              <h3 style="color: var(--gold); font-size: 1.8rem;">Strategy</h3>
+              <p class="service-text">Planning and plotting a frictionless future.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4 (Made with Magic) -->
+    <section class="sec sec-4" id="sec-4">
+      <div class="content-wrapper monitor-container" style="width: 100%;">
+        <div class="sec-content glass-window monitor-content floating" style="--d: 0s;">
+          <h2 class="theme-glow" style="font-size: 1.5rem; margin-bottom: 0.5rem;">Made with Magic</h2>
+          <p class="portfolio-desc" style="margin-bottom: 1.5rem; font-size: 0.75rem;">Behold our masterfully curated gallery.</p>
+          
+          <div class="view-trigger glowing-hover" id="open-gallery">
+            <div class="glow-bg"></div>
+            <span>CLICK TO VIEW PROJECTS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 (Contact) -->
+    <section class="sec sec-5" id="sec-5">
+      <div class="content-wrapper" style="width: 100%;">
+        <div class="sec-content levitating-door floating center-panel" style="--d: 0.1s; margin: auto;">
+          <div class="door-frame">
+            <h2 class="neon-text theme-glow" style="text-transform: uppercase;">KNOCK ON OUR DOOR</h2>
+            <p style="margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto;">The future waits
+              for
+              no one. Step thoughtfully through the archway and let us physically orchestrate your next masterpiece. Our
+              artisans are ready to illuminate your brand forever.</p>
+            <div class="contact-info">
+              <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">hello@qimracreations.com</p>
+              <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">1-800-LIGHT-UP</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  <!-- Projects Modal -->
+  <div id="projects-modal" class="modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-container glass-panel">
+      <button class="close-modal">&times;</button>
+      <h2 class="theme-glow">OUR MASTERPIECES</h2>
+      <div class="gallery-track-container">
+        <div class="gallery-track">
+           <!-- Group 1 -->
+           <div class="project-card floating" style="--d: 0.1s">
+              <div class="card-glow"></div>
+              <h3>Project Alpha</h3>
+              <p>Brand Metamorphosis</p>
+           </div>
+           <div class="project-card floating" style="--d: 0.2s">
+              <div class="card-glow"></div>
+              <h3>Project Beta</h3>
+              <p>WebGL Experience</p>
+           </div>
+           <div class="project-card floating" style="--d: 0.3s">
+              <div class="card-glow"></div>
+              <h3>Project Gamma</h3>
+              <p>Digital Architecture</p>
+           </div>
+           <div class="project-card floating" style="--d: 0.4s">
+              <div class="card-glow"></div>
+              <h3>Project Delta</h3>
+              <p>Visual Identity</p>
+           </div>
+           <!-- Duplicate Group for looping -->
+           <div class="project-card floating" style="--d: 0.1s">
+            <div class="card-glow"></div>
+            <h3>Project Alpha</h3>
+            <p>Brand Metamorphosis</p>
+         </div>
+         <div class="project-card floating" style="--d: 0.2s">
+            <div class="card-glow"></div>
+            <h3>Project Beta</h3>
+            <p>WebGL Experience</p>
+         </div>
+         <div class="project-card floating" style="--d: 0.3s">
+            <div class="card-glow"></div>
+            <h3>Project Gamma</h3>
+            <p>Digital Architecture</p>
+         </div>
+         <div class="project-card floating" style="--d: 0.4s">
+            <div class="card-glow"></div>
+            <h3>Project Delta</h3>
+            <p>Visual Identity</p>
+         </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
