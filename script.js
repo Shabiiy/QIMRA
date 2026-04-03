@@ -623,24 +623,23 @@ function skipToSection(targetIdx) {
 
     // Switch background videos
     const targetVideoIdx = Math.min(targetIdx, videos.length - 1);
-    videos.forEach((v, idx) => {
-      if (v) {
-         const isTarget = (idx === targetVideoIdx);
-         if (isTarget) {
-            v.pause();
-            // If jumping to section 5 (index 4) or beyond, show final frame of Slide 4 video
-            v.currentTime = (targetIdx >= videos.length) ? v.duration : 0;
-            
-            // Allow buffer time for seeking before reveal
-            setTimeout(() => {
-              gsap.to(v, { opacity: 1, duration: 0.8 });
-            }, 250);
-         } else {
-            v.style.opacity = 0;
-            v.pause();
-         }
-      }
-    });
+    const isLastSlide = (targetIdx >= videos.length);
+    
+    // Hide ALL videos first
+    videos.forEach(v => { if(v) v.style.opacity = 0; });
+    revVideos.forEach(rv => { if(rv) rv.style.opacity = 0; });
+
+    const v = isLastSlide ? revVideos[targetVideoIdx] : videos[targetVideoIdx];
+    
+    if (v) {
+       v.pause();
+       // Use first frame of Slide4_Rev (which corresponds to Slide4_End/Section 5)
+       v.currentTime = 0; 
+       
+       setTimeout(() => {
+          gsap.to(v, { opacity: 1, duration: 0.8 });
+       }, 250);
+    }
 
     // Fade in next section UI
     currentSectionIndex = targetIdx;
