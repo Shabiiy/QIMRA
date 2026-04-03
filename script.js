@@ -269,12 +269,11 @@ setupGlobalEventListeners();
 function initSliderAnimations() {
   sectionElements = document.querySelectorAll('.sec');
   
-  gsap.set(sectionElements, { opacity: 0, pointerEvents: "none", visibility: "hidden" });
-  gsap.set(".features-list", { opacity: 0, y: 30 });
-  gsap.set(".side-hero-logo", { opacity: 0, x: 300 });
+  // Set all but section 1 to hidden
+  gsap.set(Array.from(sectionElements).slice(1), { opacity: 0, pointerEvents: "none", visibility: "hidden" });
   
+  // Ensure section 1 is flagged as the current one correctly but leave animations to revealMainContent
   gsap.set(sectionElements[0], { opacity: 1, pointerEvents: "auto", visibility: "visible" });
-  // Animations are now managed by revealMainContent
 }
 
 function turnOff() {
