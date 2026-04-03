@@ -10,11 +10,18 @@ const xFol = gsap.quickTo(cursorFollower, "x", {duration: 0.08, ease: "power1.ou
 const yFol = gsap.quickTo(cursorFollower, "y", {duration: 0.08, ease: "power1.out", yPercent: -50});
 
 window.addEventListener("mousemove", (e) => {
+  if (isMobile) return; // Completely disable cursor logic on mobile
+  
   // Use set for the main dot (zero latency)
   gsap.set(customCursor, { x: e.clientX, y: e.clientY });
   xFol(e.clientX);
   yFol(e.clientY);
 });
+
+if (isMobile) {
+  if (customCursor) customCursor.style.display = 'none';
+  if (cursorFollower) cursorFollower.style.display = 'none';
+}
 
 document.querySelectorAll('.feature-item, #hold-button, .cupboard, .parallax-project').forEach(item => {
   item.addEventListener('mouseenter', () => cursorFollower.classList.add('hover-active'));
@@ -30,6 +37,19 @@ function setupInteraction() {
   const holdFill = document.querySelector('.hold-fill');
   if (!holdBtn) return;
   
+  if (isMobile) {
+    // 📱 MOBILE: One tap triggers everything instantly
+    const handleMobileTap = (e) => {
+       e.preventDefault();
+       if (window.navigator.vibrate) window.navigator.vibrate(100);
+       gsap.to(holdFill, { scale: 1, duration: 0.3, ease: "power2.out", onComplete: turnOn });
+       holdBtn.removeEventListener('touchstart', handleMobileTap);
+    };
+    holdBtn.addEventListener('touchstart', handleMobileTap, {passive: false});
+    return;
+  }
+
+  // 💻 DESKTOP: Existing Hold Logic - NO CHANGES
   if (!startHold) {
     startHold = (e) => {
       e.preventDefault(); 
@@ -37,13 +57,9 @@ function setupInteraction() {
       holdTween = gsap.to(holdFill, {
         scale: 1, duration: 1.5, ease: "power1.inOut",
         onComplete: () => {
-          // One nice haptic pulse on completion
-          if (isMobile && window.navigator.vibrate) window.navigator.vibrate(100);
           turnOn();
           holdBtn.removeEventListener('mousedown', startHold);
-          holdBtn.removeEventListener('touchstart', startHold);
           window.removeEventListener('mouseup', endHold);
-          window.removeEventListener('touchend', endHold);
         }
       });
     };
@@ -58,16 +74,11 @@ function setupInteraction() {
     };
   }
 
-  // Cleanup to avoid duplicates
+  // Cleanup & Add
   holdBtn.removeEventListener('mousedown', startHold);
-  holdBtn.removeEventListener('touchstart', startHold);
   window.removeEventListener('mouseup', endHold);
-  window.removeEventListener('touchend', endHold);
-
   holdBtn.addEventListener('mousedown', startHold);
-  holdBtn.addEventListener('touchstart', startHold, {passive: false});
   window.addEventListener('mouseup', endHold);
-  window.addEventListener('touchend', endHold);
 }
 
 setupInteraction();
