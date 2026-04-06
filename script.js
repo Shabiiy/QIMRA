@@ -40,7 +40,10 @@ class MobileSequence {
         const baseFolder = (slideIndex === 0) ? 'BULB ON&OFF mobile' : `SLIDE${slideIndex}`;
         for (let i = 1; i <= this.totalFrames; i++) {
             const num = String(i).padStart(3, '0');
-            const path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
+            let path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
+            if (slideIndex === 0 && i === 1) {
+                path = `mobileview/BULBOFF mv.png`;
+            }
             promises.push(this.loadImage(path));
         }
         
