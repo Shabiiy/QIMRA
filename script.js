@@ -91,7 +91,7 @@ class MobileSequence {
         this.ctx.drawImage(img, x, y, drawWidth, drawHeight);
     }
 
-    async animate(slideIndex, direction = 'forward', onComplete, duration = 1.5) {
+    async animate(slideIndex, direction = 'forward', onComplete, duration = 4.0) {
         const self = this;
         this.currentSlide = slideIndex;
         let start = (direction === 'forward') ? 1 : this.totalFrames;
@@ -250,10 +250,10 @@ function turnOn() {
   }
   
   if (isMobile) {
-      // 📱 MOBILE: Frame sequence animation for bulb turn on
+      // 📱 MOBILE: Frame sequence animation for bulb turn on at 1x speed (4s)
       loaderSeq.animate(0, 'forward', () => {
           revealMainContent();
-      }, 1.2);
+      }, 4.0);
   } else if (loaderVideo) {
     activeTransitionVideo = loaderVideo; // Enable scroll-based speedup
     loaderVideo.play();
@@ -466,7 +466,7 @@ function turnOff() {
           loaderSeq.animate(0, 'backward', () => {
               gsap.to("#hold-button", { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" });
               resetUIStates();
-          }, 1.2);
+          }, 4.0);
       } else if (loaderVidRev) {
         activeTransitionVideo = loaderVidRev;
         loaderVidRev.currentTime = 0;
