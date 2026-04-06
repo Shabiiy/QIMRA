@@ -194,19 +194,19 @@ window.addEventListener('load', () => {
   // Phase 1: Fade out the "LOADING" text
   gsap.to(".loading-text", { 
     opacity: 0, 
-    duration: 0.8, 
+    duration: 1.0,
+    ease: "power2.inOut", 
     onComplete: () => {
       const el = document.querySelector(".loading-text");
       if (el) el.style.display = "none";
-    }
-  });
 
-  // Phase 2: Fade in the interactive button
-  gsap.to("#loader-content", { 
-    opacity: 1, 
-    duration: 1.2, 
-    ease: "power2.out",
-    delay: 0.4 
+      // Phase 2: Fade in the interactive button AFTER the text is gone
+      gsap.to("#loader-content", { 
+        opacity: 1, 
+        duration: 1.5, 
+        ease: "power3.out"
+      });
+    }
   });
 
   const loaderVideo = document.getElementById('loader-video');
