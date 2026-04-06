@@ -233,12 +233,16 @@ p {
 }
 
 @media (max-width: 768px) {
-  #mobile-canvas {
-    display: block;
+  #mobile-canvas, #loader-canvas {
+    display: block !important;
   }
 
   .desktop-only-vid {
     display: none !important;
+  }
+  
+  .mobile-only-vid {
+    display: block !important;
   }
 
   body {
@@ -249,6 +253,10 @@ p {
   #cursor-follower {
     display: none !important;
   }
+}
+
+.mobile-only-vid {
+  display: none;
 }
 
 /* Loader / Section 1 */

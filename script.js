@@ -4,14 +4,14 @@ const isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|B
 
 // --- MOBILE CANVAS SEQUENCE LOGIC ---
 class MobileSequence {
-    constructor() {
-        this.canvas = document.getElementById('mobile-canvas');
+    constructor(canvasId, totalFrames = 240) {
+        this.canvas = document.getElementById(canvasId);
         if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
         this.frames = {
-            1: [], 2: [], 3: [], 4: []
+            0: [], 1: [], 2: [], 3: [], 4: []
         };
-        this.totalFrames = 240;
+        this.totalFrames = totalFrames;
         this.currentSlide = 1;
         this.isLoaded = false;
         
@@ -21,12 +21,15 @@ class MobileSequence {
     }
 
     async init() {
-        // Preload first frames immediately
-        await this.preloadSlide(1);
-        this.draw(1, 1);
-        // Preload rest in background
-        for (let i = 2; i <= 4; i++) {
-            this.preloadSlide(i);
+        if (this.canvas.id === 'loader-canvas') {
+            await this.preloadSlide(0);
+            this.draw(0, 1);
+        } else {
+            await this.preloadSlide(1);
+            this.draw(1, 1);
+            for (let i = 2; i <= 4; i++) {
+                this.preloadSlide(i);
+            }
         }
     }
 
@@ -34,21 +37,22 @@ class MobileSequence {
         if (this.frames[slideIndex].length > 0) return;
         
         const promises = [];
+        const baseFolder = (slideIndex === 0) ? 'bulb_on_off' : `SLIDE${slideIndex}`;
         for (let i = 1; i <= this.totalFrames; i++) {
             const num = String(i).padStart(3, '0');
-            const path = `mobileview/SLIDE${slideIndex}/ezgif-frame-${num}.jpg`;
+            const path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
             promises.push(this.loadImage(path));
         }
         
         this.frames[slideIndex] = await Promise.all(promises);
-        if (slideIndex === 1) this.isLoaded = true;
+        if (slideIndex === 0 || slideIndex === 1) this.isLoaded = true;
     }
 
     loadImage(src) {
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => resolve(img);
-            img.onerror = () => resolve(null); // Handle missing frames gracefully
+            img.onerror = () => resolve(null); 
             img.src = src;
         });
     }
@@ -56,13 +60,11 @@ class MobileSequence {
     draw(slideIndex, frameIndex) {
         if (!this.canvas || !this.ctx) return;
         
-        // Ensure frameIndex is within 1-240
         frameIndex = Math.max(1, Math.min(this.totalFrames, Math.round(frameIndex)));
         const img = this.frames[slideIndex][frameIndex - 1];
         
         if (!img) return;
 
-        // Cover logic
         const canvasWidth = window.innerWidth;
         const canvasHeight = window.innerHeight;
         this.canvas.width = canvasWidth;
@@ -89,24 +91,26 @@ class MobileSequence {
         this.ctx.drawImage(img, x, y, drawWidth, drawHeight);
     }
 
-    async animate(slideIndex, direction = 'forward', onComplete) {
+    async animate(slideIndex, direction = 'forward', onComplete, duration = 1.5) {
+        const self = this;
         this.currentSlide = slideIndex;
         let start = (direction === 'forward') ? 1 : this.totalFrames;
         let end = (direction === 'forward') ? this.totalFrames : 1;
         
         gsap.to({ frame: start }, {
             frame: end,
-            duration: 1.5, // Match desktop video duration approx
+            duration: duration, 
             ease: "none",
             onUpdate: function() {
-                mobileSeq.draw(slideIndex, this.targets()[0].frame);
+                self.draw(slideIndex, this.targets()[0].frame);
             },
             onComplete: onComplete
         });
     }
 }
 
-const mobileSeq = new MobileSequence();
+const mobileSeq = new MobileSequence('mobile-canvas');
+const loaderSeq = new MobileSequence('loader-canvas');
 
 const customCursor = document.getElementById("cursor");
 const cursorFollower = document.getElementById("cursor-follower");
@@ -144,6 +148,10 @@ function setupInteraction() {
   if (!holdBtn) return;
   
   if (isMobile) {
+    // Update text for mobile as requested
+    const holdText = document.querySelector('.hold-text');
+    if (holdText) holdText.textContent = "TOUCH TO UNFOLD";
+
     // 📱 MOBILE: One tap triggers everything instantly
     const handleMobileTap = (e) => {
        e.preventDefault();
@@ -202,11 +210,18 @@ window.addEventListener('load', () => {
     ease: "power2.out" 
   });
 
-  const loaderVideo = document.getElementById('loader-video');
-  if (loaderVideo) {
-    loaderVideo.currentTime = 0;
-    loaderVideo.pause();
-    loaderVideo.style.opacity = 1; // Reveal initial state after hidden in CSS
+  if (isMobile) {
+      if (loaderSeq.canvas) {
+          loaderSeq.draw(0, 1);
+          loaderSeq.canvas.style.opacity = 1;
+      }
+  } else {
+      const loaderVideo = document.getElementById('loader-video');
+      if (loaderVideo) {
+        loaderVideo.currentTime = 0;
+        loaderVideo.pause();
+        loaderVideo.style.opacity = 1; // Reveal initial state after hidden in CSS
+      }
   }
 });
 
@@ -229,12 +244,17 @@ function turnOn() {
   const holdBtn = document.getElementById('hold-button');
   document.body.style.overflow = "hidden"; 
   
-  // Hide UI immediately so we can see the full video transition
+  // Hide UI immediately so we can see the full transition
   if (holdBtn) {
     gsap.to([holdBtn, '.hold-text'], { scale: 0, opacity: 0, duration: 0.4, ease: "back.in(1.7)" });
   }
   
-  if (loaderVideo) {
+  if (isMobile) {
+      // 📱 MOBILE: Frame sequence animation for bulb turn on
+      loaderSeq.animate(0, 'forward', () => {
+          revealMainContent();
+      }, 1.2);
+  } else if (loaderVideo) {
     activeTransitionVideo = loaderVideo; // Enable scroll-based speedup
     loaderVideo.play();
     
@@ -420,13 +440,18 @@ function turnOff() {
   
   const tl = gsap.timeline();
   
-  // IMMEDIATELY prep video visibility before any other animation starts
-  tl.set(loaderVid, { opacity: 0 })
-    .set(loaderVidRev, { opacity: 1 })
+  // IMMEDIATELY prep visibility before any other animation starts
+  tl.set([loaderVid, loaderVidRev], { opacity: 0 })
     .set("#hold-button", { opacity: 0, scale: 0 }) 
     .set(".hold-fill", { scale: 0 });
 
-  // Slide UI back out of frame - Matched Slide 1 exit from goToNextSlide
+  if (isMobile && loaderSeq.canvas) {
+      tl.set(loaderSeq.canvas, { opacity: 1 });
+  } else {
+      tl.set(loaderVidRev, { opacity: 1 });
+  }
+
+  // Slide UI back out of frame
   tl.to(".logo-switcher", { x: -200, opacity: 0, duration: 1, ease: "power2.in" })
     .to(".side-hero-logo", { x: 300, opacity: 0, duration: 1.2, ease: "power2.in" }, "-=0.8")
     .to(".features-list", { y: -150, opacity: 0, duration: 1, ease: "power2.in" }, "-=1.0")
@@ -437,8 +462,13 @@ function turnOff() {
     .to("#video-container", { opacity: 0, duration: 0.8, ease: "power2.in" }, "-=0.8")
     .to("#loader", { opacity: 1, duration: 0.8, ease: "power2.out", pointerEvents: "auto" }, "-=0.8")
     .add(() => {
-      if (loaderVidRev) {
-        activeTransitionVideo = loaderVidRev; // Enable scroll-based speedup
+      if (isMobile) {
+          loaderSeq.animate(0, 'backward', () => {
+              gsap.to("#hold-button", { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" });
+              resetUIStates();
+          }, 1.2);
+      } else if (loaderVidRev) {
+        activeTransitionVideo = loaderVidRev;
         loaderVidRev.currentTime = 0;
         loaderVidRev.play();
         
@@ -450,36 +480,41 @@ function turnOff() {
         };
 
         loaderVidRev.onended = () => {
-          activeTransitionVideo = null; // Clear active video
-          // SEAMLESS RESET: No reload used to prevent flash
-          if (loaderVidRev) loaderVidRev.pause();
-          if (loaderVid) loaderVid.pause();
-          
-          gsap.set(loaderVidRev, { opacity: 0 });
-          gsap.set(loaderVid, { opacity: 1 }); // Show start video again for next loop
-          
-          currentSectionIndex = 0;
-          scrollingLocked = true;
-          
-          // Reset UI states for next time
-          gsap.set(".sec", { opacity: 0, visibility: "hidden" });
-          gsap.set(sectionElements[0], { opacity: 1, visibility: "visible" });
-          gsap.set(".features-list", { opacity: 0, y: 30 });
-          gsap.set(".side-hero-logo", { opacity: 0, x: 300 });
-          gsap.set(".logo-switcher", { opacity: 1, x: 0 });
-          gsap.set("#video-container", { opacity: 0 });
-          gsap.set("#scrolly-container", { opacity: 1, display: "none" }); // Reset for next fade in
-          
-          videos.forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
-          revVideos.forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
-          
-          // Re-enable hold interaction
-          setupInteraction();
+          activeTransitionVideo = null;
+          resetUIStates();
         };
       } else {
         window.location.reload();
       }
     });
+
+  function resetUIStates() {
+      if (loaderVidRev) loaderVidRev.pause();
+      if (loaderVid) loaderVid.pause();
+      
+      gsap.set(loaderVidRev, { opacity: 0 });
+      gsap.set(loaderVid, { opacity: 1 });
+      if (isMobile) {
+          gsap.set(loaderSeq.canvas, { opacity: 1 });
+          loaderSeq.draw(0, 1);
+      }
+
+      currentSectionIndex = 0;
+      scrollingLocked = true;
+      
+      gsap.set(".sec", { opacity: 0, visibility: "hidden" });
+      gsap.set(sectionElements[0], { opacity: 1, visibility: "visible" });
+      gsap.set(".features-list", { opacity: 0, y: 30 });
+      gsap.set(".side-hero-logo", { opacity: 0, x: 300 });
+      gsap.set(".logo-switcher", { opacity: 1, x: 0 });
+      gsap.set("#video-container", { opacity: 0 });
+      gsap.set("#scrolly-container", { opacity: 1, display: "none" }); 
+      
+      videos.forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
+      revVideos.forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
+      
+      setupInteraction();
+  }
 }
 
 function goToNextSlide() {
