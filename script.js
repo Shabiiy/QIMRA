@@ -37,7 +37,7 @@ class MobileSequence {
         if (this.frames[slideIndex].length > 0) return;
         
         const promises = [];
-        const baseFolder = (slideIndex === 0) ? 'bulb_on_off' : `SLIDE${slideIndex}`;
+        const baseFolder = (slideIndex === 0) ? 'BULB ON&OFF mobile' : `SLIDE${slideIndex}`;
         for (let i = 1; i <= this.totalFrames; i++) {
             const num = String(i).padStart(3, '0');
             const path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
