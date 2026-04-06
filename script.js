@@ -191,6 +191,24 @@ setupInteraction();
 
 // Ensure loader video is at first frame on start
 window.addEventListener('load', () => {
+  // Phase 1: Fade out the "LOADING" text
+  gsap.to(".loading-text", { 
+    opacity: 0, 
+    duration: 0.8, 
+    onComplete: () => {
+      const el = document.querySelector(".loading-text");
+      if (el) el.style.display = "none";
+    }
+  });
+
+  // Phase 2: Fade in the interactive button
+  gsap.to("#loader-content", { 
+    opacity: 1, 
+    duration: 1.2, 
+    ease: "power2.out",
+    delay: 0.4 
+  });
+
   const loaderVideo = document.getElementById('loader-video');
   if (loaderVideo) {
     loaderVideo.currentTime = 0;

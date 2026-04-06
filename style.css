@@ -279,6 +279,28 @@ p {
   /* Hidden by default to prevent flashes */
 }
 
+.loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gold);
+  font-family: var(--font-main);
+  letter-spacing: 0.8rem;
+  /* Extra wide for cinematic feel */
+  font-size: 0.8rem;
+  /* Scaled via root rem */
+  font-weight: 500;
+  z-index: 1000;
+  text-shadow: 0 0 1.25rem rgba(255, 196, 54, 0.4);
+  animation: pulse-opacity 2s infinite ease-in-out alternate;
+  pointer-events: none;
+  white-space: nowrap;
+  /* Keep it on one line */
+  text-align: center;
+  width: max-content;
+}
+
 #loader-content {
   position: absolute;
   bottom: var(--on-btn-bottom, 8vh);
