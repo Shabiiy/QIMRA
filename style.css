@@ -73,6 +73,16 @@
   /* Item 4 (+54 degrees) */
   --orbit-4-top: calc(var(--orbit-center-y) - var(--orbit-radius) * 0.5878);
   --orbit-4-left: calc(var(--orbit-center-x) + var(--orbit-radius) * 0.8090);
+  /* ------------------------------------------- */
+  /* 🖥️ MONITOR BRANDING LOGO (Slide 4)           */
+  /* Adjust these to move the branding logo      */
+  /* ------------------------------------------- */
+  --monitor-logo-y-offset: 15rem;
+  /* Higher = further DOWN (relative to center)  */
+  --monitor-logo-x-offset: 2vw;
+  /* Higher = further RIGHT (relative to center) */
+  --monitor-logo-width: 4rem;
+  /* Width of the logo branding */
 }
 
 html {
@@ -146,7 +156,8 @@ p {
   color: rgba(255, 245, 225, 0.85);
   line-height: 1.7;
   font-weight: 300;
-  font-size: 1.05rem; /* Scales with root */
+  font-size: 1.05rem;
+  /* Scales with root */
 }
 
 /* Custom Cursor Elements */
@@ -225,7 +236,7 @@ p {
   #mobile-canvas {
     display: block;
   }
-  
+
   .desktop-only-vid {
     display: none !important;
   }
@@ -234,7 +245,8 @@ p {
     cursor: auto !important;
   }
 
-  #cursor, #cursor-follower {
+  #cursor,
+  #cursor-follower {
     display: none !important;
   }
 }
@@ -293,8 +305,13 @@ p {
 }
 
 @keyframes pulse-opacity {
-  from { opacity: 0.3; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.3;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 #hold-button {
@@ -311,8 +328,15 @@ p {
 }
 
 @keyframes pulse-glow {
-  from { box-shadow: 0 0 10px rgba(255, 215, 0, 0.4), inset 0 0 5px rgba(255, 215, 0, 0.2); border-color: rgba(255, 220, 100, 0.4); }
-  to { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.5); border-color: rgba(255, 220, 100, 0.9); }
+  from {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4), inset 0 0 5px rgba(255, 215, 0, 0.2);
+    border-color: rgba(255, 220, 100, 0.4);
+  }
+
+  to {
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.5);
+    border-color: rgba(255, 220, 100, 0.9);
+  }
 }
 
 #hold-button:active {
@@ -460,8 +484,13 @@ p {
 }
 
 @keyframes float-scroll {
-  0% { transform: translate(-50%, 0); }
-  100% { transform: translate(-50%, 12px); }
+  0% {
+    transform: translate(-50%, 0);
+  }
+
+  100% {
+    transform: translate(-50%, 12px);
+  }
 }
 
 .logo-switcher {
@@ -475,7 +504,8 @@ p {
   margin-left: 2.5rem;
   pointer-events: auto;
   z-index: 100;
-  perspective: 75rem; /* added for 3D flip */
+  perspective: 75rem;
+  /* added for 3D flip */
   transform-style: preserve-3d;
 }
 
@@ -497,7 +527,8 @@ p {
 .logo-ara {
   left: -2.5rem;
   /* Aligned relative to the new container margin */
-  transform: rotateX(0deg); /* Start flat */
+  transform: rotateX(0deg);
+  /* Start flat */
 }
 
 .logo-eng {
@@ -505,9 +536,11 @@ p {
   /* Nudge English logo further back right as requested */
   width: 70%;
   height: 70%;
-  top: 15%; /* Keep vertically centered */
+  top: 15%;
+  /* Keep vertically centered */
   opacity: 0;
-  transform: rotateX(-180deg); /* Start flipped upside down/backward */
+  transform: rotateX(-180deg);
+  /* Start flipped upside down/backward */
 }
 
 .logo-switcher.active .logo-ara {
@@ -543,8 +576,10 @@ p {
   width: auto;
   max-width: 65vw;
   object-fit: contain;
+  /* Watermark look using original colors */
   mix-blend-mode: screen;
-  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.1));
+  opacity: 0.15;
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.1));
   pointer-events: none;
   z-index: 5;
   will-change: transform, opacity;
@@ -673,7 +708,8 @@ p {
 }
 
 .feature-item:hover {
-  z-index: 100; /* Pop this specific item to the very front so its bubble overlaps all neighbors */
+  z-index: 100;
+  /* Pop this specific item to the very front so its bubble overlaps all neighbors */
   background: rgba(40, 30, 10, 0.5);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
@@ -717,10 +753,12 @@ p {
   content: '';
   width: 22px;
   height: 22px;
-  border-radius: 4px; /* slightly more rounded for a bigger size */
+  border-radius: 4px;
+  /* slightly more rounded for a bigger size */
   transform: rotate(45deg);
   transition: transform 0.4s, opacity 0.4s, box-shadow 0.4s;
-  opacity: 0.5; /* Dimmed */
+  opacity: 0.5;
+  /* Dimmed */
 }
 
 .orbit-1 .orbit-icon::after {
@@ -744,7 +782,8 @@ p {
 }
 
 .feature-item:hover .orbit-icon::after {
-  transform: scale(0.85) rotate(45deg); /* Adjusted scale for bigger size */
+  transform: scale(0.85) rotate(45deg);
+  /* Adjusted scale for bigger size */
   opacity: 1;
   /* Dot shrinks slightly when expanded */
 }
@@ -753,21 +792,27 @@ p {
 .feature-item span {
   position: absolute;
   left: 50%;
-  bottom: 110%; /* Place bubble directly above */
+  bottom: 110%;
+  /* Place bubble directly above */
   translate: -50% 12px;
   width: max-content;
   padding: 8px 18px;
-  
+
   /* Liquid Glass Aesthetic */
-  background: rgba(40, 30, 10, 0.3); /* Translucent tinted glass */
+  background: rgba(40, 30, 10, 0.3);
+  /* Translucent tinted glass */
   backdrop-filter: blur(15px) saturate(150%);
   -webkit-backdrop-filter: blur(15px) saturate(150%);
-  border: 1px solid rgba(255, 220, 100, 0.3); /* Subtle glass edge */
-  box-shadow: 
-    inset 0 0 20px rgba(255, 220, 100, 0.1), /* Inner volumetric glass glow */
-    0 10px 30px rgba(0, 0, 0, 0.8), /* Dropped shadow */
-    0 0 20px rgba(255, 215, 0, 0.3); /* Outer golden glow */
-    
+  border: 1px solid rgba(255, 220, 100, 0.3);
+  /* Subtle glass edge */
+  box-shadow:
+    inset 0 0 20px rgba(255, 220, 100, 0.1),
+    /* Inner volumetric glass glow */
+    0 10px 30px rgba(0, 0, 0, 0.8),
+    /* Dropped shadow */
+    0 0 20px rgba(255, 215, 0, 0.3);
+  /* Outer golden glow */
+
   border-radius: 20px;
   color: var(--gold);
   font-family: 'Inter', sans-serif;
@@ -778,7 +823,8 @@ p {
   opacity: 0;
   scale: 0.3;
   transform-origin: bottom center;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.5, 1.3); /* Elastic bouncy cubic bezier */
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.5, 1.3);
+  /* Elastic bouncy cubic bezier */
   pointer-events: none;
 }
 
@@ -791,7 +837,8 @@ p {
   translate: -50% 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid rgba(255, 220, 100, 0.3); /* Match the subtle glass border */
+  border-top: 6px solid rgba(255, 220, 100, 0.3);
+  /* Match the subtle glass border */
 }
 
 .feature-item:hover span {
@@ -844,25 +891,28 @@ p {
   width: var(--cupboard-width, 17vw);
   min-width: 15rem;
   max-width: 18.75rem;
-  height: 26.25rem; /* Increased height to prevent "cutoff" look */
+  height: 26.25rem;
+  /* Increased height to prevent "cutoff" look */
   border-radius: 0.75rem;
   position: relative;
   cursor: pointer;
   transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-  overflow: visible; /* Prevent clipping of opened books */
+  overflow: visible;
+  /* Prevent clipping of opened books */
 
   background: rgba(15, 12, 8, 0.7);
   border: 1px solid rgba(255, 220, 100, 0.2);
-  box-shadow: 
-    0 2.5rem 6.25rem rgba(0, 0, 0, 0.8), 
+  box-shadow:
+    0 2.5rem 6.25rem rgba(0, 0, 0, 0.8),
     inset 0 0 6.25rem rgba(0, 0, 0, 0.95),
     0 0 1.25rem rgba(255, 215, 0, 0.05);
   backdrop-filter: blur(0.9375rem);
   -webkit-backdrop-filter: blur(0.9375rem);
-  
+
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Shelf sits at bottom */
+  justify-content: flex-end;
+  /* Shelf sits at bottom */
 }
 
 .shelf-label {
@@ -883,22 +933,25 @@ p {
   width: 100%;
   height: 17.5rem;
   display: flex;
-  flex-direction: column-reverse; /* Stacked horizontally on top of each other */
+  flex-direction: column-reverse;
+  /* Stacked horizontally on top of each other */
   justify-content: center;
   align-items: center;
-  gap: 0.125rem; /* Tightened stack with minimal space */
+  gap: 0.125rem;
+  /* Tightened stack with minimal space */
   padding: 1.25rem 0.625rem;
   perspective: 125rem;
   transform-style: preserve-3d;
 }
 
 .book {
-  width: var(--book-h, 12.5rem); /* Swapped for horizontal stack */
-  height: var(--book-w, 2.625rem); /* Swapped for horizontal stack */
+  width: var(--book-h, 12.5rem);
+  height: var(--book-w, 2.625rem);
   position: relative;
   transform-style: preserve-3d;
+  perspective: 125rem; /* Local perspective for better 3D depth */
   transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-  box-shadow: 0 0.3125rem 0.9375rem rgba(0,0,0,0.5); /* Shadow changed for flat stack */
+  box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.5);
   cursor: pointer;
   border-radius: 0.125rem 0.375rem 0.375rem 0.125rem;
   flex-shrink: 0;
@@ -906,42 +959,44 @@ p {
 
 .book-cover {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: inherit;
-  z-index: 5;
-  transform-origin: top; /* Changed to TOP for upward opening */
-  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1s;
+  z-index: 10;
+  transform-origin: left;
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1s;
   background-color: inherit;
-  /* Page edges effect (Gold/Cream) */
-  box-shadow: 
-    inset 0 -0.1875rem 0.625rem rgba(0,0,0,0.3),
-    inset 0 0.25rem 0.5rem rgba(255,255,255,0.1),
-    -0.25rem 0 0 rgba(255, 215, 0, 0.4), /* Left gold pages */
-    0.25rem 0 0 rgba(255, 215, 0, 0.4);  /* Right gold pages */
-  border-radius: 0.25rem 0.25rem 0.5rem 0.5rem; /* Adjusted corners */
+  /* Premium Leather Book Face */
+  box-shadow:
+    inset -5px 0 10px rgba(0, 0, 0, 0.4),
+    inset 0 2px 5px rgba(255, 255, 255, 0.1);
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 /* Intricate Gold Bands */
 .book-cover::before {
   content: '';
   position: absolute;
-  left: 0; top: 0; width: 100%; height: 100%;
-  background: 
-    linear-gradient(to bottom, 
-      transparent 12%, 
-      var(--gold-dim) 12.5%, var(--gold-dim) 13.5%, 
-      transparent 14%, 
-      transparent 18%, 
-      var(--gold-dim) 18.5%, var(--gold-dim) 19.5%, 
-      transparent 20%, 
-      transparent 80%, 
-      var(--gold-dim) 80.5%, var(--gold-dim) 81.5%, 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(to bottom,
+      transparent 12%,
+      var(--gold-dim) 12.5%, var(--gold-dim) 13.5%,
+      transparent 14%,
+      transparent 18%,
+      var(--gold-dim) 18.5%, var(--gold-dim) 19.5%,
+      transparent 20%,
+      transparent 80%,
+      var(--gold-dim) 80.5%, var(--gold-dim) 81.5%,
       transparent 82%,
-      transparent 86%, 
-      var(--gold-dim) 86.5%, var(--gold-dim) 87.5%, 
-      transparent 88%
-    );
+      transparent 86%,
+      var(--gold-dim) 86.5%, var(--gold-dim) 87.5%,
+      transparent 88%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, white 40%, transparent 100%);
   mask-image: radial-gradient(circle at 50% 50%, white 40%, transparent 100%);
   opacity: 0.8;
@@ -953,7 +1008,10 @@ p {
 .book-cover::after {
   content: '✥';
   position: absolute;
-  left: 0; top: 0; width: 100%; height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   display: flex;
   justify-content: center;
@@ -962,7 +1020,7 @@ p {
   font-size: 1.4rem;
   opacity: 0.6;
   pointer-events: none;
-  
+
   /* Grainy Leather Texture */
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-size: 150px 150px;
@@ -974,7 +1032,10 @@ p {
 .book::before {
   content: '';
   position: absolute;
-  top: 0.625rem; left: 0.3125rem; right: 0.3125rem; bottom: 0.625rem;
+  top: 0.625rem;
+  left: 0.3125rem;
+  right: 0.3125rem;
+  bottom: 0.625rem;
   border: 1px solid rgba(255, 215, 0, 0.15);
   pointer-events: none;
   z-index: 6;
@@ -986,76 +1047,196 @@ p {
 
 .book-page {
   position: absolute;
-  top: 0; left: 0;
-  width: 20rem;  /* Slightly wider for landscape-friendly opening */
-  height: 23.75rem; 
-  background: #dbccae; /* Saturated Vintage Tobacco Brown */
-  background-image: 
-    linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.1) 100%),
-    radial-gradient(circle at 10% 10%, rgba(255,255,255,0.2) 0%, transparent 80%);
-  color: #1a0f0a; /* Deep, bold ink */
+  top: 0;
+  left: 0;
+  width: 14rem; /* More compact for framing */
+  height: 20rem;
+  background: #fcf9ef;
+  color: #1a0f0a;
   padding: 2.5rem 1.875rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Crimson Text', serif;
   font-size: 1.1rem;
-  letter-spacing: 0.05rem;
-  font-weight: 800;
-  line-height: 1.4;
-  border-radius: 0.25rem 0.25rem 0.75rem 0.75rem;
-  transform-origin: top;
-  transform: rotateX(0deg) translateZ(-1px);
+  line-height: 1.5;
+  border-radius: 0 0.5rem 0.5rem 0;
+  transform-origin: left;
+  transform: rotateY(0deg) translateZ(-1px);
   opacity: 0;
-  transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
   pointer-events: none;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-  border-top: 14px solid rgba(0,0,0,0.1);
+  /* Thick page stack simulation */
+  box-shadow: 
+    -1px 0 0 white,
+    -2px 0 0 #ddd,
+    -3px 0 0 white,
+    -4px 0 0 #ddd,
+    0 20px 50px rgba(0, 0, 0, 0.7);
+  /* Antique Paper Texturing */
+  background-image: 
+    linear-gradient(to right, rgba(0,0,0,0.1) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.1) 100%),
+    repeating-linear-gradient(to right, transparent 0 1px, rgba(0,0,0,0.03) 1px 2px);
+  border-left: 1px solid rgba(0,0,0,0.2);
 }
 
 /* 🎨 VINTAGE THEMED BROWNS & TANS (Encyclopedic Size) */
-.book-1 { 
-    background: linear-gradient(to bottom, #3e2723, #4e342e, #2d1d1a); 
-    --book-w: 4.375rem; --book-h: 15rem; 
+.book-1 {
+  background: linear-gradient(to bottom, #3e2723, #4e342e, #2d1d1a);
+  --book-w: 4.375rem;
+  --book-h: 15rem;
 }
-.book-1 .book-page { border-left-color: #3e2723; }
 
-.book-2 { 
-    background: linear-gradient(to bottom, #5d4037, #6d4c41, #4e342e); 
-    --book-w: 4.375rem; --book-h: 15rem;
+.book-1 .book-page {
+  border-left-color: #3e2723;
 }
-.book-2 .book-page { border-left-color: #5d4037; }
 
-.book-3 { 
-    background: linear-gradient(to bottom, #2c1810, #3e2723, #1a0f0d); 
-    --book-w: 4.375rem; --book-h: 15rem;
+.book-2 {
+  background: linear-gradient(to bottom, #5d4037, #6d4c41, #4e342e);
+  --book-w: 4.375rem;
+  --book-h: 15rem;
 }
-.book-3 .book-page { border-left-color: #2c1810; }
+
+.book-2 .book-page {
+  border-left-color: #5d4037;
+}
+
+.book-3 {
+  background: linear-gradient(to bottom, #2c1810, #3e2723, #1a0f0d);
+  --book-w: 4.375rem;
+  --book-h: 15rem;
+}
+
+.book-3 .book-page {
+  border-left-color: #2c1810;
+}
 
 /* Filler Book Colors (More varieties of antique brown) */
-.book-filler-1 { background: linear-gradient(to right, #3b2f2f, #4a3c3c, #2a1e1e); --book-w: 2.375rem; --book-h: 11.5625rem; }
-.book-filler-2 { background: linear-gradient(to right, #795548, #8d6e63, #5d4037); --book-w: 2rem; --book-h: 12.1875rem; }
-.book-filler-3 { background: linear-gradient(to right, #212121, #424242, #111111); --book-w: 2.5rem; --book-h: 12.8125rem; }
-
-/* OPEN STATE (Enhanced Animation) */
-/* OPEN STATE (Vertical Framing within Cupboard) */
-.book.open {
-  z-index: 1000 !important;
-  /* Centered within parent cupboard */
-  transform: translate(var(--center-x), var(--center-y)) translateZ(200px) !important;
+.book-filler-1 {
+  background: linear-gradient(to right, #3b2f2f, #4a3c3c, #2a1e1e);
+  --book-w: 2.375rem;
+  --book-h: 11.5625rem;
 }
 
+.book-filler-2 {
+  background: linear-gradient(to right, #795548, #8d6e63, #5d4037);
+  --book-w: 2rem;
+  --book-h: 12.1875rem;
+}
+
+.book-filler-3 {
+  background: linear-gradient(to right, #212121, #424242, #111111);
+  --book-w: 2.5rem;
+  --book-h: 12.8125rem;
+}
+
+/* OPEN STATE (Storybook Dimensions & Layout) */
+.book.open {
+  z-index: 2500 !important;
+  width: 14rem !important; /* Slightly more compact */
+  height: 20rem !important;
+  transform: translate(var(--center-x), var(--center-y)) translateZ(250px) rotateY(0deg) !important;
+  transform-style: preserve-3d;
+}
+
+/* Cinematic Multi-Page Flip Styling */
+.book-pg {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.125rem;
+  width: calc(100% - 0.3125rem);
+  height: calc(100% - 0.375rem);
+  background: white;
+  transform-origin: left;
+  transform: rotateY(0deg) translateZ(1px);
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, #e5e5e5 0%, #fff 10%);
+  border-radius: 0 0.25rem 0.25rem 0;
+  box-shadow: inset 2px 0 5px rgba(0,0,0,0.1);
+  opacity: 0;
+}
+
+.book-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: 0 0.5rem 0.5rem 0;
+  transform-origin: left;
+  transform: rotateY(0deg);
+  z-index: 1;
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book.open .book-pg, 
+.book.open .book-back {
+  opacity: 1;
+}
+
+/* Bi-Directional Staggered Flip Angles (Wide 3D Reveal) */
 .book.open .book-cover {
-  transform: rotateX(150deg); /* Opens UPWARDS like a premium box or ledger */
-  box-shadow: 0 -15px 30px rgba(0,0,0,0.5);
+  transform: rotateY(-155deg); /* Swing wide and stay BEHIND the pages */
+  box-shadow: -20px 15px 40px rgba(0,0,0,0.6);
+  z-index: 10 !important; /* Low Z on left arm to show pages on top */
+}
+
+/* Left Pages fanning out (Swinging to -145, -130, -115) */
+.book.open .book-pg--1 {
+  transform: rotateY(-145deg);
+  z-index: 20;
+  transition-delay: 0.05s;
+}
+
+.book.open .book-pg--3 {
+  transform: rotateY(-130deg);
+  z-index: 30;
+  transition-delay: 0.1s;
+}
+
+.book.open .book-pg--5 {
+  transform: rotateY(-115deg);
+  z-index: 40;
+  transition-delay: 0.15s;
+}
+
+/* Right Pages fanning out (Swinging to 50, 40, 30) */
+.book.open .book-pg--6 {
+  transform: rotateY(50deg);
+  z-index: 20;
+  transition-delay: 0.05s;
+}
+
+.book.open .book-pg--4 {
+  transform: rotateY(40deg);
+  z-index: 30;
+  transition-delay: 0.1s;
+}
+
+.book.open .book-pg--2 {
+  transform: rotateY(30deg);
+  z-index: 40;
+  transition-delay: 0.15s;
+}
+
+.book.open .book-back {
+  transform: rotateY(15deg);
+  z-index: 10;
 }
 
 .book.open .book-page {
   opacity: 1;
-  transform: rotateX(0deg) translateZ(0px);
+  transform: rotateY(5deg) translateZ(40px); /* Content page centered and on top */
   pointer-events: auto;
+  transition-delay: 0.25s;
+  z-index: 1000; /* Absolute Top Priority */
+  background: #fdfaf0;
+  box-shadow: -5px 10px 20px rgba(0,0,0,0.2), inset 15px 0 20px rgba(0,0,0,0.05);
 }
 
 /* Focus Mode */
@@ -1074,21 +1255,21 @@ p {
   text-transform: uppercase;
   user-select: none;
   /* Cleaner Horizontal Label */
-  padding: 6px 20px; 
+  padding: 6px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  
+
   /* Vintage Label Aesthetic (restored and cleaned) */
   background: rgba(25, 20, 15, 0.5);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 215, 0, 0.4);
   border-radius: 4px;
-  box-shadow: 
-    inset 0 0 12px rgba(0,0,0,0.5),
-    0 4px 12px rgba(0,0,0,0.6);
-    
+  box-shadow:
+    inset 0 0 12px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.6);
+
   filter: drop-shadow(0 0 8px rgba(255, 196, 54, 0.2));
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0.95;
@@ -1101,9 +1282,9 @@ p {
   opacity: 1;
   letter-spacing: 3px;
   border-color: rgba(255, 215, 0, 0.8);
-  box-shadow: 
+  box-shadow:
     inset 0 0 15px rgba(255, 215, 0, 0.1),
-    0 10px 25px rgba(0,0,0,0.6);
+    0 10px 25px rgba(0, 0, 0, 0.6);
   transform: scale(1.05);
 }
 
@@ -1127,15 +1308,31 @@ p {
 
 .cupboard:hover .book {
   transform: translateZ(40px) translateY(-5px);
-  box-shadow: 15px 5px 25px rgba(0,0,0,0.7);
+  box-shadow: 15px 5px 25px rgba(0, 0, 0, 0.7);
 }
 
-.cupboard:hover .book:nth-child(odd) { transform: translateZ(45px) translateY(-8px) rotateZ(1deg); }
-.cupboard:hover .book:nth-child(even) { transform: translateZ(35px) translateY(-4px) rotateZ(-1deg); }
+.cupboard:hover .book:nth-child(odd) {
+  transform: translateZ(45px) translateY(-8px) rotateZ(1deg);
+}
 
-.cupboard:hover .book-1 { transition-delay: 0.05s; transform: translateZ(45px) translateY(-5px) rotateZ(-0.5deg); }
-.cupboard:hover .book-2 { transition-delay: 0.1s; transform: translateZ(35px) translateY(-3px) rotateZ(0.3deg) translateX(1px); }
-.cupboard:hover .book-3 { transition-delay: 0.15s; transform: translateZ(40px) translateY(-7px) rotateZ(-0.2deg) translateX(-1px); }
+.cupboard:hover .book:nth-child(even) {
+  transform: translateZ(35px) translateY(-4px) rotateZ(-1deg);
+}
+
+.cupboard:hover .book-1 {
+  transition-delay: 0.05s;
+  transform: translateZ(45px) translateY(-5px) rotateZ(-0.5deg);
+}
+
+.cupboard:hover .book-2 {
+  transition-delay: 0.1s;
+  transform: translateZ(35px) translateY(-3px) rotateZ(0.3deg) translateX(1px);
+}
+
+.cupboard:hover .book-3 {
+  transition-delay: 0.15s;
+  transform: translateZ(40px) translateY(-7px) rotateZ(-0.2deg) translateX(-1px);
+}
 
 .cupboard:hover .spine-text {
   opacity: 1;
@@ -1161,7 +1358,7 @@ p {
 }
 
 .service-text {
-  display: none; 
+  display: none;
 }
 
 .monitor-container {
@@ -1191,6 +1388,35 @@ p {
   margin-left: 5.5vw;
   /* Even further LEFT from 8.5vw */
   box-shadow: inset 0 0 2.5rem rgba(0, 0, 0, 0.9), 0 0 1.5625rem rgba(255, 196, 54, 0.05);
+}
+
+.monitor-container {
+  position: relative;
+}
+
+.monitor-branding-logo {
+  position: absolute;
+  /* Control its position via the variables at the top of this file */
+  left: calc(50% + var(--monitor-logo-x-offset, 2vw));
+  bottom: calc(50% - var(--monitor-logo-y-offset, 15rem) + 1vh); 
+  transform: translateX(-50%);
+  width: var(--monitor-logo-width, 4rem);
+  opacity: 0; 
+  
+  /* Bold Transparent Look (matching computer surface) */
+  clip-path: inset(0 100% 0 0);
+  
+  filter:
+    brightness(0.5) contrast(1.5) grayscale(1)
+    /* Simulated "Bold" by layering offsets for a thicker look */
+    drop-shadow(0.5px 0px 0.1px rgba(0,0,0,0.8))
+    drop-shadow(-0.5px 0px 0.1px rgba(0,0,0,0.8))
+    drop-shadow(0px 0.5px 0.1px rgba(255,255,255,0.2));
+
+  mix-blend-mode: hard-light; /* Melds with monitor metal */
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
 }
 
 .view-trigger {
@@ -1345,6 +1571,38 @@ p {
   opacity: 0.25;
 }
 
+.modal-branding-logo {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6.25rem;
+  opacity: 1; /* Full visibility for actual color */
+  /* Remove yellow filter to show actual color */
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.4)); 
+  pointer-events: none;
+  z-index: 50;
+  transition: transform 0.5s ease;
+}
+
+.modal.active .modal-branding-logo {
+  animation: modal-logo-reveal 2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes modal-logo-reveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    filter: brightness(3);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    filter: brightness(1) drop-shadow(0 0 5px rgba(0, 0, 0, 0.4));
+  }
+}
+
 .door-frame {
   padding: 3.125rem 3.75rem;
   text-align: center;
@@ -1418,9 +1676,9 @@ p {
   .logo-switcher {
     max-width: 350px;
     height: 140px;
-    margin-left: -40px; 
+    margin-left: -40px;
   }
-  
+
   .side-hero-logo {
     height: 80vh;
     max-width: 65vw;
@@ -1431,22 +1689,22 @@ p {
   .hero-text-container {
     padding-left: 5vw;
     padding-right: 5vw;
-    align-items: center; 
+    align-items: center;
     text-align: center;
   }
-  
+
   .logo-switcher {
     max-width: 280px;
     height: 100px;
-    margin-left: 0; 
+    margin-left: 0;
   }
-  
+
   .logo-ara {
-    left: 0; 
+    left: 0;
     width: 100%;
     transform: rotateX(0deg) scale(0.9);
   }
-  
+
   .logo-eng {
     left: 0;
     width: 80%;
@@ -1456,15 +1714,21 @@ p {
   .logo-switcher.active .logo-ara {
     transform: rotateX(180deg) scale(0.9);
   }
-  
+
+  .logo-switcher.active .logo-eng {
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+
   .side-logo-wrapper {
-    width: 40vw; /* Smaller as requested */
+    width: 40vw;
+    /* Smaller as requested */
     right: 5vw;
     left: auto;
     top: 50%;
     transform: translateY(-50%);
     opacity: 0.15;
-    z-index: 1; 
+    z-index: 1;
   }
 
   .side-hero-logo {
@@ -1485,7 +1749,10 @@ p {
 #rotate-device-overlay {
   display: none;
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: var(--bg-dark);
   z-index: 9999999;
   flex-direction: column;
@@ -1534,19 +1801,29 @@ p {
 }
 
 @keyframes rotatePhone {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(-90deg); }
-  100% { transform: rotate(-90deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(-90deg);
+  }
+
+  100% {
+    transform: rotate(-90deg);
+  }
 }
 
 /* Enable Portrait Support: Remove the blocking overlay effect */
 @media screen and (max-width: 1024px) {
   #rotate-device-overlay {
-    display: none !important; /* Never block the user */
+    display: none !important;
+    /* Never block the user */
   }
-  
+
   body {
-    overflow-y: auto !important; /* Ensure they can scroll if needed in portrait */
+    overflow-y: auto !important;
+    /* Ensure they can scroll if needed in portrait */
   }
 }
 
@@ -1555,15 +1832,16 @@ p {
 /* ========================================= */
 
 @media screen and (max-width: 900px) {
+
   /* Video: Letterbox/Window effect as requested */
-  .bg-vid, 
-  .loader-bulb-fullscreen, 
+  .bg-vid,
+  .loader-bulb-fullscreen,
   #mobile-canvas {
-     height: 100dvh;
-     width: 100vw;
-     object-fit: cover; 
-     object-position: center center;
-     background: #000;
+    height: 100dvh;
+    width: 100vw;
+    object-fit: cover;
+    object-position: center center;
+    background: #000;
   }
 
   /* Vertical Centering for Portrait */
@@ -1577,6 +1855,7 @@ p {
     align-items: center !important;
     overflow: hidden !important;
   }
+
   .hero-text-container {
     padding: 2vh 5vw;
     width: 100%;
@@ -1588,15 +1867,16 @@ p {
     text-align: center;
     gap: 1.5vh;
   }
-  
-  .glass-panel, 
-  .glass-window, 
-  .monitor-content, 
-  .levitating-door, 
+
+  .glass-panel,
+  .glass-window,
+  .monitor-content,
+  .levitating-door,
   .door-frame,
   .right-panel,
   .center-panel {
-    scale: 0.8; /* Small size for mobile integration */
+    scale: 0.8;
+    /* Small size for mobile integration */
     width: 90% !important;
     max-width: 20rem !important;
     margin: 0 auto;
@@ -1613,13 +1893,14 @@ p {
     position: relative;
     z-index: 20;
   }
-  
+
   .side-logo-wrapper {
     position: relative !important;
     width: 60vw !important;
     margin: 2vh auto !important;
     transform: none !important;
-    top: 0 !important; left: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
     opacity: 0.1;
   }
 
@@ -1646,51 +1927,64 @@ p {
     transform: none !important;
   }
 
-  h1 { font-size: 1.5rem !important; }
-  h2 { font-size: 1.3rem !important; }
-  h3 { font-size: 1.1rem !important; }
-  p { font-size: 0.85rem !important; line-height: 1.5; }
+  h1 {
+    font-size: 1.5rem !important;
+  }
 
-  
+  h2 {
+    font-size: 1.3rem !important;
+  }
+
+  h3 {
+    font-size: 1.1rem !important;
+  }
+
+  p {
+    font-size: 0.85rem !important;
+    line-height: 1.5;
+  }
+
+
   /* Section 3 Cupboards: Stack vertically in portrait */
   .cupboard-grid {
     flex-direction: column;
     gap: 1.875rem;
     margin-top: 5vh;
   }
-  
+
   .cupboard {
     width: 17.5rem;
     height: 20rem;
     margin: 0 auto;
   }
-  
+
   .bookshelf {
-    flex-direction: row; /* Preserve original layout for mobile */
+    flex-direction: row;
+    /* Preserve original layout for mobile */
     gap: 0.09375rem;
     height: 15rem;
     align-items: flex-end;
   }
-  
+
   .book {
     --book-w: 3.4375rem !important;
     --book-h: 11.25rem !important;
     width: var(--book-w);
     height: var(--book-h);
     border-radius: 0.375rem 0.125rem 0.125rem 0.375rem;
-    box-shadow: 0.125rem 0 0.9375rem rgba(0,0,0,0.5);
+    box-shadow: 0.125rem 0 0.9375rem rgba(0, 0, 0, 0.5);
   }
 
   .spine-text {
-     writing-mode: vertical-rl;
-     text-orientation: mixed;
-     padding: 0.9375rem 0.25rem;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 0.9375rem 0.25rem;
   }
-  
+
   .book.open {
     transform: translate(var(--center-x), var(--center-y)) translateZ(150px) !important;
   }
-  
+
   .book-page {
     width: 15rem;
     height: 18.75rem;
@@ -1700,24 +1994,43 @@ p {
     font-weight: 700;
     padding: 0.9375rem;
   }
-  
+
   .book.open {
     transform: translate(var(--center-x), var(--center-y)) translateZ(100px) !important;
   }
-  
+
   /* Section 4 Monitor */
   .monitor-content {
     width: 90%;
     margin-left: 0;
     padding: 2rem;
   }
-  
+
+  .monitor-branding-logo {
+    position: relative !important;
+    left: 0 !important;
+    top: 2rem !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: 3.5rem !important;
+    opacity: 0.5 !important;
+    margin: 0 auto;
+    display: block;
+  }
+
   /* Section 5 Door */
   .levitating-door {
     max-width: 95%;
   }
-  .neon-text { font-size: 1.4rem; white-space: normal; }
-  .contact-info p { font-size: 1rem !important; }
+
+  .neon-text {
+    font-size: 1.4rem;
+    white-space: normal;
+  }
+
+  .contact-info p {
+    font-size: 1rem !important;
+  }
 }
 
 /* Tweaks for landscape phones */
@@ -1732,19 +2045,19 @@ p {
     transform: translateY(-50%) !important;
     margin: 0 !important;
   }
-  
+
   /* Shrink bulb components on mobile - Fix alignment by keeping translate */
   #loader-content {
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) scale(0.65) !important;
   }
-  
+
   .hold-text {
     font-size: 1.2rem !important;
     letter-spacing: 2px !important;
   }
-  
+
   .hero-text-container {
     padding-left: 5vw;
     padding-right: 5vw;
@@ -1754,45 +2067,53 @@ p {
     font-size: 2.2rem;
     margin-bottom: 0.5rem;
   }
-  
+
   .features-list {
     transform: scale(0.65);
     transform-origin: center center;
   }
-  
+
   .scroll-indicator {
-    bottom: 2vh; 
+    bottom: 2vh;
   }
-  
+
   #off-button {
     bottom: 4vh;
     width: 1.875rem;
     height: 1.875rem;
   }
-  
+
   /* Panel Optimizations */
   .right-panel {
     max-width: 20rem;
     padding: 1.25rem;
     margin-right: 5vw;
   }
-  
-  .glass-panel, .glass-window, .cupboard {
+
+  .glass-panel,
+  .glass-window,
+  .cupboard {
     padding: 1.5rem !important;
   }
-  
+
   .cupboard-grid {
     gap: 8vw;
     margin-top: -5vh;
   }
-  
+
   .cupboard {
     width: 180px;
     height: 120px;
   }
 
-  h2 { font-size: 1.5rem; }
-  p { font-size: 0.9rem; line-height: 1.4; }
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
 
   /* Interactive items scale */
   .interactive-square {
@@ -1801,21 +2122,39 @@ p {
   }
 
   /* Section 3 Scale */
-  .module-title { font-size: 1.8rem; margin-bottom: 1rem !important; }
-  .cupboard-grid { gap: 5vw; }
+  .module-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem !important;
+  }
+
+  .cupboard-grid {
+    gap: 5vw;
+  }
+
   .cupboard {
     width: 140px;
     height: 100px;
     padding: 10px;
   }
-  .cupboard img { width: 40px !important; height: 40px !important; margin-bottom: 0.5rem !important; }
-  .cupboard h3 { font-size: 1.1rem !important; }
-  .service-text { font-size: 0.7rem !important; }
+
+  .cupboard img {
+    width: 40px !important;
+    height: 40px !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .cupboard h3 {
+    font-size: 1.1rem !important;
+  }
+
+  .service-text {
+    font-size: 0.7rem !important;
+  }
 
   /* Section 4 monitor */
   .monitor-content {
-     padding: 1rem !important;
-     max-width: 300px;
+    padding: 1rem !important;
+    max-width: 300px;
   }
 
   /* Section 5 Door */
@@ -1823,8 +2162,14 @@ p {
     padding: 1.5rem !important;
     max-width: 80% !important;
   }
-  .levitating-door p { margin-bottom: 1.5rem !important; }
-  .contact-info p { font-size: 1.1rem !important; }
+
+  .levitating-door p {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .contact-info p {
+    font-size: 1.1rem !important;
+  }
 
   /* Modal Gallery */
   .modal-container {
@@ -1832,14 +2177,21 @@ p {
     height: 90vh;
     padding: 1rem;
   }
+
   .project-card {
     min-width: 180px;
     height: 120px;
     padding: 1rem;
   }
-  .project-card h3 { font-size: 1.2rem; }
-  .project-card p { font-size: 0.8rem; }
-  
+
+  .project-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .project-card p {
+    font-size: 0.8rem;
+  }
+
   .footer {
     padding-bottom: 2rem;
   }
@@ -1865,7 +2217,8 @@ p {
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  color: var(--gold); /* Themed Yellow/Gold */
+  color: var(--gold);
+  /* Themed Yellow/Gold */
   font-size: 1.05rem;
   font-weight: 500;
   letter-spacing: 0.03125rem;
@@ -1893,6 +2246,7 @@ p {
   .footer {
     padding-bottom: 6vh;
   }
+
   .dev-link-btn {
     font-size: 0.9rem;
   }
@@ -1903,23 +2257,44 @@ p {
 /* ========================================= */
 
 @media (max-width: 1024px) {
-  #cursor, #cursor-follower {
+
+  #cursor,
+  #cursor-follower {
     display: none !important;
   }
-  
+
   * {
     cursor: auto !important;
   }
 
   /* Reduce filter complexity for mobile browsers */
-  .glass-panel, .glass-window, .cupboard, .levitating-door {
+  .glass-panel,
+  .glass-window,
+  .cupboard,
+  .levitating-door {
     backdrop-filter: blur(var(--blur-amt, 10px));
     -webkit-backdrop-filter: blur(var(--blur-amt, 10px));
   }
 
-  .feature-item.touch-active, .dev-link-btn:active, .dev-link-btn.touch-active {
+  .feature-item.touch-active,
+  .dev-link-btn:active,
+  .dev-link-btn.touch-active {
     background: rgba(255, 215, 0, 0.1);
     transform: scale(0.96);
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+
+  .book.open {
+    width: 11.5rem !important; /* Scaled down for mobile portrait */
+    height: 16.5rem !important;
+    transform: translate(var(--center-x), var(--center-y)) translateZ(100px) !important;
+  }
+
+  .book-page {
+    width: 11.5rem;
+    height: 16.5rem;
+    padding: 1.5rem 1rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
   }
 }

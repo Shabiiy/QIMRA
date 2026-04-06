@@ -481,6 +481,11 @@ function goToNextSlide() {
   const currentContent = currentSec.querySelector('.hero-text-container, .content-wrapper');
   const nextContent = nextSec.querySelector('.content-wrapper');
 
+  // Hide branding if leaving sec-4
+  if (currentSec.classList.contains('sec-4')) {
+      animateMonitorEngraving(false);
+  }
+
   // Exit Current Content
   if (currentSectionIndex === 0) {
      gsap.to("#off-button", { opacity: 0, duration: 0.5 });
@@ -556,6 +561,11 @@ function goToNextSlide() {
                   if (!isMobile) {
                     const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
                     if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power3.out", clearProps: "--blur-amt" });
+                    
+                    // Trigger Monitor Branding Engraving Animation for Sec-4
+                    if (nextSec.classList.contains('sec-4')) {
+                      animateMonitorEngraving(true);
+                    }
                   } else {
                     nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
                   }
@@ -623,6 +633,11 @@ function goToPrevSlide() {
   const prevSec = sectionElements[prevSectionIndex];
   const currentContent = currentSec.querySelector('.content-wrapper');
   const prevContent = (prevSectionIndex === 0) ? prevSec.querySelector('.hero-text-container') : prevSec.querySelector('.content-wrapper');
+
+  // Hide branding if leaving sec-4
+  if (currentSec.classList.contains('sec-4')) {
+      animateMonitorEngraving(false);
+  }
 
   // Exit Current Content
   if (currentContent) {
@@ -699,6 +714,11 @@ function goToPrevSlide() {
                  if (!isMobile) {
                     const glass = prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
                     if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power3.out", clearProps: "--blur-amt" });
+                    
+                    // Trigger Monitor Branding Engraving Animation
+                    if (prevSec.classList.contains('sec-4')) {
+                        animateMonitorEngraving(true);
+                    }
                  } else {
                     prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
                  }
@@ -818,6 +838,11 @@ function skipToSection(targetIdx) {
   const currentContent = currentSec.querySelector('.hero-text-container, .content-wrapper');
   const nextContent = nextSec.querySelector('.content-wrapper');
 
+  // Trigger Monitor Engraving HIDE if jumping AWAY from Section 4
+  if (currentSectionIndex === 3) {
+      animateMonitorEngraving(false);
+  }
+
   // Fade out current section UI AND Background
   gsap.to(currentSec, { opacity: 0, duration: 0.4 });
   gsap.to(videos, { opacity: 0, duration: 0.4 });
@@ -838,6 +863,11 @@ function skipToSection(targetIdx) {
         // Hide ALL videos first
         videos.forEach(v => { if(v) v.style.opacity = 0; });
         revVideos.forEach(rv => { if(rv) rv.style.opacity = 0; });
+
+        // Trigger Monitor Engraving if jumping TO Section 4
+        if (targetIdx === 3) {
+           animateMonitorEngraving(true);
+        }
 
         const v = isLastSlide ? revVideos[targetVideoIdx] : videos[targetVideoIdx];
         
@@ -1008,14 +1038,15 @@ function initBookshelfLogic() {
         const bookCenterY = bookRect.top + (bookRect.height / 2);
         
         // Deep nudge upwards to place the opened book in the upper half of the cupboard
-        let moveX = cupCenterX - bookCenterX;
-        let moveY = (cupCenterY - bookCenterY) - 140; 
+        // Reduced upward nudge (from -140 to -40) to keep it centered and 'near the text box'
+        let moveX = (cupCenterX - bookCenterX) - 80; 
+        let moveY = (cupCenterY - bookCenterY) - 40; 
         
-        // Custom: If it's the LEFTMOST cupboard, nudge it slightly to the RIGHT (+70px) 
-        // to move it away from the screen edge
+        // Custom: If it's the LEFTMOST cupboard, nudge it significantly to the RIGHT (+140px) 
+        // to move it away from the screen edge and prevent clipping
         const shelves = document.querySelectorAll('.cupboard');
         if (cupboard === shelves[0]) {
-           moveX += 70;
+           moveX += 140;
         }
         
         book.classList.add('open');
@@ -1041,6 +1072,32 @@ function initBookshelfLogic() {
       if (cupboard) cupboard.style.zIndex = "10";
     });
   });
+}
+
+function animateMonitorEngraving(show) {
+    const logo = document.querySelector('.monitor-branding-logo');
+    if (!logo) return;
+    
+    if (show) {
+        gsap.killTweensOf(logo);
+        
+        // Define a clear non-yellow metallic "engraved" filter string
+        const baseFilter = "brightness(0.5) contrast(1.5) grayscale(1) drop-shadow(0.5px 0px 0.1px rgba(0,0,0,0.8)) drop-shadow(-0.5px 0px 0.1px rgba(0,0,0,0.8)) drop-shadow(0px 0.5px 0.1px rgba(255,255,255,0.2))";
+        
+        // Faster, robust clip-path LTR reveal
+        gsap.fromTo(logo, 
+            { clipPath: "inset(0 100% 0 0)", opacity: 0, filter: baseFilter + " brightness(4)" }, 
+            { 
+                clipPath: "inset(0 0% 0 0)",
+                opacity: 1, 
+                filter: baseFilter + " brightness(1)",
+                duration: 1.6, 
+                ease: "power2.inOut"
+            }
+        );
+    } else {
+        gsap.to(logo, { opacity: 0, duration: 0.6 });
+    }
 }
 
 // Run on boot
