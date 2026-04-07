@@ -232,15 +232,18 @@ p {
   transition: opacity 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-@media (max-width: 768px), (max-aspect-ratio: 1/1) {
-  #mobile-canvas, #loader-canvas {
+@media (max-width: 768px),
+(max-aspect-ratio: 1/1) {
+
+  #mobile-canvas,
+  #loader-canvas {
     display: block !important;
   }
 
   .desktop-only-vid {
     display: none !important;
   }
-  
+
   .mobile-only-vid {
     display: block !important;
   }
@@ -289,7 +292,8 @@ p {
   object-fit: cover;
   z-index: 0;
   opacity: 0;
-  pointer-events: none; /* Never steal clicks */
+  pointer-events: none;
+  /* Never steal clicks */
   /* Hidden by default to prevent flashes */
 }
 
@@ -357,7 +361,8 @@ p {
   border: 1.5px solid rgba(255, 220, 100, 0.4);
   position: relative;
   overflow: hidden;
-  cursor: pointer; /* Changed from none to pointer to support desktop testing of mobile view */
+  cursor: pointer;
+  /* Changed from none to pointer to support desktop testing of mobile view */
   box-shadow: 0 0 0.625rem rgba(255, 215, 0, 0.4), inset 0 0 0.3125rem rgba(255, 215, 0, 0.2);
   transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
   animation: pulse-glow 2s infinite alternate;
@@ -471,10 +476,11 @@ p {
   align-items: center !important;
   overflow: visible !important;
   pointer-events: none !important;
-  transition: none !important; /* No CSS transitions allowed while GSAP is in control */
+  transition: none !important;
+  /* No CSS transitions allowed while GSAP is in control */
 }
 
-.content-wrapper > * {
+.content-wrapper>* {
   pointer-events: auto !important;
 }
 
@@ -613,6 +619,14 @@ p {
 .logo-switcher.active .logo-eng {
   opacity: 1;
   transform: rotateX(0deg);
+}
+
+.mobile-logo {
+  display: none !important;
+}
+
+.desktop-logo {
+  display: block !important;
 }
 
 .side-logo-wrapper {
@@ -1011,7 +1025,8 @@ p {
   height: var(--book-w, 2.625rem);
   position: relative;
   transform-style: preserve-3d;
-  perspective: 125rem; /* Local perspective for better 3D depth */
+  perspective: 125rem;
+  /* Local perspective for better 3D depth */
   transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
   box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.5);
   cursor: pointer;
@@ -1111,7 +1126,8 @@ p {
   position: absolute;
   top: 0;
   left: 0;
-  width: 14rem; /* More compact for framing */
+  width: 14rem;
+  /* More compact for framing */
   height: 20rem;
   background: #fcf9ef;
   color: #1a0f0a;
@@ -1131,17 +1147,17 @@ p {
   transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
   pointer-events: none;
   /* Thick page stack simulation */
-  box-shadow: 
+  box-shadow:
     -1px 0 0 white,
     -2px 0 0 #ddd,
     -3px 0 0 white,
     -4px 0 0 #ddd,
     0 20px 50px rgba(0, 0, 0, 0.7);
   /* Antique Paper Texturing */
-  background-image: 
-    linear-gradient(to right, rgba(0,0,0,0.1) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.1) 100%),
-    repeating-linear-gradient(to right, transparent 0 1px, rgba(0,0,0,0.03) 1px 2px);
-  border-left: 1px solid rgba(0,0,0,0.2);
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.1) 0%, transparent 8%, transparent 92%, rgba(0, 0, 0, 0.1) 100%),
+    repeating-linear-gradient(to right, transparent 0 1px, rgba(0, 0, 0, 0.03) 1px 2px);
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 /* 🎨 VINTAGE THEMED BROWNS & TANS (Encyclopedic Size) */
@@ -1197,7 +1213,8 @@ p {
 /* OPEN STATE (Storybook Dimensions & Layout) */
 .book.open {
   z-index: 2500 !important;
-  width: 14rem !important; /* Slightly more compact */
+  width: 14rem !important;
+  /* Slightly more compact */
   height: 20rem !important;
   transform: translate(var(--center-x), var(--center-y)) translateZ(250px) rotateY(0deg) !important;
   transform-style: preserve-3d;
@@ -1218,7 +1235,7 @@ p {
   pointer-events: none;
   background-image: linear-gradient(90deg, #e5e5e5 0%, #fff 10%);
   border-radius: 0 0.25rem 0.25rem 0;
-  box-shadow: inset 2px 0 5px rgba(0,0,0,0.1);
+  box-shadow: inset 2px 0 5px rgba(0, 0, 0, 0.1);
   opacity: 0;
 }
 
@@ -1236,16 +1253,18 @@ p {
   transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.book.open .book-pg, 
+.book.open .book-pg,
 .book.open .book-back {
   opacity: 1;
 }
 
 /* Bi-Directional Staggered Flip Angles (Wide 3D Reveal) */
 .book.open .book-cover {
-  transform: rotateY(-155deg); /* Swing wide and stay BEHIND the pages */
-  box-shadow: -20px 15px 40px rgba(0,0,0,0.6);
-  z-index: 10 !important; /* Low Z on left arm to show pages on top */
+  transform: rotateY(-155deg);
+  /* Swing wide and stay BEHIND the pages */
+  box-shadow: -20px 15px 40px rgba(0, 0, 0, 0.6);
+  z-index: 10 !important;
+  /* Low Z on left arm to show pages on top */
 }
 
 /* Left Pages fanning out (Swinging to -145, -130, -115) */
@@ -1293,12 +1312,14 @@ p {
 
 .book.open .book-page {
   opacity: 1;
-  transform: rotateY(5deg) translateZ(40px); /* Content page centered and on top */
+  transform: rotateY(5deg) translateZ(40px);
+  /* Content page centered and on top */
   pointer-events: auto;
   transition-delay: 0.25s;
-  z-index: 1000; /* Absolute Top Priority */
+  z-index: 1000;
+  /* Absolute Top Priority */
   background: #fdfaf0;
-  box-shadow: -5px 10px 20px rgba(0,0,0,0.2), inset 15px 0 20px rgba(0,0,0,0.05);
+  box-shadow: -5px 10px 20px rgba(0, 0, 0, 0.2), inset 15px 0 20px rgba(0, 0, 0, 0.05);
 }
 
 /* Focus Mode */
@@ -1460,22 +1481,21 @@ p {
   position: absolute;
   /* Control its position via the variables at the top of this file */
   left: calc(50% + var(--monitor-logo-x-offset, 2vw));
-  bottom: calc(50% - var(--monitor-logo-y-offset, 15rem) + 1vh); 
+  bottom: calc(50% - var(--monitor-logo-y-offset, 15rem) + 1vh);
   transform: translateX(-50%);
   width: var(--monitor-logo-width, 4rem);
-  opacity: 0; 
-  
+  opacity: 0;
+
   /* Bold Transparent Look (matching computer surface) */
   clip-path: inset(0 100% 0 0);
-  
+
   filter:
     brightness(0.5) contrast(1.5) grayscale(1)
     /* Simulated "Bold" by layering offsets for a thicker look */
-    drop-shadow(0.5px 0px 0.1px rgba(0,0,0,0.8))
-    drop-shadow(-0.5px 0px 0.1px rgba(0,0,0,0.8))
-    drop-shadow(0px 0.5px 0.1px rgba(255,255,255,0.2));
+    drop-shadow(0.5px 0px 0.1px rgba(0, 0, 0, 0.8)) drop-shadow(-0.5px 0px 0.1px rgba(0, 0, 0, 0.8)) drop-shadow(0px 0.5px 0.1px rgba(255, 255, 255, 0.2));
 
-  mix-blend-mode: hard-light; /* Melds with monitor metal */
+  mix-blend-mode: hard-light;
+  /* Melds with monitor metal */
   pointer-events: none;
   z-index: 9999;
   transition: opacity 0.5s ease;
@@ -1639,9 +1659,10 @@ p {
   left: 50%;
   transform: translateX(-50%);
   width: 6.25rem;
-  opacity: 1; /* Full visibility for actual color */
+  opacity: 1;
+  /* Full visibility for actual color */
   /* Remove yellow filter to show actual color */
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.4)); 
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.4));
   pointer-events: none;
   z-index: 50;
   transition: transform 0.5s ease;
@@ -1893,7 +1914,8 @@ p {
 /* 📱 VERTICAL PORTRAIT & SMARTPHONE OPTIMIZATIONS */
 /* ========================================= */
 
-@media screen and (max-width: 900px), (max-aspect-ratio: 1/1) {
+@media screen and (max-width: 900px),
+(max-aspect-ratio: 1/1) {
 
   /* Video: Letterbox/Window effect as requested */
   .bg-vid,
@@ -1937,7 +1959,8 @@ p {
   .door-frame,
   .right-panel,
   .center-panel {
-    scale: 0.85; /* Increased from 0.55 for better visibility */
+    scale: 0.85;
+    /* Increased from 0.55 for better visibility */
     width: 95% !important;
     max-width: 22rem !important;
     margin: 0 auto;
@@ -1953,27 +1976,54 @@ p {
   .sec-2 .right-panel {
     margin: 0 0 0 auto !important;
     position: relative;
-    right: -2% !important; 
+    right: 5% !important;
     transform-origin: right center !important;
-    scale: 0.85 !important;
+    scale: 0.55 !important;
   }
 
   .logo-switcher {
-    margin: 0 auto;
-    max-width: 11.25rem;
-    height: 4.5rem;
+    margin: -12vh auto 2vh auto !important;
+    /* Moved UP by -12vh and added bottom margin */
+    max-width: 18rem !important;
+    /* Enlarged from 14rem */
+    height: 7.5rem !important;
     position: relative;
     z-index: 20;
   }
 
   .side-logo-wrapper {
-    position: relative !important;
-    width: 45vw !important;
-    margin: 1vh auto !important;
-    transform: none !important;
+    position: absolute !important;
+    width: 100vw !important; /* Reset to screen width to avoid clipping */
+    height: 100vh !important;
     top: 0 !important;
-    left: 0 !important;
-    opacity: 0.1;
+    left: 0 !important; /* Center definitively on the viewport */
+    right: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .side-hero-logo {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; /* 'contain' ensures no part of the 9:16 asset is cut off */
+    filter: none !important;
+  }
+
+  .desktop-logo {
+    display: none !important;
+    /* Hide massive desktop logo on phones */
+  }
+
+  .mobile-logo {
+    display: block !important;
+    /* Show optimized mobile logo */
+  }
+
+  .interactive-square {
+    display: none !important;
+    /* Remove the 5 moving color squares on mobile as requested */
   }
 
   .features-list {
@@ -1999,51 +2049,82 @@ p {
     transform: none !important;
   }
 
-  h1 { font-size: 1.4rem !important; }
-  h2 { font-size: 1.2rem !important; }
-  h3 { font-size: 1.0rem !important; }
-  p { font-size: 0.8rem !important; line-height: 1.4; }
+  h1 {
+    font-size: 1.4rem !important;
+  }
 
-  /* Section 3 Cupboards: Stack vertically in portrait */
+  h2 {
+    font-size: 1.2rem !important;
+  }
+
+  h3 {
+    font-size: 1.0rem !important;
+  }
+
+  p {
+    font-size: 0.8rem !important;
+    line-height: 1.4;
+  }
+
+  /* Section 3 Cupboards: Row layout to match horizontal cabinet art */
   .cupboard-grid {
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-top: 3vh;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 1.5vw !important;
+    margin-top: 2vh;
+    width: 100% !important;
     margin-left: 0 !important;
   }
 
   .sec-3 .glass-panel {
-    scale: 1 !important; 
-    margin-bottom: 0 !important;
-    padding: 1.2rem !important;
-    width: 95% !important;
-    max-width: 22rem !important;
+    scale: 1 !important;
+    margin-bottom: 1.5rem !important;
+    padding: 1rem !important;
+    width: 92% !important;
+    max-width: 28rem !important;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
 
   .cupboard {
-    width: 22rem;
-    height: 19.5rem;
-    margin: 0 auto;
-    padding: 1rem !important;
+    width: 29vw !important;
+    height: 24vh !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0.5rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
   }
 
   .bookshelf {
-    flex-direction: row;
+    flex-direction: column-reverse !important;
+    /* Stack vertically to fit narrow cupboards */
     gap: 0.0625rem;
-    height: 13rem;
-    align-items: flex-end;
+    height: 100% !important;
+    width: 100% !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    padding: 0.25rem 0 !important;
   }
 
   .book {
-    --book-w: 3rem !important;
-    --book-h: 10rem !important;
-    width: var(--book-w);
-    height: var(--book-h);
-    border-radius: 0.375rem 0.125rem 0.125rem 0.375rem;
-    box-shadow: 0.125rem 0 0.9375rem rgba(0, 0, 0, 0.5);
+    --book-w: 5.5vw !important;
+    --book-h: 1.25rem !important;
+    /* Very thin spines to stack vertically */
+    width: 80% !important;
+    height: 1.125rem !important;
+    border-radius: 0.125rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    margin: 1px 0 !important;
+  }
+
+  .spine-text {
+    writing-mode: horizontal-tb !important;
+    font-size: 0.5rem !important;
+    padding: 0 2px !important;
+    text-align: center;
   }
 
   .spine-text {
@@ -2064,7 +2145,7 @@ p {
     font-size: 0.85rem;
     font-weight: 700;
     padding: 1rem;
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.1);
   }
 
   .book.open {
@@ -2115,12 +2196,14 @@ p {
     scroll-snap-type: x mandatory;
     padding: 20px 0;
   }
+
   .gallery-track {
     animation: none !important;
     display: flex !important;
     width: max-content !important;
     padding: 0 20px;
   }
+
   .project-card {
     min-width: 70vw !important;
     height: 180px !important;
@@ -2381,7 +2464,8 @@ p {
   }
 
   .book.open {
-    width: 11.5rem !important; /* Scaled down for mobile portrait */
+    width: 11.5rem !important;
+    /* Scaled down for mobile portrait */
     height: 16.5rem !important;
     transform: translate(var(--center-x), var(--center-y)) translateZ(100px) !important;
   }
