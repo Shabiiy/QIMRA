@@ -1,6 +1,7 @@
 gsap.registerPlugin(ScrollTrigger);
 
-const isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+let isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isTouchDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 // --- MOBILE CANVAS SEQUENCE LOGIC ---
 class MobileSequence {
@@ -20,15 +21,14 @@ class MobileSequence {
         }
     }
 
-    async init() {
+    async init(initialSlide = null) {
         if (this.canvas.id === 'loader-canvas') {
             await this.preloadSlide(0);
-            this.draw(0, 1);
         } else {
-            await this.preloadSlide(1);
-            this.draw(1, 1);
-            for (let i = 2; i <= 4; i++) {
-                this.preloadSlide(i);
+            const slideToLoadFirst = initialSlide || 1;
+            await this.preloadSlide(slideToLoadFirst);
+            for (let i = 1; i <= 4; i++) {
+                if (i !== slideToLoadFirst) this.preloadSlide(i);
             }
         }
     }
@@ -36,25 +36,38 @@ class MobileSequence {
     async preloadSlide(slideIndex) {
         if (this.frames[slideIndex].length > 0) return;
         
-        const promises = [];
         const baseFolder = (slideIndex === 0) ? 'BULB ON&OFF mobile' : `SLIDE${slideIndex}`;
-        for (let i = 1; i <= this.totalFrames; i++) {
+        
+        // 1. Load the first frame immediately and draw it
+        const firstFrameNum = "001";
+        let firstPath = `mobileview/${baseFolder}/ezgif-frame-${firstFrameNum}.jpg`;
+        if (slideIndex === 0) firstPath = `mobileview/BULBOFF mv.png`;
+        
+        const firstImg = await this.loadImage(firstPath);
+        this.frames[slideIndex][0] = firstImg;
+        this.draw(slideIndex, 1);
+        
+        // 2. Load the rest in the background
+        const promises = [];
+        for (let i = 2; i <= this.totalFrames; i++) {
             const num = String(i).padStart(3, '0');
-            let path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
-            if (slideIndex === 0 && i === 1) {
-                path = `mobileview/BULBOFF mv.png`;
-            }
-            promises.push(this.loadImage(path));
+            const path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
+            promises.push(this.loadImage(path, i-1, slideIndex));
         }
         
-        this.frames[slideIndex] = await Promise.all(promises);
+        const rest = await Promise.all(promises);
         if (slideIndex === 0 || slideIndex === 1) this.isLoaded = true;
     }
 
-    loadImage(src) {
+    loadImage(src, index = null, slideIndex = null) {
         return new Promise((resolve) => {
             const img = new Image();
-            img.onload = () => resolve(img);
+            img.onload = () => {
+                if (index !== null && slideIndex !== null) {
+                    this.frames[slideIndex][index] = img;
+                }
+                resolve(img);
+            };
             img.onerror = () => resolve(null); 
             img.src = src;
         });
@@ -123,7 +136,7 @@ const xFol = gsap.quickTo(cursorFollower, "x", {duration: 0.08, ease: "power1.ou
 const yFol = gsap.quickTo(cursorFollower, "y", {duration: 0.08, ease: "power1.out", yPercent: -50});
 
 window.addEventListener("mousemove", (e) => {
-  if (isMobile) return; // Completely disable cursor logic on mobile
+  if (isTouchDevice) return; // Completely disable cursor logic ONLY on real touch devices
   
   // Use set for the main dot (zero latency)
   gsap.set(customCursor, { x: e.clientX, y: e.clientY });
@@ -131,7 +144,7 @@ window.addEventListener("mousemove", (e) => {
   yFol(e.clientY);
 });
 
-if (isMobile) {
+if (isTouchDevice) {
   if (customCursor) customCursor.style.display = 'none';
   if (cursorFollower) cursorFollower.style.display = 'none';
 }
@@ -143,26 +156,47 @@ document.querySelectorAll('.feature-item, #hold-button, .cupboard, .parallax-pro
 
 // Intro Interaction
 let holdTween;
-let startHold, endHold;
+let startHold, endHold, handleMobileTap;
+let holdBtn, holdFill;
 
 function setupInteraction() {
-  const holdBtn = document.getElementById('hold-button');
-  const holdFill = document.querySelector('.hold-fill');
-  if (!holdBtn) return;
+  holdBtn = document.getElementById('hold-button');
+  holdFill = document.querySelector('.hold-fill');
+  if (!holdBtn || !holdFill) return;
   
-  if (isMobile) {
-    // Update text for mobile as requested
-    const holdText = document.querySelector('.hold-text');
-    if (holdText) holdText.textContent = "TOUCH TO UNFOLD";
-
-    // 📱 MOBILE: One tap triggers everything instantly
-    const handleMobileTap = (e) => {
+  // Define mobile-specific tap (which also handles clicks)
+  if (!handleMobileTap) {
+     handleMobileTap = (e) => {
        e.preventDefault();
        if (window.navigator.vibrate) window.navigator.vibrate(100);
-       gsap.to(holdFill, { scale: 1, duration: 0.3, ease: "power2.out", onComplete: turnOn });
+       
+       // Instant feedback on current global refs
+       gsap.to(holdFill, { scale: 1, duration: 0.2, ease: "power2.out" });
+       gsap.to(holdBtn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
+       
+       // Trigger logic
+       setTimeout(() => turnOn(), 200);
+       
        holdBtn.removeEventListener('touchstart', handleMobileTap);
+       holdBtn.removeEventListener('mousedown', handleMobileTap);
+       holdBtn.removeEventListener('click', handleMobileTap);
     };
+  }
+
+  if (isMobile) {
+    const holdText = document.querySelector('.hold-text');
+    if (holdText) holdText.textContent = "TOUCH TO UNFOLD";
+    if (loaderSeq && !loaderSeq.isLoaded) loaderSeq.init();
+
+    holdBtn.removeEventListener('touchstart', handleMobileTap);
+    holdBtn.removeEventListener('mousedown', handleMobileTap);
+    holdBtn.removeEventListener('click', handleMobileTap);
+    holdBtn.removeEventListener('mousedown', startHold);
+    window.removeEventListener('mouseup', endHold);
+
     holdBtn.addEventListener('touchstart', handleMobileTap, {passive: false});
+    holdBtn.addEventListener('mousedown', handleMobileTap);
+    holdBtn.addEventListener('click', handleMobileTap);
     return;
   }
 
@@ -192,6 +226,9 @@ function setupInteraction() {
   }
 
   // Cleanup & Add
+  holdBtn.removeEventListener('touchstart', handleMobileTap);
+  holdBtn.removeEventListener('mousedown', handleMobileTap);
+  holdBtn.removeEventListener('click', handleMobileTap);
   holdBtn.removeEventListener('mousedown', startHold);
   window.removeEventListener('mouseup', endHold);
   holdBtn.addEventListener('mousedown', startHold);
@@ -253,10 +290,10 @@ function turnOn() {
   }
   
   if (isMobile) {
-      // 📱 MOBILE: Frame sequence animation for bulb turn on at 1x speed (10s)
+      // 📱 MOBILE: Accelerated transition for immediate feeling
       loaderSeq.animate(0, 'forward', () => {
           revealMainContent();
-      }, 10.0);
+      }, 5.0); // Reduced from 10s to 5s for better flow
   } else if (loaderVideo) {
     activeTransitionVideo = loaderVideo; // Enable scroll-based speedup
     loaderVideo.play();
@@ -323,6 +360,70 @@ function revealMainContent() {
 let currentSectionIndex = 0;
 const totalSections = 5;
 let scrollingLocked = true; // Start locked during loader
+
+window.addEventListener('resize', () => {
+    const wasMobile = isMobile;
+    
+    // Check for small width OR portrait aspect ratio (common for mobile testing on laptop)
+    const isSmallWidth = window.innerWidth <= 768;
+    const isPortrait = window.innerWidth / window.innerHeight < 0.85; 
+    const isTouch = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    isMobile = (isSmallWidth || isPortrait || isTouch);
+    
+    if (isMobile && !wasMobile) {
+        // --- SWITCH TO MOBILE ---
+        if (!mobileSeq.isLoaded) mobileSeq.init(currentSectionIndex + 1);
+        if (!loaderSeq.isLoaded) loaderSeq.init();
+        
+        // Hide desktop cursor IF it is a REAL touch device
+        if (isTouchDevice) {
+            if (customCursor) customCursor.style.display = 'none';
+            if (cursorFollower) cursorFollower.style.display = 'none';
+        }
+        
+        // Finalize background swap
+        videos.forEach(v => { if(v) v.style.opacity = 0; });
+        revVideos.forEach(v => { if(v) v.style.opacity = 0; });
+        
+        if (scrollingLocked) {
+           loaderSeq.draw(0, 1);
+        } else {
+           mobileSeq.draw(currentSectionIndex + 1, 1);
+        }
+        
+        setupInteraction();
+        ScrollTrigger.refresh();
+    } else if (!isMobile && wasMobile) {
+        // --- SWITCH TO DESKTOP ---
+        if (customCursor) customCursor.style.display = 'block';
+        if (cursorFollower) cursorFollower.style.display = 'block';
+        
+        // Reveal desktop background videos and hide mobile canvas
+        const loaderCanvas = document.getElementById('loader-canvas');
+        if (loaderCanvas) loaderCanvas.style.opacity = 0;
+        const mobileCanvas = document.getElementById('mobile-canvas');
+        if (mobileCanvas) mobileCanvas.style.opacity = 0;
+
+        if (scrollingLocked) {
+            const loaderVideo = document.getElementById('loader-video');
+            if (loaderVideo) { 
+                loaderVideo.style.opacity = 1;
+                loaderVideo.currentTime = 0;
+            }
+        } else {
+            const currentVid = videos[currentSectionIndex];
+            if (currentVid) {
+                currentVid.style.opacity = 1;
+                currentVid.currentTime = 0.05;
+            }
+        }
+        
+        setupInteraction();
+        ScrollTrigger.refresh();
+    }
+});
+
 let sectionElements = [];
 
 let activeTransitionVideo = null;
@@ -600,24 +701,27 @@ function goToNextSlide() {
               gsap.set(nextSec, { visibility: "visible", opacity: 1 });
               
               if (nextContent) {
-                  gsap.set(nextContent, { position: "relative" }); 
-                  const enterFrom = { opacity: 0, top: 300, left: 0, scale: 0.95 };
-                  if (nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4')) {
-                    enterFrom.left = 500; enterFrom.top = 0;
-                  }
-                  gsap.fromTo(nextContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 2, ease: "power3.out", clearProps: "left,top,scale" });
-                  
-                  if (!isMobile) {
+                   const isSide = nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4');
+                   const enterFrom = isSide ? { left: 800, top: 0, opacity: 0, scale: 0.9 } : { left: 0, top: 300, opacity: 0, scale: 0.9 };
+                   
+                   gsap.fromTo(nextContent, enterFrom, { 
+                       opacity: 1, 
+                       left: 0, 
+                       top: 0, 
+                       scale: 1, 
+                       duration: 2.2, 
+                       ease: "power3.out", 
+                       clearProps: "all" 
+                   });
+                   
+                   if (!isMobile) {
                     const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
-                    if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power3.out", clearProps: "--blur-amt" });
+                    if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2.2, ease: "power3.out", clearProps: "--blur-amt" });
                     
-                    // Trigger Monitor Branding Engraving Animation for Sec-4
-                    if (nextSec.classList.contains('sec-4')) {
-                      animateMonitorEngraving(true);
-                    }
-                  } else {
+                    if (nextSec.classList.contains('sec-4')) animateMonitorEngraving(true);
+                   } else {
                     nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
-                  }
+                   }
               }
           }
       };
@@ -934,18 +1038,32 @@ function skipToSection(targetIdx) {
     // Fade in next section UI
     currentSectionIndex = targetIdx;
     
-    gsap.set(nextSec, { visibility: "visible", opacity: 0, pointerEvents: "auto" });
-    gsap.to(nextSec, { opacity: 1, duration: 1.2, ease: "power2.out" });
+    gsap.set(nextSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
     
     preloadVideosForIndex(targetIdx);
 
     if (nextContent) {
+      gsap.killTweensOf(nextContent);
+      
       if (!isMobile) {
+        gsap.set(nextContent, { position: "relative" }); 
+        const isSide = (targetIdx === 1 || targetIdx === 3);
+        const enterFrom = isSide ? { left: 800, top: 0, opacity: 0, scale: 0.9 } : { left: 0, top: 300, opacity: 0, scale: 0.9 };
+        
+        gsap.fromTo(nextContent, enterFrom, { 
+          opacity: 1, 
+          left: 0, 
+          top: 0, 
+          scale: 1, 
+          duration: 2.2, 
+          ease: "power3.out", 
+          clearProps: "all" 
+        });
+
         const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
-        gsap.fromTo(nextContent, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.5, ease: "power2.out" });
-        if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2, ease: "power2.out" });
+        if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2.2, ease: "power3.out", clearProps: "--blur-amt" });
       } else {
-        gsap.fromTo(nextContent, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 });
+        gsap.fromTo(nextContent, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, clearProps: "all" });
         nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
       }
     }

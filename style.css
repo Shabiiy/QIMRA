@@ -232,7 +232,7 @@ p {
   transition: opacity 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-aspect-ratio: 1/1) {
   #mobile-canvas, #loader-canvas {
     display: block !important;
   }
@@ -289,6 +289,7 @@ p {
   object-fit: cover;
   z-index: 0;
   opacity: 0;
+  pointer-events: none; /* Never steal clicks */
   /* Hidden by default to prevent flashes */
 }
 
@@ -356,7 +357,7 @@ p {
   border: 1.5px solid rgba(255, 220, 100, 0.4);
   position: relative;
   overflow: hidden;
-  cursor: none;
+  cursor: pointer; /* Changed from none to pointer to support desktop testing of mobile view */
   box-shadow: 0 0 0.625rem rgba(255, 215, 0, 0.4), inset 0 0 0.3125rem rgba(255, 215, 0, 0.2);
   transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
   animation: pulse-glow 2s infinite alternate;
@@ -376,6 +377,16 @@ p {
 
 #hold-button:active {
   transform: scale(0.9);
+}
+
+/* Extra click padding for mobile/testing - Invisible hit area */
+#hold-button::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
 }
 
 .hold-fill {
@@ -449,6 +460,22 @@ p {
   width: 100vw;
   height: 100vh;
   z-index: 10;
+}
+
+.content-wrapper {
+  width: 100% !important;
+  max-width: 100vw !important;
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  transition: none !important; /* No CSS transitions allowed while GSAP is in control */
+}
+
+.content-wrapper > * {
+  pointer-events: auto !important;
 }
 
 /* Each slide overlaps */
@@ -1866,7 +1893,7 @@ p {
 /* 📱 VERTICAL PORTRAIT & SMARTPHONE OPTIMIZATIONS */
 /* ========================================= */
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 900px), (max-aspect-ratio: 1/1) {
 
   /* Video: Letterbox/Window effect as requested */
   .bg-vid,
@@ -1910,9 +1937,9 @@ p {
   .door-frame,
   .right-panel,
   .center-panel {
-    scale: 0.55; /* Reduced further for 9:16 portrait */
+    scale: 0.85; /* Increased from 0.55 for better visibility */
     width: 95% !important;
-    max-width: 20rem !important;
+    max-width: 22rem !important;
     margin: 0 auto;
     padding: 1.25rem !important;
     background: rgba(10, 8, 5, 0.45);
@@ -1928,7 +1955,7 @@ p {
     position: relative;
     right: -2% !important; 
     transform-origin: right center !important;
-    scale: 0.55 !important;
+    scale: 0.85 !important;
   }
 
   .logo-switcher {
@@ -1982,17 +2009,23 @@ p {
     flex-direction: column;
     gap: 1.25rem;
     margin-top: 3vh;
+    margin-left: 0 !important;
   }
 
   .sec-3 .glass-panel {
-    scale: 0.5 !important; 
+    scale: 1 !important; 
     margin-bottom: 0 !important;
-    padding: 0.8rem !important;
+    padding: 1.2rem !important;
+    width: 95% !important;
+    max-width: 22rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
+
   .cupboard {
-    width: 14rem;
-    height: 16rem;
+    width: 22rem;
+    height: 19.5rem;
     margin: 0 auto;
     padding: 1rem !important;
   }
@@ -2163,6 +2196,7 @@ p {
   .cupboard-grid {
     gap: 8vw;
     margin-top: -5vh;
+    margin-left: 0 !important;
   }
 
   .cupboard {
@@ -2191,9 +2225,7 @@ p {
     margin-bottom: 1rem !important;
   }
 
-  .cupboard-grid {
-    gap: 5vw;
-  }
+
 
   .cupboard {
     width: 140px;
