@@ -2231,7 +2231,7 @@ p {
   /* Section 4 Monitor */
   .sec-4 .monitor-container {
     position: absolute !important;
-    top: 21vh !important;
+    top: 19vh !important;
     left: 3vw !important;
     width: 100vw !important;
     height: 100% !important;
