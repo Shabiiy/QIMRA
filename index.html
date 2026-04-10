@@ -70,13 +70,14 @@
     <!-- Section 1 (Hero) -->
     <section class="sec sec-1" id="sec-1">
       <div class="hero-text-container">
-        <div class="logo-switcher" onmouseenter="this.classList.toggle('active')">
-          <img src="assets/qimra logo arabic.png" alt="Arabic Logo" class="intellex-title logo-ara">
-          <img src="assets/qimra logo eng.png" alt="English Logo" class="intellex-title logo-eng">
+        <div class="logo-switcher" onmouseenter="if(window.innerWidth > 900) this.classList.toggle('active')" onclick="if(window.innerWidth <= 900) this.classList.toggle('active')">
+          <div class="mobile-tap-hint">click to see magic</div>
+          <img src="assets/qimra logo arabic.png" alt="Arabic Logo" class="intellex-title logo-ara" loading="lazy" decoding="async">
+          <img src="assets/qimra logo eng.png" alt="English Logo" class="intellex-title logo-eng" loading="lazy" decoding="async">
         </div>
         <div class="side-logo-wrapper">
-          <img src="assets/Side logo.png" alt="Intellex Branding" class="side-hero-logo desktop-logo">
-          <img src="mobileview/side logo mv.png" alt="Intellex Branding" class="side-hero-logo mobile-logo">
+          <img src="assets/Side logo.png" alt="Intellex Branding" class="side-hero-logo desktop-logo" loading="lazy" decoding="async">
+          <img src="mobileview/side logo mv.png" alt="Intellex Branding" class="side-hero-logo mobile-logo" loading="lazy" decoding="async">
           <div class="interactive-square sq-green" data-color="#10b981"></div>
           <div class="interactive-square sq-orange" data-color="#fb923c"></div>
           <div class="interactive-square sq-blue" data-color="#3b82f6"></div>
@@ -277,7 +278,7 @@
 
     <!-- Section 4 (Made with Magic) -->
     <section class="sec sec-4" id="sec-4">
-      <img src="assets/qimra logo arabic.png" alt="Branding" class="monitor-branding-logo">
+      <img src="assets/qimra logo arabic.png" alt="Branding" class="monitor-branding-logo" loading="lazy" decoding="async">
       <div class="content-wrapper monitor-container" style="width: 100%;">
         <div class="sec-content glass-window monitor-content floating" style="--d: 0s;">
           <h2 class="theme-glow" style="font-size: 1.5rem; margin-bottom: 0.5rem;">Made with Magic</h2>
@@ -379,13 +380,12 @@
         </div>
       </div>
       <!-- Branding Logo in Modal -->
-      <img src="assets/qimra logo arabic.png" alt="Branding" class="modal-branding-logo">
+      <img src="assets/qimra logo arabic.png" alt="Branding" class="modal-branding-logo" loading="lazy" decoding="async">
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
   <script src="script.js"></script>
 </body>
 

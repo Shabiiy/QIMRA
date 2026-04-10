@@ -644,9 +644,9 @@ function goToNextSlide() {
      gsap.to(".features-list", { y: -150, opacity: 0, duration: 1, ease: "power2.in" });
      animateSquaresOut();
   } else if (currentContent) {
-     const exitDir = { opacity: 0, top: -200, left: 0, duration: 0.8, ease: "power2.in" };
+     const exitDir = { opacity: 0, y: -200, x: 0, duration: 0.8, ease: "power2.in" };
      if (currentSec.classList.contains('sec-2') || currentSec.classList.contains('sec-4')) {
-        exitDir.left = 300; exitDir.top = 0;
+        exitDir.x = 300; exitDir.y = 0;
      }
      gsap.to(currentContent, exitDir);
   }
@@ -666,18 +666,18 @@ function goToNextSlide() {
           setTimeout(() => { scrollingLocked = false; }, 800);
       });
 
-      // Trigger UI entrance halfway through
+      // Trigger UI entrance near the end
       setTimeout(() => {
           gsap.set(nextSec, { visibility: "visible", opacity: 1 });
           if (nextContent) {
-              const enterFrom = { opacity: 0, top: 200, left: 0, scale: 0.95 };
+              const enterFrom = { opacity: 0, y: 200, x: 0, scale: 0.95 };
               if (nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4')) {
-                enterFrom.left = 200; enterFrom.top = 0;
+                enterFrom.x = 200; enterFrom.y = 0;
               }
-              gsap.fromTo(nextContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "left,top,scale" });
+              gsap.fromTo(nextContent, enterFrom, { opacity: 1, x: 0, y: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "x,y,scale" });
               nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
           }
-      }, 750);
+      }, 2800);
       
       return; 
   }
@@ -702,12 +702,12 @@ function goToNextSlide() {
               
               if (nextContent) {
                    const isSide = nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4');
-                   const enterFrom = isSide ? { left: 800, top: 0, opacity: 0, scale: 0.9 } : { left: 0, top: 300, opacity: 0, scale: 0.9 };
+                   const enterFrom = isSide ? { x: 800, y: 0, opacity: 0, scale: 0.9 } : { x: 0, y: 300, opacity: 0, scale: 0.9 };
                    
                    gsap.fromTo(nextContent, enterFrom, { 
                        opacity: 1, 
-                       left: 0, 
-                       top: 0, 
+                       x: 0, 
+                       y: 0, 
                        scale: 1, 
                        duration: 2.2, 
                        ease: "power3.out", 
@@ -745,7 +745,7 @@ function goToNextSlide() {
          if (!uiTriggered) {
              gsap.set(nextSec, { visibility: "visible", opacity: 1 });
              if (nextContent) {
-                  gsap.fromTo(nextContent, { opacity: 0, top: 100 }, { opacity: 1, top: 0, duration: 1.5, clearProps: "all" });
+                  gsap.fromTo(nextContent, { opacity: 0, y: 100 }, { opacity: 1, y: 0, duration: 1.5, clearProps: "all" });
                   
                   if (!isMobile) {
                     const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard');
@@ -768,7 +768,7 @@ function goToNextSlide() {
          currentSectionIndex = nextSectionIndex;
          gsap.set(nextSec, { visibility: "visible", opacity: 1 });
          if (nextContent) {
-            gsap.fromTo(nextContent, { opacity: 0, top: 100 }, { opacity: 1, top: 0, duration: 1.5, clearProps: "all" });
+            gsap.fromTo(nextContent, { opacity: 0, y: 100 }, { opacity: 1, y: 0, duration: 1.5, clearProps: "all" });
             const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
             if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power3.out", clearProps: "--blur-amt" });
          }
@@ -794,9 +794,9 @@ function goToPrevSlide() {
 
   // Exit Current Content
   if (currentContent) {
-     const exitDir = { opacity: 0, top: 300, left: 0, duration: 0.8, ease: "power2.in" };
+     const exitDir = { opacity: 0, y: 300, x: 0, duration: 0.8, ease: "power2.in" };
      if (currentSec.classList.contains('sec-2') || currentSec.classList.contains('sec-4')) {
-        exitDir.left = 500; exitDir.top = 0;
+        exitDir.x = 500; exitDir.y = 0;
      }
      gsap.to(currentContent, exitDir);
   }
@@ -813,8 +813,9 @@ function goToPrevSlide() {
           setTimeout(() => { scrollingLocked = false; }, 800);
       });
 
-      // Trigger UI entrance halfway through
+      // Trigger UI entrance near the end
       setTimeout(() => {
+          gsap.set(prevSec, { visibility: "visible", opacity: 1 });
           if (prevSectionIndex === 0) {
               gsap.to("#off-button", { opacity: 1, duration: 1.5, ease: "power3.out" });
               gsap.fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
@@ -822,14 +823,14 @@ function goToPrevSlide() {
               gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
               animateSquaresIn();
           } else if (prevContent) {
-              const enterFrom = { opacity: 0, top: -200, left: 0, scale: 0.95 };
+              const enterFrom = { opacity: 0, y: -200, x: 0, scale: 0.95 };
               if (prevSec.classList.contains('sec-2') || prevSec.classList.contains('sec-4')) {
-                enterFrom.left = -200; enterFrom.top = 0;
+                enterFrom.x = -200; enterFrom.y = 0;
               }
-              gsap.fromTo(prevContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "left,top,scale" });
+              gsap.fromTo(prevContent, enterFrom, { opacity: 1, x: 0, y: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "x,y,scale" });
               prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
           }
-      }, 750);
+      }, 2800);
       
       return;
   }
@@ -858,11 +859,11 @@ function goToPrevSlide() {
                  animateSquaresIn();
               } else if (prevContent) {
                  gsap.set(prevContent, { position: "relative", cursor: "pointer", transition: "all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)", overflow: "visible" });
-                 const enterFrom = { opacity: 0, top: -250, left: 0, scale: 0.95 };
+                 const enterFrom = { opacity: 0, y: -250, x: 0, scale: 0.95 };
                  if (prevSec.classList.contains('sec-2') || prevSec.classList.contains('sec-4')) {
-                    enterFrom.left = -500; enterFrom.top = 0; // Mirror exit direction
+                    enterFrom.x = -500; enterFrom.y = 0; // Mirror exit direction
                  }
-                 gsap.fromTo(prevContent, enterFrom, { opacity: 1, left: 0, top: 0, scale: 1, duration: 2, ease: "power3.out", clearProps: "left,top,scale" });
+                 gsap.fromTo(prevContent, enterFrom, { opacity: 1, x: 0, y: 0, scale: 1, duration: 2, ease: "power3.out", clearProps: "x,y,scale" });
                  
                  if (!isMobile) {
                     const glass = prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
@@ -908,7 +909,7 @@ function goToPrevSlide() {
           currentSectionIndex = prevSectionIndex;
           gsap.set(prevSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
           if (prevContent) {
-             gsap.fromTo(prevContent, { opacity: 0, top: -200 }, { opacity: 1, top: 0, duration: 1.5, clearProps: "all" });
+             gsap.fromTo(prevContent, { opacity: 0, y: -200 }, { opacity: 1, y: 0, duration: 1.5, clearProps: "all" });
              const glass = prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
              if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power3.out", clearProps: "--blur-amt" });
           }
