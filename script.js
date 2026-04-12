@@ -8,24 +8,37 @@ const SFX = {
   // 📱 Mobile-specific slide audio
   mobileBulb: new Audio('mobileview/BULB ON OFF MOBILE.mp3'),
   mobileSlides: [
-    null,                                          // index 0 = unused (bulb)
-    new Audio('mobileview/Slide 1 mv.mp3'),        // SLIDE1
-    new Audio('mobileview/slide 2 mv.mp3'),        // SLIDE2
-    new Audio('mobileview/slide3 mv.mp3'),         // SLIDE3
-    new Audio('mobileview/slide 4 mv.mp3'),        // SLIDE4
+    null,                                          
+    new Audio('mobileview/Slide 1 mv.mp3'),        
+    new Audio('mobileview/slide 2 mv.mp3'),        
+    new Audio('mobileview/slide3 mv.mp3'),         
+    new Audio('mobileview/slide 4 mv.mp3'),        
   ]
 };
 SFX.bulb.preload = 'auto';
 SFX.component.preload = 'auto';
 SFX.pageFlip.preload = 'auto';
 SFX.mobileBulb.preload = 'auto';
-SFX.mobileSlides.forEach(a => { if (a) a.preload = 'auto'; });
+SFX.mobileSlides.forEach(a => { if (a) { a.preload = 'auto'; a.load(); } });
 
 function playSound(sfx) {
   try {
     sfx.currentTime = 0;
-    sfx.play().catch(() => {}); // swallow autoplay policy errors gracefully
+    const p = sfx.play();
+    if (p && p.catch) p.catch(() => {}); 
   } catch(e) {}
+}
+
+// Global unlock for mobile audio (call on first interaction)
+function unlockMobileAudio() {
+  [SFX.mobileBulb, ...SFX.mobileSlides].forEach(audio => {
+    if (audio) {
+      const p = audio.play();
+      if (p && p.then) {
+        p.then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {});
+      }
+    }
+  });
 }
 
 // Play a mobile slide audio track and return it so caller can stop it
@@ -117,7 +130,8 @@ class MobileSequence {
                 resolve(img);
             };
             img.onerror = () => resolve(null); 
-            img.src = src;
+            // Cache buster for Vercel/CDN updates
+            img.src = src + "?v=" + new Date().getTime();
         });
     }
 
@@ -331,6 +345,10 @@ function turnOn() {
   const loaderVideo = document.getElementById('loader-video');
   const holdBtn = document.getElementById('hold-button');
   document.body.style.overflow = "hidden";
+  
+  // Unlock all mobile audio streams on this gesture
+  unlockMobileAudio();
+  
   playSound(SFX.bulb); // 🔊 Bulb ON click
   
   // Hide UI immediately so we can see the full transition
