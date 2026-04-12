@@ -129,9 +129,24 @@ class MobileSequence {
         
         const baseFolder = (slideIndex === 0) ? 'BULB ON&OFF mobile' : `SLIDE${slideIndex}`;
         
+        const startPathMap = {
+            0: 'BULBOFF mv.png',
+            1: 'BULBON mv.png',
+            2: 'behind the magic mv.png',
+            3: 'our playground mv.png',
+            4: 'made with magic mv.png'
+        };
+        
+        const endPathMap = {
+            0: 'BULBON mv.png',
+            1: 'behind the magic mv.png',
+            2: 'our playground mv.png',
+            3: 'made with magic mv.png',
+            4: 'knock on our door mv.png'
+        };
+
         // 1. Load the first frame immediately and draw it
-        const firstFrameNum = "001";
-        let firstPath = `mobileview/${baseFolder}/out_${firstFrameNum}.webp`;
+        let firstPath = `mobileview/${startPathMap[slideIndex]}`;
         
         const firstImg = await this.loadImage(firstPath);
         this.frames[slideIndex][0] = firstImg;
@@ -140,8 +155,13 @@ class MobileSequence {
         // 2. Load the rest in the background
         const promises = [];
         for (let i = 2; i <= this.totalFrames; i++) {
-            const num = String(i).padStart(3, '0');
-            const path = `mobileview/${baseFolder}/out_${num}.webp`;
+            let path;
+            if (i === this.totalFrames) {
+                path = `mobileview/${endPathMap[slideIndex]}`;
+            } else {
+                const num = String(i).padStart(3, '0');
+                path = `mobileview/${baseFolder}/out_${num}.webp`;
+            }
             promises.push(this.loadImage(path, i-1, slideIndex));
         }
         
