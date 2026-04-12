@@ -313,9 +313,10 @@ window.addEventListener('load', () => {
   });
 
   if (isMobile) {
-      if (loaderSeq.canvas) {
-          loaderSeq.draw(0, 1);
-          loaderSeq.canvas.style.opacity = 1;
+      const mobileBulbImg = document.getElementById('mobile-bulb-webp');
+      if (mobileBulbImg) {
+          mobileBulbImg.src = 'mobileview/BULBOFF mv.png';
+          mobileBulbImg.style.opacity = 1;
       }
   } else {
       const loaderVideo = document.getElementById('loader-video');
@@ -357,12 +358,19 @@ function turnOn() {
   }
   
   if (isMobile) {
-      // 📱 MOBILE: Accelerated transition for immediate feeling
+      // 📱 MOBILE: Use WebP animation instead of frames
+      const mobileBulbImg = document.getElementById('mobile-bulb-webp');
       playSound(SFX.mobileBulb); // 🔊 Mobile bulb ON audio
-      loaderSeq.animate(0, 'forward', () => {
+      
+      if (mobileBulbImg) {
+          // Trigger WebP (using timestamp to ensure it starts from frame 1)
+          mobileBulbImg.src = 'mobileview/BULB ON OFF MOBILE.webp?v=' + new Date().getTime();
+      }
+
+      setTimeout(() => {
           stopMobileAudio(SFX.mobileBulb);
           revealMainContent();
-      }, 5.0); // Reduced from 10s to 5s for better flow
+      }, 5000); // Sync with 5s audio/transition
   } else if (loaderVideo) {
     activeTransitionVideo = loaderVideo; // Enable scroll-based speedup
     loaderVideo.play();
@@ -619,8 +627,9 @@ function turnOff() {
     .set("#hold-button", { opacity: 0, scale: 0 }) 
     .set(".hold-fill", { scale: 0 });
 
-  if (isMobile && loaderSeq.canvas) {
-      tl.set(loaderSeq.canvas, { opacity: 1 });
+  const mobileBulbImg = document.getElementById('mobile-bulb-webp');
+  if (isMobile && mobileBulbImg) {
+      tl.set(mobileBulbImg, { opacity: 1 });
   } else {
       tl.set(loaderVidRev, { opacity: 1 });
   }
@@ -638,11 +647,15 @@ function turnOff() {
     .add(() => {
       if (isMobile) {
           playSound(SFX.mobileBulb); // 🔊 Mobile bulb OFF audio
-          loaderSeq.animate(0, 'backward', () => {
+          if (mobileBulbImg) {
+              mobileBulbImg.src = 'mobileview/BULB ON OFF MOBILE.webp?v=' + new Date().getTime();
+          }
+          
+          setTimeout(() => {
               stopMobileAudio(SFX.mobileBulb);
               gsap.to("#hold-button", { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" });
               resetUIStates();
-          }, 10.0);
+          }, 5000);
       } else if (loaderVidRev) {
         activeTransitionVideo = loaderVidRev;
         loaderVidRev.currentTime = 0;
@@ -670,9 +683,10 @@ function turnOff() {
       
       gsap.set(loaderVidRev, { opacity: 0 });
       gsap.set(loaderVid, { opacity: 1 });
-      if (isMobile) {
-          gsap.set(loaderSeq.canvas, { opacity: 1 });
-          loaderSeq.draw(0, 1);
+      const mobileBulbImg = document.getElementById('mobile-bulb-webp');
+      if (isMobile && mobileBulbImg) {
+          gsap.set(mobileBulbImg, { opacity: 1 });
+          mobileBulbImg.src = 'mobileview/BULBOFF mv.png';
       }
 
       currentSectionIndex = 0;
