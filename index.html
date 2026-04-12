@@ -26,9 +26,9 @@
 
   <!-- Loader / Interactive Hold Switch -->
   <div id="loader">
-    <video id="loader-video" src="assets/BULB ON&OFF.mp4" poster="assets/1.BULB off.jpeg" muted playsinline
+    <video id="loader-video" src="assets/BULB ON&OFF.mp4" poster="assets/1.BULB off.jpeg" playsinline
       preload="auto" class="loader-bulb-fullscreen desktop-only-vid"></video>
-    <video id="loader-video-rev" src="assets/BULB ON&OFF Reverse.mp4" poster="assets/BULBON still.png" muted playsinline
+    <video id="loader-video-rev" src="assets/BULB ON&OFF Reverse.mp4" poster="assets/BULBON still.png" playsinline
       preload="auto" class="loader-bulb-fullscreen desktop-only-vid" style="opacity: 0;"></video>
     
     <!-- Mobile Loader Canvas -->
@@ -46,21 +46,21 @@
   <!-- BG Videos instead of sequence -->
   <div id="video-container">
     <canvas id="mobile-canvas"></canvas>
-    <video id="vid-1" src="assets/SLIDE 1.mp4" poster="assets/BULBON still.png" muted playsinline preload="auto"
+    <video id="vid-1" src="assets/SLIDE 1.mp4" poster="assets/BULBON still.png" playsinline preload="auto"
       class="bg-vid desktop-only-vid"></video>
-    <video id="vid-1-rev" src="assets/SLIDE 1 Reverse.mp4" poster="assets/Behind the magic still.jpeg" muted playsinline
+    <video id="vid-1-rev" src="assets/SLIDE 1 Reverse.mp4" poster="assets/Behind the magic still.jpeg" playsinline
       preload="auto" class="bg-vid desktop-only-vid"></video>
-    <video id="vid-2" src="assets/SLIDE2.mp4" poster="assets/Behind the magic still.jpeg" muted playsinline
+    <video id="vid-2" src="assets/SLIDE2.mp4" poster="assets/Behind the magic still.jpeg" playsinline
       preload="none" class="bg-vid desktop-only-vid"></video>
-    <video id="vid-2-rev" src="assets/SLIDE2 Reverse.mp4" poster="assets/playground still.png" muted playsinline
+    <video id="vid-2-rev" src="assets/SLIDE2 Reverse.mp4" poster="assets/playground still.png" playsinline
       preload="none" class="bg-vid desktop-only-vid"></video>
-    <video id="vid-3" src="assets/SLIDE3.mp4" poster="assets/playground still.png" muted playsinline preload="none"
+    <video id="vid-3" src="assets/SLIDE3.mp4" poster="assets/playground still.png" playsinline preload="none"
       class="bg-vid desktop-only-vid"></video>
-    <video id="vid-3-rev" src="assets/SLIDE3 Reverse.mp4" poster="assets/made with magic still.png" muted playsinline
+    <video id="vid-3-rev" src="assets/SLIDE3 Reverse.mp4" poster="assets/made with magic still.png" playsinline
       preload="none" class="bg-vid desktop-only-vid"></video>
-    <video id="vid-4" src="assets/SLIDE4.mp4" poster="assets/made with magic still.png" muted playsinline preload="none"
+    <video id="vid-4" src="assets/SLIDE4.mp4" poster="assets/made with magic still.png" playsinline preload="none"
       class="bg-vid desktop-only-vid"></video>
-    <video id="vid-4-rev" src="assets/SLIDE4 Reverse.mp4" poster="assets/Knock on our door still.jpeg" muted playsinline
+    <video id="vid-4-rev" src="assets/SLIDE4 Reverse.mp4" poster="assets/Knock on our door still.jpeg" playsinline
       preload="none" class="bg-vid desktop-only-vid"></video>
   </div>
 
@@ -70,7 +70,7 @@
     <!-- Section 1 (Hero) -->
     <section class="sec sec-1" id="sec-1">
       <div class="hero-text-container">
-        <div class="logo-switcher" onmouseenter="if(window.innerWidth > 900) this.classList.toggle('active')" onclick="if(window.innerWidth <= 900) this.classList.toggle('active')">
+        <div class="logo-switcher" onmouseenter="if(window.innerWidth > 900){ this.classList.toggle('active'); playSound(SFX.component); }" onclick="if(window.innerWidth <= 900){ this.classList.toggle('active'); playSound(SFX.component); }">
           <div class="mobile-tap-hint">click to see magic</div>
           <img src="assets/qimra logo arabic.png" alt="Arabic Logo" class="intellex-title logo-ara" loading="lazy" decoding="async">
           <img src="assets/qimra logo eng.png" alt="English Logo" class="intellex-title logo-eng" loading="lazy" decoding="async">

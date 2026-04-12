@@ -1,5 +1,53 @@
 gsap.registerPlugin(ScrollTrigger);
 
+// ─── Audio Manager ───────────────────────────────────────────────
+const SFX = {
+  bulb: new Audio('assets/click button sound for mobile on off.mp3'),
+  component: new Audio('assets/component touch.mp3'),
+  pageFlip: new Audio('assets/page flip.mp3'),
+  // 📱 Mobile-specific slide audio
+  mobileBulb: new Audio('mobileview/BULB ON OFF MOBILE.mp3'),
+  mobileSlides: [
+    null,                                          // index 0 = unused (bulb)
+    new Audio('mobileview/Slide 1 mv.mp3'),        // SLIDE1
+    new Audio('mobileview/slide 2 mv.mp3'),        // SLIDE2
+    new Audio('mobileview/slide3 mv.mp3'),         // SLIDE3
+    new Audio('mobileview/slide 4 mv.mp3'),        // SLIDE4
+  ]
+};
+SFX.bulb.preload = 'auto';
+SFX.component.preload = 'auto';
+SFX.pageFlip.preload = 'auto';
+SFX.mobileBulb.preload = 'auto';
+SFX.mobileSlides.forEach(a => { if (a) a.preload = 'auto'; });
+
+function playSound(sfx) {
+  try {
+    sfx.currentTime = 0;
+    sfx.play().catch(() => {}); // swallow autoplay policy errors gracefully
+  } catch(e) {}
+}
+
+// Play a mobile slide audio track and return it so caller can stop it
+function playMobileSlideAudio(slideIndex) {
+  const audio = SFX.mobileSlides[slideIndex];
+  if (!audio) return null;
+  try {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  } catch(e) {}
+  return audio;
+}
+
+function stopMobileAudio(audio) {
+  if (!audio) return;
+  try {
+    audio.pause();
+    audio.currentTime = 0;
+  } catch(e) {}
+}
+// ─────────────────────────────────────────────────────────────────
+
 let isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const isTouchDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -282,7 +330,8 @@ const revVideos = [
 function turnOn() {
   const loaderVideo = document.getElementById('loader-video');
   const holdBtn = document.getElementById('hold-button');
-  document.body.style.overflow = "hidden"; 
+  document.body.style.overflow = "hidden";
+  playSound(SFX.bulb); // 🔊 Bulb ON click
   
   // Hide UI immediately so we can see the full transition
   if (holdBtn) {
@@ -291,7 +340,9 @@ function turnOn() {
   
   if (isMobile) {
       // 📱 MOBILE: Accelerated transition for immediate feeling
+      playSound(SFX.mobileBulb); // 🔊 Mobile bulb ON audio
       loaderSeq.animate(0, 'forward', () => {
+          stopMobileAudio(SFX.mobileBulb);
           revealMainContent();
       }, 5.0); // Reduced from 10s to 5s for better flow
   } else if (loaderVideo) {
@@ -534,6 +585,7 @@ function initSliderAnimations() {
 
 function turnOff() {
   scrollingLocked = true;
+  playSound(SFX.bulb); // 🔊 Bulb OFF click
   const loaderVidRev = document.getElementById("loader-video-rev");
   const loaderVid = document.getElementById("loader-video");
   
@@ -567,7 +619,9 @@ function turnOff() {
     .to("#loader", { opacity: 1, duration: 0.8, ease: "power2.out", pointerEvents: "auto" }, "-=0.8")
     .add(() => {
       if (isMobile) {
+          playSound(SFX.mobileBulb); // 🔊 Mobile bulb OFF audio
           loaderSeq.animate(0, 'backward', () => {
+              stopMobileAudio(SFX.mobileBulb);
               gsap.to("#hold-button", { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" });
               resetUIStates();
           }, 10.0);
@@ -660,7 +714,10 @@ function goToNextSlide() {
 
   if (isMobile) {
       // 📱 MOBILE: Frame-based Canvas Animation
+      const slideAudioIdx = currentSectionIndex + 1; // 1-4 matching SLIDE1-4
+      const slideAudio = playMobileSlideAudio(slideAudioIdx); // 🔊 Play slide transition audio
       mobileSeq.animate(currentSectionIndex + 1, 'forward', () => {
+          stopMobileAudio(slideAudio);
           currentSectionIndex = nextSectionIndex;
           gsap.set(nextSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
           setTimeout(() => { scrollingLocked = false; }, 800);
@@ -807,7 +864,10 @@ function goToPrevSlide() {
 
   if (isMobile) {
       // 📱 MOBILE: Frame-based Canvas Animation (BACKWARD)
+      const slideAudioIdx = prevSectionIndex + 1; // 1-4 matching SLIDE1-4
+      const slideAudio = playMobileSlideAudio(slideAudioIdx); // 🔊 Play slide transition audio
       mobileSeq.animate(prevSectionIndex + 1, 'backward', () => {
+          stopMobileAudio(slideAudio);
           currentSectionIndex = prevSectionIndex;
           gsap.set(prevSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
           setTimeout(() => { scrollingLocked = false; }, 800);
@@ -953,6 +1013,7 @@ function initSquaresInteraction() {
     sq.addEventListener('mouseenter', () => {
       if (!isAnySquareHovered) {
         isAnySquareHovered = true;
+        playSound(SFX.component); // 🔊 Squares first touched
         squares.forEach(square => startChaos(square));
       }
       cursorFollower.classList.add('hover-active');
@@ -961,11 +1022,22 @@ function initSquaresInteraction() {
     sq.addEventListener('mouseleave', () => {
       cursorFollower.classList.remove('hover-active');
     });
+
+    // Mobile touch support — always reset flag first so sound plays on every touch
+    sq.addEventListener('touchstart', () => {
+      isAnySquareHovered = true;
+      playSound(SFX.component);
+      squares.forEach(square => startChaos(square));
+    }, { passive: true });
   });
 
-  // Global reset: When mouse leaves the entire logo area, all squares return slowly
+  // Global reset: desktop = mouseleave, mobile = touchend anywhere outside wrapper
   if (wrapper) {
     wrapper.addEventListener('mouseleave', stopAllChaos);
+    wrapper.addEventListener('touchend', () => {
+      // Delay so chaos plays briefly before squares return
+      setTimeout(stopAllChaos, 3000);
+    }, { passive: true });
   }
 }
 
@@ -974,6 +1046,7 @@ function initOrbitNavigation() {
   orbitItems.forEach((item, index) => {
     item.addEventListener('click', () => {
       if (scrollingLocked) return;
+      playSound(SFX.component); // 🔊 Orbit nav tap/click
       // Orbit 1 is Section 2 (index 1), Orbit 2 is Section 3 (index 2), etc.
       skipToSection(index + 1);
     });
@@ -1116,6 +1189,7 @@ function initModalLogic() {
   };
 
   const openModal = () => {
+    playSound(SFX.component); // 🔊 View Projects clicked
     modal.classList.add('active');
     scrollingLocked = true;
     if (!loopTween) setupLoop();
@@ -1131,6 +1205,8 @@ function initModalLogic() {
   };
 
   openBtn.addEventListener('click', openModal);
+  // 📱 Mobile: instant audio on touchstart (before 300ms click delay)
+  openBtn.addEventListener('touchstart', () => playSound(SFX.component), { passive: true });
   closeBtn.addEventListener('click', closeModal);
   overlay.addEventListener('click', closeModal);
 
@@ -1174,6 +1250,8 @@ function initFooterLinks() {
     } else {
       instaLink.href = "https://www.instagram.com/intellex.web?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==";
     }
+    // 🔊 Component sound when Meet the Developer is clicked
+    instaLink.addEventListener('click', () => playSound(SFX.component));
   }
 }
 
@@ -1181,11 +1259,21 @@ function initBookshelfLogic() {
   const books = document.querySelectorAll('.book');
   
   books.forEach(book => {
+    // 🔊 Mobile: instant page flip sound on touchstart (before 300ms click delay)
+    book.addEventListener('touchstart', (e) => {
+      if (!book.classList.contains('open')) {
+        playSound(SFX.pageFlip);
+      }
+    }, { passive: true });
+
     book.addEventListener('click', (e) => {
       e.stopPropagation();
       
       const isOpen = book.classList.contains('open');
       const cupboard = book.closest('.cupboard');
+
+      // 🔊 Desktop: page flip sound on open (mobile already played it on touchstart)
+      if (!isOpen && !isTouchDevice) playSound(SFX.pageFlip);
       
       // Close all other books first
       document.querySelectorAll('.book.open').forEach(b => {
