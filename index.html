@@ -31,8 +31,11 @@
     <video id="loader-video-rev" src="assets/BULB ON&OFF Reverse.mp4" poster="assets/BULBON still.png" playsinline
       preload="auto" class="loader-bulb-fullscreen desktop-only-vid" style="opacity: 0;"></video>
     
-    <!-- Mobile Loader Canvas -->
-    <canvas id="loader-canvas" class="loader-bulb-fullscreen mobile-only-vid"></canvas>
+    <!-- Mobile Loader Videos -->
+    <video id="loader-video-mobile" src="mobileview/BULB ON OFF MOBILE.mp4" playsinline
+      preload="auto" class="loader-bulb-fullscreen mobile-only-vid"></video>
+    <video id="loader-video-rev-mobile" src="mobileview/BULB ON OFF MOBILE.mp4" playsinline
+      preload="auto" class="loader-bulb-fullscreen mobile-only-vid" style="opacity: 0;"></video>
 
     <div id="pre-loader-text" class="loading-text">LOADING YOUR EXPERIENCE</div>
     <div id="loader-content" style="opacity: 0;">
@@ -45,7 +48,15 @@
 
   <!-- BG Videos instead of sequence -->
   <div id="video-container">
-    <canvas id="mobile-canvas"></canvas>
+    <!-- Mobile BG Videos -->
+    <video id="vid-1-mobile" src="mobileview/Slide 1 mv.mp4" playsinline preload="auto" class="bg-vid mobile-only-vid"></video>
+    <video id="vid-1-rev-mobile" src="mobileview/Slide 1 mv.mp4" playsinline preload="auto" class="bg-vid mobile-only-vid"></video>
+    <video id="vid-2-mobile" src="mobileview/slide 2 mv.mp4" playsinline preload="none" class="bg-vid mobile-only-vid"></video>
+    <video id="vid-2-rev-mobile" src="mobileview/slide 2 mv.mp4" playsinline preload="none" class="bg-vid mobile-only-vid"></video>
+    <video id="vid-3-mobile" src="mobileview/slide3 mv.mp4" playsinline preload="none" class="bg-vid mobile-only-vid"></video>
+    <video id="vid-3-rev-mobile" src="mobileview/slide3 mv.mp4" playsinline preload="none" class="bg-vid mobile-only-vid"></video>
+    <video id="vid-4-mobile" src="mobileview/slide 4 mv.mp4" playsinline preload="none" class="bg-vid mobile-only-vid"></video>
+    <video id="vid-4-rev-mobile" src="mobileview/slide 4 mv.mp4" playsinline preload="none" class="bg-vid mobile-only-vid"></video>
     <video id="vid-1" src="assets/SLIDE 1.mp4" poster="assets/BULBON still.png" playsinline preload="auto"
       class="bg-vid desktop-only-vid"></video>
     <video id="vid-1-rev" src="assets/SLIDE 1 Reverse.mp4" poster="assets/Behind the magic still.jpeg" playsinline
