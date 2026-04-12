@@ -8,49 +8,173 @@ const SFX = {
   // 📱 Mobile-specific slide audio
   mobileBulb: new Audio('mobileview/BULB ON OFF MOBILE.mp3'),
   mobileSlides: [
-    null,                                          
-    new Audio('mobileview/Slide 1 mv.mp3'),        
-    new Audio('mobileview/slide 2 mv.mp3'),        
-    new Audio('mobileview/slide3 mv.mp3'),         
-    new Audio('mobileview/slide 4 mv.mp3'),        
+    null,                                          // index 0 = unused (bulb)
+    new Audio('mobileview/Slide 1 mv.mp3'),        // SLIDE1
+    new Audio('mobileview/slide 2 mv.mp3'),        // SLIDE2
+    new Audio('mobileview/slide3 mv.mp3'),         // SLIDE3
+    new Audio('mobileview/slide 4 mv.mp3'),        // SLIDE4
   ]
 };
 SFX.bulb.preload = 'auto';
 SFX.component.preload = 'auto';
 SFX.pageFlip.preload = 'auto';
 SFX.mobileBulb.preload = 'auto';
-SFX.mobileSlides.forEach(a => { if (a) { a.preload = 'auto'; a.load(); } });
+SFX.mobileSlides.forEach(a => { if (a) a.preload = 'auto'; });
 
 function playSound(sfx) {
   try {
     sfx.currentTime = 0;
-    const p = sfx.play();
-    if (p && p.catch) p.catch(() => {}); 
+    sfx.play().catch(() => {}); // swallow autoplay policy errors gracefully
   } catch(e) {}
 }
 
-// Global media unlock (fixes mobile blank video iOS/Android strict policies)
-let mediaUnlocked = false;
-function unlockMedia() {
-  if (mediaUnlocked) return;
-  const allVids = document.querySelectorAll('video');
-  allVids.forEach(v => {
-    if (v) {
-      const p = v.play();
-      if (p && p.then) {
-        p.then(() => { v.pause(); v.currentTime = 0; }).catch(() => {});
-      }
-    }
-  });
-  mediaUnlocked = true;
+// Play a mobile slide audio track and return it so caller can stop it
+function playMobileSlideAudio(slideIndex) {
+  const audio = SFX.mobileSlides[slideIndex];
+  if (!audio) return null;
+  try {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  } catch(e) {}
+  return audio;
+}
+
+function stopMobileAudio(audio) {
+  if (!audio) return;
+  try {
+    audio.pause();
+    audio.currentTime = 0;
+  } catch(e) {}
 }
 // ─────────────────────────────────────────────────────────────────
 
 let isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const isTouchDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// --- MOBILE CANVAS SEQUENCE REMOVED ---
-// Switched to HTML5 videos directly like desktop
+// --- MOBILE CANVAS SEQUENCE LOGIC ---
+class MobileSequence {
+    constructor(canvasId, totalFrames = 240) {
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.frames = {
+            0: [], 1: [], 2: [], 3: [], 4: []
+        };
+        this.totalFrames = totalFrames;
+        this.currentSlide = 1;
+        this.isLoaded = false;
+        
+        if (isMobile) {
+            this.init();
+        }
+    }
+
+    async init(initialSlide = null) {
+        if (this.canvas.id === 'loader-canvas') {
+            await this.preloadSlide(0);
+        } else {
+            const slideToLoadFirst = initialSlide || 1;
+            await this.preloadSlide(slideToLoadFirst);
+            for (let i = 1; i <= 4; i++) {
+                if (i !== slideToLoadFirst) this.preloadSlide(i);
+            }
+        }
+    }
+
+    async preloadSlide(slideIndex) {
+        if (this.frames[slideIndex].length > 0) return;
+        
+        const baseFolder = (slideIndex === 0) ? 'BULB ON&OFF mobile' : `SLIDE${slideIndex}`;
+        
+        // 1. Load the first frame immediately and draw it
+        const firstFrameNum = "001";
+        let firstPath = `mobileview/${baseFolder}/ezgif-frame-${firstFrameNum}.jpg`;
+        if (slideIndex === 0) firstPath = `mobileview/BULBOFF mv.png`;
+        
+        const firstImg = await this.loadImage(firstPath);
+        this.frames[slideIndex][0] = firstImg;
+        this.draw(slideIndex, 1);
+        
+        // 2. Load the rest in the background
+        const promises = [];
+        for (let i = 2; i <= this.totalFrames; i++) {
+            const num = String(i).padStart(3, '0');
+            const path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
+            promises.push(this.loadImage(path, i-1, slideIndex));
+        }
+        
+        const rest = await Promise.all(promises);
+        if (slideIndex === 0 || slideIndex === 1) this.isLoaded = true;
+    }
+
+    loadImage(src, index = null, slideIndex = null) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                if (index !== null && slideIndex !== null) {
+                    this.frames[slideIndex][index] = img;
+                }
+                resolve(img);
+            };
+            img.onerror = () => resolve(null); 
+            img.src = src;
+        });
+    }
+
+    draw(slideIndex, frameIndex) {
+        if (!this.canvas || !this.ctx) return;
+        
+        frameIndex = Math.max(1, Math.min(this.totalFrames, Math.round(frameIndex)));
+        const img = this.frames[slideIndex][frameIndex - 1];
+        
+        if (!img) return;
+
+        const canvasWidth = window.innerWidth;
+        const canvasHeight = window.innerHeight;
+        this.canvas.width = canvasWidth;
+        this.canvas.height = canvasHeight;
+        
+        const imgRatio = img.width / img.height;
+        const canvasRatio = canvasWidth / canvasHeight;
+        
+        let drawWidth, drawHeight, x, y;
+        
+        if (canvasRatio > imgRatio) {
+            drawWidth = canvasWidth;
+            drawHeight = canvasWidth / imgRatio;
+            x = 0;
+            y = (canvasHeight - drawHeight) / 2;
+        } else {
+            drawWidth = canvasHeight * imgRatio;
+            drawHeight = canvasHeight;
+            x = (canvasWidth - drawWidth) / 2;
+            y = 0;
+        }
+        
+        this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        this.ctx.drawImage(img, x, y, drawWidth, drawHeight);
+    }
+
+    async animate(slideIndex, direction = 'forward', onComplete, duration = 4.0) {
+        const self = this;
+        this.currentSlide = slideIndex;
+        let start = (direction === 'forward') ? 1 : this.totalFrames;
+        let end = (direction === 'forward') ? this.totalFrames : 1;
+        
+        gsap.to({ frame: start }, {
+            frame: end,
+            duration: duration, 
+            ease: "none",
+            onUpdate: function() {
+                self.draw(slideIndex, this.targets()[0].frame);
+            },
+            onComplete: onComplete
+        });
+    }
+}
+
+const mobileSeq = new MobileSequence('mobile-canvas');
+const loaderSeq = new MobileSequence('loader-canvas');
 
 const customCursor = document.getElementById("cursor");
 const cursorFollower = document.getElementById("cursor-follower");
@@ -94,9 +218,6 @@ function setupInteraction() {
        e.preventDefault();
        if (window.navigator.vibrate) window.navigator.vibrate(100);
        
-       // SYNC UNLOCK: Bind video playback trust-tokens to this direct touch event
-       unlockMedia();
-       
        // Instant feedback on current global refs
        gsap.to(holdFill, { scale: 1, duration: 0.2, ease: "power2.out" });
        gsap.to(holdBtn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
@@ -110,9 +231,10 @@ function setupInteraction() {
     };
   }
 
-    if (isMobile) {
-      const holdText = document.querySelector('.hold-text');
-      if (holdText) holdText.textContent = "TOUCH TO UNFOLD";
+  if (isMobile) {
+    const holdText = document.querySelector('.hold-text');
+    if (holdText) holdText.textContent = "TOUCH TO UNFOLD";
+    if (loaderSeq && !loaderSeq.isLoaded) loaderSeq.init();
 
     holdBtn.removeEventListener('touchstart', handleMobileTap);
     holdBtn.removeEventListener('mousedown', handleMobileTap);
@@ -130,7 +252,6 @@ function setupInteraction() {
   if (!startHold) {
     startHold = (e) => {
       e.preventDefault(); 
-      unlockMedia(); // Sync unlock for desktop strict policies
       if (!holdFill) return;
       holdTween = gsap.to(holdFill, {
         scale: 1, duration: 1.5, ease: "power1.inOut",
@@ -177,11 +298,18 @@ window.addEventListener('load', () => {
     ease: "power2.out" 
   });
 
-  const loaderVideo = getLoaderVideo();
-  if (loaderVideo) {
-    loaderVideo.currentTime = 0;
-    loaderVideo.pause();
-    loaderVideo.style.opacity = 1; // Reveal initial state after hidden in CSS
+  if (isMobile) {
+      if (loaderSeq.canvas) {
+          loaderSeq.draw(0, 1);
+          loaderSeq.canvas.style.opacity = 1;
+      }
+  } else {
+      const loaderVideo = document.getElementById('loader-video');
+      if (loaderVideo) {
+        loaderVideo.currentTime = 0;
+        loaderVideo.pause();
+        loaderVideo.style.opacity = 1; // Reveal initial state after hidden in CSS
+      }
   }
 });
 
@@ -199,55 +327,30 @@ const revVideos = [
   document.getElementById("vid-4-rev")
 ];
 
-const mobileVideos = [
-  document.getElementById("vid-1-mobile"),
-  document.getElementById("vid-2-mobile"),
-  document.getElementById("vid-3-mobile"),
-  document.getElementById("vid-4-mobile")
-];
-
-const mobileRevVideos = [
-  document.getElementById("vid-1-rev-mobile"),
-  document.getElementById("vid-2-rev-mobile"),
-  document.getElementById("vid-3-rev-mobile"),
-  document.getElementById("vid-4-rev-mobile")
-];
-
-function getActiveVideos() {
-    return isMobile ? mobileVideos : videos;
-}
-
-function getActiveRevVideos() {
-    return isMobile ? mobileRevVideos : revVideos;
-}
-
-function getLoaderVideo() {
-    return isMobile ? document.getElementById('loader-video-mobile') : document.getElementById('loader-video');
-}
-
-function getLoaderRevVideo() {
-    return isMobile ? document.getElementById('loader-video-rev-mobile') : document.getElementById('loader-video-rev');
-}
-
 function turnOn() {
-  const loaderVideo = getLoaderVideo();
+  const loaderVideo = document.getElementById('loader-video');
   const holdBtn = document.getElementById('hold-button');
   document.body.style.overflow = "hidden";
-  
   playSound(SFX.bulb); // 🔊 Bulb ON click
   
   // Hide UI immediately so we can see the full transition
   if (holdBtn) {
     gsap.to([holdBtn, '.hold-text'], { scale: 0, opacity: 0, duration: 0.4, ease: "back.in(1.7)" });
   }
-
-  if (loaderVideo) {
+  
+  if (isMobile) {
+      // 📱 MOBILE: Accelerated transition for immediate feeling
+      playSound(SFX.mobileBulb); // 🔊 Mobile bulb ON audio
+      loaderSeq.animate(0, 'forward', () => {
+          stopMobileAudio(SFX.mobileBulb);
+          revealMainContent();
+      }, 5.0); // Reduced from 10s to 5s for better flow
+  } else if (loaderVideo) {
     activeTransitionVideo = loaderVideo; // Enable scroll-based speedup
     loaderVideo.play();
     
     // When video is almost finished, start revealing the main content
     loaderVideo.ontimeupdate = () => {
-      // Adjusted check limit slightly for mobile if needed, but keeping logic consistent
       if (loaderVideo.currentTime >= loaderVideo.duration - 0.6) {
         loaderVideo.ontimeupdate = null; 
         revealMainContent();
@@ -274,11 +377,12 @@ function revealMainContent() {
   gsap.set([".logo-switcher", ".side-hero-logo", ".features-list", "#off-button", ".interactive-square"], { opacity: 0 });
   
   gsap.set(sectionElements[0], { opacity: 1, visibility: "visible", pointerEvents: "auto" });
-  const activeVids = getActiveVideos();
-  if (activeVids[0]) {
-      activeVids[0].style.opacity = 1;
+  if (isMobile) {
+      mobileSeq.draw(1, 1);
+  } else if (videos[0]) {
+      videos[0].style.opacity = 1;
       // Force a frame on mobile by seeking slightly past zero
-      activeVids[0].currentTime = 0.05; 
+      videos[0].currentTime = 0.05; 
   }
 
   tl.to("#hold-button", { scale: 0, opacity: 0, duration: 0.2 })
@@ -334,11 +438,9 @@ window.addEventListener('resize', () => {
         revVideos.forEach(v => { if(v) v.style.opacity = 0; });
         
         if (scrollingLocked) {
-           const loaderMobile = document.getElementById('loader-video-mobile');
-           if (loaderMobile) { loaderMobile.style.opacity = 1; loaderMobile.currentTime = 0; }
+           loaderSeq.draw(0, 1);
         } else {
-           const currentVid = mobileVideos[currentSectionIndex];
-           if (currentVid) { currentVid.style.opacity = 1; currentVid.currentTime = 0.05; }
+           mobileSeq.draw(currentSectionIndex + 1, 1);
         }
         
         setupInteraction();
@@ -348,11 +450,11 @@ window.addEventListener('resize', () => {
         if (customCursor) customCursor.style.display = 'block';
         if (cursorFollower) cursorFollower.style.display = 'block';
         
-        // Reveal desktop background videos and hide mobile videos
-        mobileVideos.forEach(v => { if(v) v.style.opacity = 0; });
-        mobileRevVideos.forEach(v => { if(v) v.style.opacity = 0; });
-        const loaderMobile = document.getElementById('loader-video-mobile');
-        if (loaderMobile) loaderMobile.style.opacity = 0;
+        // Reveal desktop background videos and hide mobile canvas
+        const loaderCanvas = document.getElementById('loader-canvas');
+        if (loaderCanvas) loaderCanvas.style.opacity = 0;
+        const mobileCanvas = document.getElementById('mobile-canvas');
+        if (mobileCanvas) mobileCanvas.style.opacity = 0;
 
         if (scrollingLocked) {
             const loaderVideo = document.getElementById('loader-video');
@@ -484,8 +586,8 @@ function initSliderAnimations() {
 function turnOff() {
   scrollingLocked = true;
   playSound(SFX.bulb); // 🔊 Bulb OFF click
-  const loaderVidRev = getLoaderRevVideo();
-  const loaderVid = getLoaderVideo();
+  const loaderVidRev = document.getElementById("loader-video-rev");
+  const loaderVid = document.getElementById("loader-video");
   
   if (loaderVid) {
     loaderVid.pause();
@@ -499,7 +601,11 @@ function turnOff() {
     .set("#hold-button", { opacity: 0, scale: 0 }) 
     .set(".hold-fill", { scale: 0 });
 
-  if (loaderVidRev) tl.set(loaderVidRev, { opacity: 1 });
+  if (isMobile && loaderSeq.canvas) {
+      tl.set(loaderSeq.canvas, { opacity: 1 });
+  } else {
+      tl.set(loaderVidRev, { opacity: 1 });
+  }
 
   // Slide UI back out of frame
   tl.to(".logo-switcher", { x: -200, opacity: 0, duration: 1, ease: "power2.in" })
@@ -512,7 +618,14 @@ function turnOff() {
     .to("#video-container", { opacity: 0, duration: 0.8, ease: "power2.in" }, "-=0.8")
     .to("#loader", { opacity: 1, duration: 0.8, ease: "power2.out", pointerEvents: "auto" }, "-=0.8")
     .add(() => {
-      if (loaderVidRev) {
+      if (isMobile) {
+          playSound(SFX.mobileBulb); // 🔊 Mobile bulb OFF audio
+          loaderSeq.animate(0, 'backward', () => {
+              stopMobileAudio(SFX.mobileBulb);
+              gsap.to("#hold-button", { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" });
+              resetUIStates();
+          }, 10.0);
+      } else if (loaderVidRev) {
         activeTransitionVideo = loaderVidRev;
         loaderVidRev.currentTime = 0;
         loaderVidRev.play();
@@ -539,6 +652,10 @@ function turnOff() {
       
       gsap.set(loaderVidRev, { opacity: 0 });
       gsap.set(loaderVid, { opacity: 1 });
+      if (isMobile) {
+          gsap.set(loaderSeq.canvas, { opacity: 1 });
+          loaderSeq.draw(0, 1);
+      }
 
       currentSectionIndex = 0;
       scrollingLocked = true;
@@ -551,8 +668,8 @@ function turnOff() {
       gsap.set("#video-container", { opacity: 0 });
       gsap.set("#scrolly-container", { opacity: 1, display: "none" }); 
       
-      getActiveVideos().forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
-      getActiveRevVideos().forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
+      videos.forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
+      revVideos.forEach(v => { if(v) { v.pause(); v.style.opacity = 0; v.currentTime = 0; } });
       
       setupInteraction();
   }
@@ -592,8 +709,35 @@ function goToNextSlide() {
     gsap.set(currentSec, {visibility: "hidden", pointerEvents: "none"});
   }});
 
-  const activeVideo = getActiveVideos()[currentSectionIndex];
-  const nextVideo = getActiveVideos()[nextSectionIndex];
+  const activeVideo = videos[currentSectionIndex];
+  const nextVideo = videos[nextSectionIndex];
+
+  if (isMobile) {
+      // 📱 MOBILE: Frame-based Canvas Animation
+      const slideAudioIdx = currentSectionIndex + 1; // 1-4 matching SLIDE1-4
+      const slideAudio = playMobileSlideAudio(slideAudioIdx); // 🔊 Play slide transition audio
+      mobileSeq.animate(currentSectionIndex + 1, 'forward', () => {
+          stopMobileAudio(slideAudio);
+          currentSectionIndex = nextSectionIndex;
+          gsap.set(nextSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
+          setTimeout(() => { scrollingLocked = false; }, 800);
+      });
+
+      // Trigger UI entrance near the end
+      setTimeout(() => {
+          gsap.set(nextSec, { visibility: "visible", opacity: 1 });
+          if (nextContent) {
+              const enterFrom = { opacity: 0, y: 200, x: 0, scale: 0.95 };
+              if (nextSec.classList.contains('sec-2') || nextSec.classList.contains('sec-4')) {
+                enterFrom.x = 200; enterFrom.y = 0;
+              }
+              gsap.fromTo(nextContent, enterFrom, { opacity: 1, x: 0, y: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "x,y,scale" });
+              nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+          }
+      }, 2800);
+      
+      return; 
+  }
   
   if (nextVideo) {
       nextVideo.pause();
@@ -715,8 +859,41 @@ function goToPrevSlide() {
   }
   gsap.to(currentSec, { opacity: 0, duration: 0.8, delay: 0.4, onComplete: () => gsap.set(currentSec, {visibility: "hidden"}) });
 
-  const revVideo = getActiveRevVideos()[prevSectionIndex];
-  const targetForwardVideo = getActiveVideos()[prevSectionIndex];
+  const revVideo = revVideos[prevSectionIndex];
+  const targetForwardVideo = videos[prevSectionIndex];
+
+  if (isMobile) {
+      // 📱 MOBILE: Frame-based Canvas Animation (BACKWARD)
+      const slideAudioIdx = prevSectionIndex + 1; // 1-4 matching SLIDE1-4
+      const slideAudio = playMobileSlideAudio(slideAudioIdx); // 🔊 Play slide transition audio
+      mobileSeq.animate(prevSectionIndex + 1, 'backward', () => {
+          stopMobileAudio(slideAudio);
+          currentSectionIndex = prevSectionIndex;
+          gsap.set(prevSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
+          setTimeout(() => { scrollingLocked = false; }, 800);
+      });
+
+      // Trigger UI entrance near the end
+      setTimeout(() => {
+          gsap.set(prevSec, { visibility: "visible", opacity: 1 });
+          if (prevSectionIndex === 0) {
+              gsap.to("#off-button", { opacity: 1, duration: 1.5, ease: "power3.out" });
+              gsap.fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              animateSquaresIn();
+          } else if (prevContent) {
+              const enterFrom = { opacity: 0, y: -200, x: 0, scale: 0.95 };
+              if (prevSec.classList.contains('sec-2') || prevSec.classList.contains('sec-4')) {
+                enterFrom.x = -200; enterFrom.y = 0;
+              }
+              gsap.fromTo(prevContent, enterFrom, { opacity: 1, x: 0, y: 0, scale: 1, duration: 1.5, ease: "power3.out", clearProps: "x,y,scale" });
+              prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
+          }
+      }, 2800);
+      
+      return;
+  }
   
   if (revVideo) {
       activeTransitionVideo = revVideo;
@@ -724,8 +901,8 @@ function goToPrevSlide() {
       revVideo.currentTime = 0;
       revVideo.play();
       
-      getActiveVideos().forEach(v => { if(v) v.style.opacity = 0; });
-      getActiveRevVideos().forEach((v, idx) => { if(v && idx !== prevSectionIndex) v.style.opacity = 0; });
+      videos.forEach(v => { if(v) v.style.opacity = 0; });
+      revVideos.forEach((v, idx) => { if(v && idx !== prevSectionIndex) v.style.opacity = 0; });
 
       let uiTriggered = false;
 
@@ -1183,14 +1360,13 @@ function animateMonitorEngraving(show) {
 initFooterLinks();
 initBookshelfLogic();
 function preloadVideosForIndex(idx) {
+  if (isMobile) return;
   // Always ensure current, next, and prev are loading
   const targets = [idx, idx + 1, idx - 1];
   targets.forEach(i => {
-    if (i >= 0 && i < getActiveVideos().length) {
-      const activeVids = getActiveVideos();
-      const activeRevVids = getActiveRevVideos();
-      if (activeVids[i]) activeVids[i].preload = "auto";
-      if (activeRevVids[i]) activeRevVids[i].preload = "auto";
+    if (i >= 0 && i < videos.length) {
+      if (videos[i]) videos[i].preload = "auto";
+      if (revVideos[i]) revVideos[i].preload = "auto";
     }
   });
 }
