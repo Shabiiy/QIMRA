@@ -1,40 +1,83 @@
 gsap.registerPlugin(ScrollTrigger);
 
 // ─── Audio Manager ───────────────────────────────────────────────
+// Lazy audio: defer Audio object creation until after user gesture (iOS Safari fix)
+const _audioCache = {};
+let _audioUnlocked = false;
+
+function _getAudio(key, src) {
+  if (!_audioCache[key]) {
+    const a = new Audio(src);
+    a.preload = 'auto';
+    _audioCache[key] = a;
+  }
+  return _audioCache[key];
+}
+
+// Unlock AudioContext + preload all audio on first user gesture (iOS Safari)
+function _unlockAudio() {
+  if (_audioUnlocked) return;
+  _audioUnlocked = true;
+
+  // Unlock by playing a silent buffer via AudioContext
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+    setTimeout(() => ctx.close(), 500);
+  } catch(e) {}
+
+  // Eagerly init all Audio objects so they preload while user is engaged
+  _getAudio('bulb',       'assets/click button sound for mobile on off.mp3');
+  _getAudio('component',  'assets/component touch.mp3');
+  _getAudio('pageFlip',   'assets/page flip.mp3');
+  _getAudio('mobileBulb', 'mobileview/BULB ON OFF MOBILE.mp3');
+  _getAudio('mSlide1',    'mobileview/Slide 1 mv.mp3');
+  _getAudio('mSlide2',    'mobileview/slide 2 mv.mp3');
+  _getAudio('mSlide3',    'mobileview/slide3 mv.mp3');
+  _getAudio('mSlide4',    'mobileview/slide 4 mv.mp3');
+}
+
+// Unlock on first touch/click so subsequent play() calls are trusted
+['touchstart', 'mousedown', 'keydown'].forEach(evt =>
+  document.addEventListener(evt, _unlockAudio, { once: true, passive: true })
+);
+
 const SFX = {
-  bulb: new Audio('assets/click button sound for mobile on off.mp3'),
-  component: new Audio('assets/component touch.mp3'),
-  pageFlip: new Audio('assets/page flip.mp3'),
-  // 📱 Mobile-specific slide audio
-  mobileBulb: new Audio('mobileview/BULB%20ON%20OFF%20MOBILE.mp3'),
+  get bulb()       { return _getAudio('bulb',       'assets/click button sound for mobile on off.mp3'); },
+  get component()  { return _getAudio('component',  'assets/component touch.mp3'); },
+  get pageFlip()   { return _getAudio('pageFlip',   'assets/page flip.mp3'); },
+  get mobileBulb() { return _getAudio('mobileBulb', 'mobileview/BULB ON OFF MOBILE.mp3'); },
   mobileSlides: [
-    null,                                          // index 0 = unused (bulb)
-    new Audio('mobileview/Slide%201%20mv.mp3'),        // SLIDE1
-    new Audio('mobileview/slide%202%20mv.mp3'),        // SLIDE2
-    new Audio('mobileview/slide3%20mv.mp3'),         // SLIDE3
-    new Audio('mobileview/slide%204%20mv.mp3'),        // SLIDE4
+    null,
+    { get audio() { return _getAudio('mSlide1', 'mobileview/Slide 1 mv.mp3'); } },
+    { get audio() { return _getAudio('mSlide2', 'mobileview/slide 2 mv.mp3'); } },
+    { get audio() { return _getAudio('mSlide3', 'mobileview/slide3 mv.mp3'); } },
+    { get audio() { return _getAudio('mSlide4', 'mobileview/slide 4 mv.mp3'); } },
   ]
 };
-SFX.bulb.preload = 'auto';
-SFX.component.preload = 'auto';
-SFX.pageFlip.preload = 'auto';
-SFX.mobileBulb.preload = 'auto';
-SFX.mobileSlides.forEach(a => { if (a) a.preload = 'auto'; });
 
 function playSound(sfx) {
   try {
     sfx.currentTime = 0;
-    sfx.play().catch(() => {}); // swallow autoplay policy errors gracefully
+    const p = sfx.play();
+    if (p && p.catch) p.catch(() => {});
   } catch(e) {}
 }
 
-// Play a mobile slide audio track and return it so caller can stop it
+// Play a mobile slide audio track and return the raw Audio object so caller can stop it
 function playMobileSlideAudio(slideIndex) {
-  const audio = SFX.mobileSlides[slideIndex];
+  const entry = SFX.mobileSlides[slideIndex];
+  if (!entry) return null;
+  const audio = entry.audio;
   if (!audio) return null;
   try {
     audio.currentTime = 0;
-    audio.play().catch(() => {});
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => {});
   } catch(e) {}
   return audio;
 }
@@ -46,35 +89,6 @@ function stopMobileAudio(audio) {
     audio.currentTime = 0;
   } catch(e) {}
 }
-
-// 📱 Mobile Audio Unlocker: Browsers require a user gesture to play audio. 
-// We "unlock" all audio instances on the first touch/click.
-function unlockAudio() {
-  const allAudio = [
-    SFX.bulb, SFX.component, SFX.pageFlip, SFX.mobileBulb,
-    ...SFX.mobileSlides.filter(a => a !== null)
-  ];
-  
-  allAudio.forEach(audio => {
-    // Play slightly then pause to "claim" the audio context for these objects
-    const p = audio.play();
-    if (p && p.then) {
-        p.then(() => {
-            audio.pause();
-            audio.currentTime = 0;
-        }).catch(() => {});
-    } else {
-        audio.pause();
-        audio.currentTime = 0;
-    }
-  });
-  
-  // Remove the listeners once unlocked
-  document.removeEventListener('touchstart', unlockAudio);
-  document.removeEventListener('click', unlockAudio);
-}
-document.addEventListener('touchstart', unlockAudio, { once: true });
-document.addEventListener('click', unlockAudio, { once: true });
 // ─────────────────────────────────────────────────────────────────
 
 let isMobile = (window.innerWidth <= 768) || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -252,7 +266,6 @@ function setupInteraction() {
        gsap.to(holdBtn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
        
        // Trigger logic
-       unlockAudio(); // Double-ensure unlocking on the specific trigger
        setTimeout(() => turnOn(), 200);
        
        holdBtn.removeEventListener('touchstart', handleMobileTap);
@@ -409,8 +422,6 @@ function revealMainContent() {
   gsap.set(sectionElements[0], { opacity: 1, visibility: "visible", pointerEvents: "auto" });
   if (isMobile) {
       mobileSeq.draw(1, 1);
-      // 🔊 Play the first slide audio (Slide 1) upon arriving at the Hero section on mobile
-      playMobileSlideAudio(1);
   } else if (videos[0]) {
       videos[0].style.opacity = 1;
       // Force a frame on mobile by seeking slightly past zero
@@ -744,18 +755,16 @@ function goToNextSlide() {
   const activeVideo = videos[currentSectionIndex];
   const nextVideo = videos[nextSectionIndex];
 
-    if (isMobile) {
-        // 📱 MOBILE: Frame-based Canvas Animation
-        // play the audio for the NEXT slide (target index + 1)
-        const slideAudioIdx = nextSectionIndex + 1;
-        const slideAudio = (slideAudioIdx <= 4) ? playMobileSlideAudio(slideAudioIdx) : null; 
-        
-        mobileSeq.animate(currentSectionIndex + 1, 'forward', () => {
-            if (slideAudio) stopMobileAudio(slideAudio);
-            currentSectionIndex = nextSectionIndex;
-            gsap.set(nextSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
-            setTimeout(() => { scrollingLocked = false; }, 800);
-        });
+  if (isMobile) {
+      // 📱 MOBILE: Frame-based Canvas Animation
+      const slideAudioIdx = currentSectionIndex + 1; // 1-4 matching SLIDE1-4
+      const slideAudio = playMobileSlideAudio(slideAudioIdx); // 🔊 Play slide transition audio
+      mobileSeq.animate(currentSectionIndex + 1, 'forward', () => {
+          stopMobileAudio(slideAudio);
+          currentSectionIndex = nextSectionIndex;
+          gsap.set(nextSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
+          setTimeout(() => { scrollingLocked = false; }, 800);
+      });
 
       // Trigger UI entrance near the end
       setTimeout(() => {
@@ -898,12 +907,10 @@ function goToPrevSlide() {
 
   if (isMobile) {
       // 📱 MOBILE: Frame-based Canvas Animation (BACKWARD)
-      // play the audio for the PREVIOUS slide (target index + 1)
-      const slideAudioIdx = prevSectionIndex + 1;
-      const slideAudio = (slideAudioIdx <= 4) ? playMobileSlideAudio(slideAudioIdx) : null;
-      
+      const slideAudioIdx = prevSectionIndex + 1; // 1-4 matching SLIDE1-4
+      const slideAudio = playMobileSlideAudio(slideAudioIdx); // 🔊 Play slide transition audio
       mobileSeq.animate(prevSectionIndex + 1, 'backward', () => {
-          if (slideAudio) stopMobileAudio(slideAudio);
+          stopMobileAudio(slideAudio);
           currentSectionIndex = prevSectionIndex;
           gsap.set(prevSec, { visibility: "visible", opacity: 1, pointerEvents: "auto" });
           setTimeout(() => { scrollingLocked = false; }, 800);
