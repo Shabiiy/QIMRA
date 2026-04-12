@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && cp -rn assets mobileview dist/ 2>/dev/null || true && npx terser script.js -c -m -o dist/script.js && npx clean-css-cli style.css -o dist/style.css && npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true index.html -o dist/index.html"
+    "build": "mkdir -p dist && cp -r assets mobileview dist/ && npx terser script.js -c -m -o dist/script.js && npx clean-css-cli style.css -o dist/style.css && npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true index.html -o dist/index.html"
   }
 }
