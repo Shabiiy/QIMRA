@@ -29,35 +29,20 @@ function playSound(sfx) {
   } catch(e) {}
 }
 
-// Global unlock for mobile audio (call on first interaction)
-function unlockMobileAudio() {
-  [SFX.mobileBulb, ...SFX.mobileSlides].forEach(audio => {
-    if (audio) {
-      const p = audio.play();
+// Global media unlock (fixes mobile blank video iOS/Android strict policies)
+let mediaUnlocked = false;
+function unlockMedia() {
+  if (mediaUnlocked) return;
+  const allVids = document.querySelectorAll('video');
+  allVids.forEach(v => {
+    if (v) {
+      const p = v.play();
       if (p && p.then) {
-        p.then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {});
+        p.then(() => { v.pause(); v.currentTime = 0; }).catch(() => {});
       }
     }
   });
-}
-
-// Play a mobile slide audio track and return it so caller can stop it
-function playMobileSlideAudio(slideIndex) {
-  const audio = SFX.mobileSlides[slideIndex];
-  if (!audio) return null;
-  try {
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
-  } catch(e) {}
-  return audio;
-}
-
-function stopMobileAudio(audio) {
-  if (!audio) return;
-  try {
-    audio.pause();
-    audio.currentTime = 0;
-  } catch(e) {}
+  mediaUnlocked = true;
 }
 // ─────────────────────────────────────────────────────────────────
 
@@ -109,6 +94,9 @@ function setupInteraction() {
        e.preventDefault();
        if (window.navigator.vibrate) window.navigator.vibrate(100);
        
+       // SYNC UNLOCK: Bind video playback trust-tokens to this direct touch event
+       unlockMedia();
+       
        // Instant feedback on current global refs
        gsap.to(holdFill, { scale: 1, duration: 0.2, ease: "power2.out" });
        gsap.to(holdBtn, { scale: 0.9, duration: 0.1, yoyo: true, repeat: 1 });
@@ -142,6 +130,7 @@ function setupInteraction() {
   if (!startHold) {
     startHold = (e) => {
       e.preventDefault(); 
+      unlockMedia(); // Sync unlock for desktop strict policies
       if (!holdFill) return;
       holdTween = gsap.to(holdFill, {
         scale: 1, duration: 1.5, ease: "power1.inOut",
@@ -244,9 +233,6 @@ function turnOn() {
   const loaderVideo = getLoaderVideo();
   const holdBtn = document.getElementById('hold-button');
   document.body.style.overflow = "hidden";
-  
-  // Unlock all mobile audio streams on this gesture
-  unlockMobileAudio();
   
   playSound(SFX.bulb); // 🔊 Bulb ON click
   
