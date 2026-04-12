@@ -96,7 +96,7 @@ const isTouchDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera 
 
 // --- MOBILE CANVAS SEQUENCE LOGIC ---
 class MobileSequence {
-    constructor(canvasId, totalFrames = 240) {
+    constructor(canvasId, totalFrames = 192) {
         this.canvas = document.getElementById(canvasId);
         if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
@@ -131,8 +131,10 @@ class MobileSequence {
         
         // 1. Load the first frame immediately and draw it
         const firstFrameNum = "001";
-        let firstPath = `mobileview/${baseFolder}/ezgif-frame-${firstFrameNum}.jpg`;
-        if (slideIndex === 0) firstPath = `mobileview/BULBOFF mv.png`;
+        // Slides 1-4 use out_XXX.webp; bulb sequence uses its own PNG
+        let firstPath = (slideIndex === 0)
+            ? `mobileview/BULBOFF mv.png`
+            : `mobileview/${baseFolder}/out_${firstFrameNum}.webp`;
         
         const firstImg = await this.loadImage(firstPath);
         this.frames[slideIndex][0] = firstImg;
@@ -142,7 +144,10 @@ class MobileSequence {
         const promises = [];
         for (let i = 2; i <= this.totalFrames; i++) {
             const num = String(i).padStart(3, '0');
-            const path = `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`;
+            // Slides 1-4 use out_XXX.webp; bulb uses its own folder (handled separately)
+            const path = (slideIndex === 0)
+                ? `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`
+                : `mobileview/${baseFolder}/out_${num}.webp`;
             promises.push(this.loadImage(path, i-1, slideIndex));
         }
         
