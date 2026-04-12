@@ -131,10 +131,7 @@ class MobileSequence {
         
         // 1. Load the first frame immediately and draw it
         const firstFrameNum = "001";
-        // Slides 1-4 use out_XXX.webp; bulb sequence uses its own PNG
-        let firstPath = (slideIndex === 0)
-            ? `mobileview/BULBOFF mv.png`
-            : `mobileview/${baseFolder}/out_${firstFrameNum}.webp`;
+        let firstPath = `mobileview/${baseFolder}/out_${firstFrameNum}.webp`;
         
         const firstImg = await this.loadImage(firstPath);
         this.frames[slideIndex][0] = firstImg;
@@ -144,10 +141,7 @@ class MobileSequence {
         const promises = [];
         for (let i = 2; i <= this.totalFrames; i++) {
             const num = String(i).padStart(3, '0');
-            // Slides 1-4 use out_XXX.webp; bulb uses its own folder (handled separately)
-            const path = (slideIndex === 0)
-                ? `mobileview/${baseFolder}/ezgif-frame-${num}.jpg`
-                : `mobileview/${baseFolder}/out_${num}.webp`;
+            const path = `mobileview/${baseFolder}/out_${num}.webp`;
             promises.push(this.loadImage(path, i-1, slideIndex));
         }
         
