@@ -437,6 +437,7 @@ function revealMainContent() {
   sectionElements = document.querySelectorAll('.sec');
   // Hide contents BEFORE making section visible to prevent flashing
   gsap.set([".logo-switcher", ".side-hero-logo", ".features-list", "#off-button", ".interactive-square"], { opacity: 0 });
+  gsap.set(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 });
   
   gsap.set(sectionElements[0], { opacity: 1, visibility: "visible", pointerEvents: "auto" });
   if (isMobile) {
@@ -454,6 +455,7 @@ function revealMainContent() {
     
     // Matched entrance from goToPrevSlide
     .fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" }, "-=0.2")
+    .fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" }, "-=1.2")
     .fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" }, "-=1.6")
     .fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" }, "-=1.6")
     .fromTo("#off-button", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 1.5, ease: "power3.out" }, "-=1.6")
@@ -671,6 +673,7 @@ function turnOff() {
 
   // Slide UI back out of frame
   tl.to(".logo-switcher", { x: -200, opacity: 0, duration: 1, ease: "power2.in" })
+    .to(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15, duration: 0.8, stagger: -0.02, ease: "power2.inOut" }, "-=1.0")
     .to(".side-hero-logo", { x: 300, opacity: 0, duration: 1.2, ease: "power2.in" }, "-=0.8")
     .to(".features-list", { y: -150, opacity: 0, duration: 1, ease: "power2.in" }, "-=1.0")
     .to("#off-button", { opacity: 0, duration: 0.5 }, "-=0.8")
@@ -727,6 +730,7 @@ function turnOff() {
       gsap.set(".features-list", { opacity: 0, y: 30 });
       gsap.set(".side-hero-logo", { opacity: 0, x: 300 });
       gsap.set(".logo-switcher", { opacity: 1, x: 0 });
+      gsap.set(".blur-word", { filter: "blur(0px)", opacity: 1, y: 0 });
       gsap.set("#video-container", { opacity: 0 });
       gsap.set("#scrolly-container", { opacity: 1, display: "none" }); 
       
@@ -756,6 +760,7 @@ function goToNextSlide() {
   if (currentSectionIndex === 0) {
      gsap.to("#off-button", { opacity: 0, duration: 0.5 });
      gsap.to(".logo-switcher", { x: -200, opacity: 0, duration: 1, ease: "power2.in" });
+     gsap.to(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15, duration: 0.8, stagger: 0.02, ease: "power2.inOut" });
      gsap.to(".side-hero-logo", { x: 300, opacity: 0, duration: 1.2, ease: "power2.in" });
      gsap.to(".features-list", { y: -150, opacity: 0, duration: 1, ease: "power2.in" });
      animateSquaresOut();
@@ -941,6 +946,7 @@ function goToPrevSlide() {
           if (prevSectionIndex === 0) {
               gsap.to("#off-button", { opacity: 1, duration: 1.5, ease: "power3.out" });
               gsap.fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              gsap.fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" });
               gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
               gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
               animateSquaresIn();
@@ -976,6 +982,7 @@ function goToPrevSlide() {
               if (prevSectionIndex === 0) {
                  gsap.to("#off-button", { opacity: 1, duration: 1.5, ease: "power3.out" });
                  gsap.fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+                 gsap.fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" });
                  gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
                  gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
                  animateSquaresIn();
@@ -1432,3 +1439,43 @@ function preloadVideosForIndex(idx) {
     }
   });
 }
+
+
+
+
+
+// --- Vanilla JS BlurText Effect ---
+function initBlurTextWords() {
+  const heroTextElements = document.querySelectorAll('.hero-main-text h1, .hero-main-text .hero-subtext, .hero-main-text .hero-desc');
+  
+  heroTextElements.forEach(el => {
+    const childNodes = Array.from(el.childNodes);
+    el.innerHTML = '';
+    
+    childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const words = node.textContent.split(/(\s+)/);
+        words.forEach(word => {
+          if (word === '') return;
+          if (word.trim() === '') {
+            el.appendChild(document.createTextNode(word));
+          } else {
+            const span = document.createElement('span');
+            span.className = 'blur-word';
+            span.innerText = word;
+            span.style.display = 'inline-block';
+            span.style.willChange = 'transform, filter, opacity';
+            gsap.set(span, { filter: 'blur(10px)', opacity: 0, y: 15 });
+            el.appendChild(span);
+          }
+        });
+      } else if (node.nodeName === 'BR') {
+        el.appendChild(document.createElement('br'));
+      } else {
+        el.appendChild(node.cloneNode(true));
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => { setTimeout(initBlurTextWords, 200); });
