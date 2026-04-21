@@ -1261,9 +1261,13 @@ function initModalLogic() {
     playSound(SFX.component); // 🔊 View Projects clicked
     modal.classList.add('active');
     scrollingLocked = true;
-    if (!loopTween) setupLoop();
-    else loopTween.play();
-    window.addEventListener('mousemove', handleMouseMove);
+    
+    // Only animate track on desktop, rely on native scroll-snap on mobile
+    if (!isMobile) {
+      if (!loopTween) setupLoop();
+      else loopTween.play();
+      window.addEventListener('mousemove', handleMouseMove);
+    }
   };
 
   const closeModal = () => {

@@ -1566,7 +1566,7 @@ p {
   max-height: 80vh;
   padding: 3.75rem;
   border-radius: 2.5rem;
-  overflow-y: auto;
+  overflow: hidden;
   z-index: 10;
   transform: scale(0.9) translateY(2.5rem);
   transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -1615,7 +1615,7 @@ p {
 .project-card {
   flex: 0 0 28.125rem;
   /* Fixed width for consistent loop */
-  padding: 3.125rem 2.5rem;
+  padding: 0;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1.5rem;
@@ -1623,6 +1623,10 @@ p {
   position: relative;
   overflow: hidden;
   transition: transform 0.4s ease, border-color 0.4s ease;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .project-card:hover {
@@ -1630,16 +1634,12 @@ p {
   border-color: var(--gold-dim);
 }
 
-.project-card h3 {
-  font-size: 2rem;
-  color: var(--gold);
-  margin-bottom: 0.8rem;
-  letter-spacing: 1px;
-}
-
-.project-card p {
-  font-size: 1rem;
-  opacity: 0.6;
+.project-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* ensures whole image is seen since they might be portraits/landscapes */
+  border-radius: inherit;
+  display: block;
 }
 
 .card-glow {
@@ -2396,11 +2396,15 @@ p {
   }
 
   .project-card {
-    min-width: 70vw !important;
-    height: 180px !important;
+    min-width: 75vw !important;
+    height: 45vh !important;
     scroll-snap-align: center;
     margin-right: 15px;
-    scale: 0.9;
+    scale: 0.95;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 }
 
@@ -2549,17 +2553,12 @@ p {
   }
 
   .project-card {
-    min-width: 180px;
-    height: 120px;
-    padding: 1rem;
-  }
-
-  .project-card h3 {
-    font-size: 1.2rem;
-  }
-
-  .project-card p {
-    font-size: 0.8rem;
+    min-width: 40vw;
+    height: 70vh;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .footer {
