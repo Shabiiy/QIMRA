@@ -2654,15 +2654,18 @@ p {
   }
 
   .book.open {
-    width: 9.2rem !important;
-    /* Scaled down for mobile portrait */
-    height: 13.2rem !important;
+    width: 38vw !important;
+    height: 55vw !important;
+    max-width: 200px !important;
+    max-height: 290px !important;
     transform: translate(0px, 0px) translateZ(100px) !important;
   }
 
   .book-page {
-    width: 9.2rem;
-    height: 13.2rem;
+    width: 38vw !important;
+    height: 55vw !important;
+    max-width: 200px !important;
+    max-height: 290px !important;
     padding: 1.2rem 0.8rem;
     font-size: 0.8rem;
     line-height: 1.4;
