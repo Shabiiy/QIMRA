@@ -2176,7 +2176,10 @@ p {
     text-align: center !important;
     margin: 0 0 12px 0 !important;
     width: 100% !important;
-    font-size: 0.85rem !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 0.05rem !important;
+    white-space: normal !important;
+    word-break: break-word !important;
   }
 
   .bookshelf {
