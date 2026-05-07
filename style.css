@@ -2173,13 +2173,18 @@ p {
   }
 
   .shelf-label {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
     text-align: center !important;
     margin: 0 0 12px 0 !important;
     width: 100% !important;
-    font-size: 0.65rem !important;
-    letter-spacing: 0.05rem !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.1rem !important;
     white-space: normal !important;
     word-break: break-word !important;
+    opacity: 1 !important;
+    color: var(--gold) !important;
   }
 
   .bookshelf {
