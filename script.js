@@ -39,6 +39,35 @@ function _unlockAudio() {
   _getAudio('mSlide2',    'mobileview/slide 2 mv.mp3');
   _getAudio('mSlide3',    'mobileview/slide3 mv.mp3');
   _getAudio('mSlide4',    'mobileview/slide 4 mv.mp3');
+
+  // Background Music
+  const bg = _getAudio('bg', 'assets/bg.mp3');
+  bg.loop = true;
+  bg.volume = 1.0;
+  bg.play().catch(() => {});
+}
+
+const _activeSFX = new Set();
+function _updateBGDucking() {
+  const bg = _audioCache['bg'];
+  if (!bg) return;
+  const targetVolume = _activeSFX.size > 0 ? 0.3 : 1.0;
+  gsap.to(bg, { volume: targetVolume, duration: 0.5, overwrite: true });
+}
+
+function _trackSFX(audio) {
+  if (_activeSFX.has(audio)) return;
+  _activeSFX.add(audio);
+  _updateBGDucking();
+  
+  const done = () => {
+    _activeSFX.delete(audio);
+    _updateBGDucking();
+    audio.removeEventListener('ended', done);
+    audio.removeEventListener('pause', done);
+  };
+  audio.addEventListener('ended', done);
+  audio.addEventListener('pause', done);
 }
 
 // Unlock on first touch/click so subsequent play() calls are trusted
@@ -51,6 +80,7 @@ const SFX = {
   get component()  { return _getAudio('component',  'assets/component touch.mp3'); },
   get pageFlip()   { return _getAudio('pageFlip',   'assets/page flip.mp3'); },
   get mobileBulb() { return _getAudio('mobileBulb', 'mobileview/BULB ON OFF MOBILE.mp3'); },
+  get bg()         { return _getAudio('bg',         'assets/bg.mp3'); },
   mobileSlides: [
     null,
     { get audio() { return _getAudio('mSlide1', 'mobileview/Slide 1 mv.mp3'); } },
@@ -63,8 +93,12 @@ const SFX = {
 function playSound(sfx) {
   try {
     sfx.currentTime = 0;
+    _trackSFX(sfx);
     const p = sfx.play();
-    if (p && p.catch) p.catch(() => {});
+    if (p && p.catch) p.catch(() => {
+      _activeSFX.delete(sfx);
+      _updateBGDucking();
+    });
   } catch(e) {}
 }
 
@@ -76,8 +110,12 @@ function playMobileSlideAudio(slideIndex) {
   if (!audio) return null;
   try {
     audio.currentTime = 0;
+    _trackSFX(audio);
     const p = audio.play();
-    if (p && p.catch) p.catch(() => {});
+    if (p && p.catch) p.catch(() => {
+      _activeSFX.delete(audio);
+      _updateBGDucking();
+    });
   } catch(e) {}
   return audio;
 }
@@ -409,6 +447,7 @@ function turnOn() {
       }, 5.0); // Reduced from 10s to 5s for better flow
   } else if (loaderVideo) {
     activeTransitionVideo = loaderVideo; // Enable scroll-based speedup
+    _trackSFX(loaderVideo);
     loaderVideo.play();
     
     // When video is almost finished, start revealing the main content
@@ -693,6 +732,7 @@ function turnOff() {
       } else if (loaderVidRev) {
         activeTransitionVideo = loaderVidRev;
         loaderVidRev.currentTime = 0;
+        _trackSFX(loaderVidRev);
         loaderVidRev.play();
         
         loaderVidRev.ontimeupdate = () => {
@@ -724,6 +764,7 @@ function turnOff() {
 
       currentSectionIndex = 0;
       scrollingLocked = true;
+      if (window.stopGlobalChaos) window.stopGlobalChaos(0);
       
       gsap.set(".sec", { opacity: 0, visibility: "hidden" });
       gsap.set(sectionElements[0], { opacity: 1, visibility: "visible" });
@@ -761,9 +802,15 @@ function goToNextSlide() {
      gsap.to("#off-button", { opacity: 0, duration: 0.5 });
      gsap.to(".logo-switcher", { x: -200, opacity: 0, duration: 1, ease: "power2.in" });
      gsap.to(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15, duration: 0.8, stagger: 0.02, ease: "power2.inOut" });
-     gsap.to(".side-hero-logo", { x: 300, opacity: 0, duration: 1.2, ease: "power2.in" });
-     gsap.to(".features-list", { y: -150, opacity: 0, duration: 1, ease: "power2.in" });
+     gsap.to(".features-list", { opacity: 1, duration: 1 }); // Ensure it stays visible
      animateSquaresOut();
+     if (isMobile) {
+         if (nextSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
+         else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+     } else {
+         if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+         else { if (window.stopGlobalChaos) window.stopGlobalChaos(nextSectionIndex); }
+     }
   } else if (currentContent) {
      const exitDir = { opacity: 0, y: -200, x: 0, duration: 0.8, ease: "power2.in" };
      if (currentSec.classList.contains('sec-2') || currentSec.classList.contains('sec-4')) {
@@ -775,6 +822,14 @@ function goToNextSlide() {
   gsap.to(currentSec, { opacity: 0, duration: 0.8, delay: 0.4, onComplete: () => {
     gsap.set(currentSec, {visibility: "hidden", pointerEvents: "none"});
   }});
+
+  if (isMobile) {
+      if (nextSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
+      else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+  } else {
+      if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+      else { if (window.stopGlobalChaos) window.stopGlobalChaos(nextSectionIndex); }
+  }
 
   const activeVideo = videos[currentSectionIndex];
   const nextVideo = videos[nextSectionIndex];
@@ -815,6 +870,7 @@ function goToNextSlide() {
       activeTransitionVideo = activeVideo;
       activeVideo.style.opacity = 1;
       activeVideo.currentTime = 0;
+      _trackSFX(activeVideo);
       activeVideo.play();
       
       let uiTriggered = false;
@@ -948,9 +1004,23 @@ function goToPrevSlide() {
               gsap.fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
               gsap.fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" });
               gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
-              gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+              if (isMobile) {
+                  if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
+                  else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+              } else {
+                  if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+                  else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
+              }
               animateSquaresIn();
           } else if (prevContent) {
+              if (isMobile) {
+                  if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
+                  else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+              } else {
+                  if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+                  else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
+              }
+              
               const enterFrom = { opacity: 0, y: -200, x: 0, scale: 0.95 };
               if (prevSec.classList.contains('sec-2') || prevSec.classList.contains('sec-4')) {
                 enterFrom.x = -200; enterFrom.y = 0;
@@ -967,6 +1037,7 @@ function goToPrevSlide() {
       activeTransitionVideo = revVideo;
       revVideo.style.opacity = 1;
       revVideo.currentTime = 0;
+      _trackSFX(revVideo);
       revVideo.play();
       
       videos.forEach(v => { if(v) v.style.opacity = 0; });
@@ -984,9 +1055,23 @@ function goToPrevSlide() {
                  gsap.fromTo(".logo-switcher", { x: -300, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
                  gsap.fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" });
                  gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
-                 gsap.fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
+                 if (isMobile) {
+                     if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
+                     else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+                 } else {
+                     if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+                     else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
+                 }
                  animateSquaresIn();
               } else if (prevContent) {
+                 if (isMobile) {
+                     if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
+                     else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+                 } else {
+                     if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+                     else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
+                 }
+
                  gsap.set(prevContent, { position: "relative", cursor: "pointer", transition: "all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)", overflow: "visible" });
                  const enterFrom = { opacity: 0, y: -250, x: 0, scale: 0.95 };
                  if (prevSec.classList.contains('sec-2') || prevSec.classList.contains('sec-4')) {
@@ -1076,6 +1161,83 @@ function initSquaresInteraction() {
       });
     });
   }
+
+  // Feature items global chaos logic
+  window.isChaosGlobal = false;
+  
+  function startFeatureChaos(item) {
+    if (!window.isChaosGlobal) return;
+    gsap.to(item, {
+      x: gsap.utils.random(-window.innerWidth * 0.4, window.innerWidth * 0.4),
+      y: gsap.utils.random(-window.innerHeight * 0.4, window.innerHeight * 0.4),
+      duration: gsap.utils.random(4, 8),
+      ease: "power1.inOut",
+      onComplete: () => startFeatureChaos(item)
+    });
+  }
+
+  window.triggerGlobalChaos = function() {
+    if (window.isChaosGlobal) return;
+    window.isChaosGlobal = true;
+    
+    // Stop the CSS orbit animations by freezing them or we can just animate X and Y
+    const featureItems = document.querySelectorAll('.feature-item');
+    featureItems.forEach(item => {
+      gsap.killTweensOf(item);
+      startFeatureChaos(item);
+    });
+  };
+
+  window.stopGlobalChaos = function(targetIdx = 0) {
+    window.isChaosGlobal = false;
+    if (isMobile) return;
+    const featureItems = document.querySelectorAll('.feature-item');
+    featureItems.forEach((item, i) => {
+      gsap.killTweensOf(item);
+      
+      let targetTop, targetLeft;
+      
+      if (targetIdx === 0) {
+         // Home: Dynamically extract exact pixel values from CSS calc() for smooth animation
+         const oldTop = item.style.top;
+         const oldLeft = item.style.left;
+         item.style.top = '';
+         item.style.left = '';
+         const comp = window.getComputedStyle(item);
+         targetTop = comp.top;
+         targetLeft = comp.left;
+         item.style.top = oldTop;
+         item.style.left = oldLeft;
+      } else if (targetIdx === 1) {
+         // Section 2: left top above the lamp, in a curvy arch format
+         const layout2 = [ { t: "22vh", l: "8vw" }, { t: "15vh", l: "15vw" }, { t: "15vh", l: "22vw" }, { t: "22vh", l: "29vw" } ];
+         targetTop = layout2[i].t; targetLeft = layout2[i].l;
+      } else if (targetIdx === 2) {
+         // Section 3: straight line in top right, very close together
+         const layout3 = [ { t: "5vh", l: "76vw" }, { t: "5vh", l: "81vw" }, { t: "5vh", l: "86vw" }, { t: "5vh", l: "91vw" } ];
+         targetTop = layout3[i].t; targetLeft = layout3[i].l;
+      } else if (targetIdx === 3) {
+         // Section 4: linear vertical position in middle to very right
+         const layout4 = [ { t: "25vh", l: "85vw" }, { t: "40vh", l: "85vw" }, { t: "55vh", l: "85vw" }, { t: "70vh", l: "85vw" } ];
+         targetTop = layout4[i].t; targetLeft = layout4[i].l;
+      }
+      
+      gsap.to(item, {
+        x: 0,
+        y: 0,
+        top: targetTop,
+        left: targetLeft,
+        duration: 2.0,
+        ease: "power2.inOut",
+        onComplete: () => {
+           if (targetIdx === 0) {
+               // Restore pure CSS control after reaching destination
+               gsap.set(item, { clearProps: "top,left" });
+           }
+        }
+      });
+    });
+  };
 
   squares.forEach(sq => {
     // Trigger "Chaos Flight" for all squares when ANY square is hovered
@@ -1209,6 +1371,17 @@ function skipToSection(targetIdx) {
         gsap.fromTo(nextContent, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, clearProps: "all" });
         nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
       }
+    }
+
+    if (isMobile) {
+        if (targetIdx === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
+        else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+    } else {
+        if (targetIdx === 4) {
+          if (window.triggerGlobalChaos) window.triggerGlobalChaos();
+        } else {
+          if (window.stopGlobalChaos) window.stopGlobalChaos(targetIdx);
+        }
     }
 
     setTimeout(() => { scrollingLocked = false; }, 1800);
@@ -1384,6 +1557,11 @@ function initBookshelfLogic() {
         book.style.setProperty('--center-x', `${moveX}px`);
         book.style.setProperty('--center-y', `${moveY}px`);
         
+        // Trigger chaos in Section 3
+        if (currentSectionIndex === 2 && window.triggerGlobalChaos) {
+           window.triggerGlobalChaos();
+        }
+        
         // Bring cupboard to the front
         cupboard.style.zIndex = "3000";
       } else {
@@ -1447,6 +1625,24 @@ function preloadVideosForIndex(idx) {
 
 
 
+
+// --- Chaos Action Triggers ---
+function initChaosTriggers() {
+  const sec2Panel = document.querySelector('.sec-2 .right-panel');
+  if (sec2Panel) {
+    sec2Panel.addEventListener('click', () => {
+      if (currentSectionIndex === 1 && window.triggerGlobalChaos) window.triggerGlobalChaos();
+    });
+  }
+
+  const sec4Panel = document.querySelector('.sec-4 .monitor-content');
+  if (sec4Panel) {
+    sec4Panel.addEventListener('click', () => {
+      if (currentSectionIndex === 3 && window.triggerGlobalChaos) window.triggerGlobalChaos();
+    });
+  }
+}
+initChaosTriggers();
 
 // --- Vanilla JS BlurText Effect ---
 function initBlurTextWords() {
