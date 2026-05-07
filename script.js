@@ -802,15 +802,16 @@ function goToNextSlide() {
      gsap.to("#off-button", { opacity: 0, duration: 0.5 });
      gsap.to(".logo-switcher", { x: -200, opacity: 0, duration: 1, ease: "power2.in" });
      gsap.to(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15, duration: 0.8, stagger: 0.02, ease: "power2.inOut" });
-     gsap.to(".features-list", { opacity: 1, duration: 1 }); // Ensure it stays visible
-     animateSquaresOut();
+     
      if (isMobile) {
          if (nextSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
          else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
      } else {
+         gsap.to(".features-list", { opacity: 1, duration: 1 }); // Carry over on desktop
          if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
          else { if (window.stopGlobalChaos) window.stopGlobalChaos(nextSectionIndex); }
      }
+     animateSquaresOut();
   } else if (currentContent) {
      const exitDir = { opacity: 0, y: -200, x: 0, duration: 0.8, ease: "power2.in" };
      if (currentSec.classList.contains('sec-2') || currentSec.classList.contains('sec-4')) {
@@ -823,13 +824,7 @@ function goToNextSlide() {
     gsap.set(currentSec, {visibility: "hidden", pointerEvents: "none"});
   }});
 
-  if (isMobile) {
-      if (nextSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
-      else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
-  } else {
-      if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
-      else { if (window.stopGlobalChaos) window.stopGlobalChaos(nextSectionIndex); }
-  }
+
 
   const activeVideo = videos[currentSectionIndex];
   const nextVideo = videos[nextSectionIndex];
