@@ -894,6 +894,9 @@ function goToNextSlide() {
                     if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 2.2, ease: "power3.out", clearProps: "--blur-amt" });
                     
                     if (nextSec.classList.contains('sec-4')) animateMonitorEngraving(true);
+                    
+                    if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+                    else { if (window.stopGlobalChaos) window.stopGlobalChaos(nextSectionIndex); }
                    } else {
                     nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door').forEach(el => el.style.setProperty('--blur-amt', '20px'));
                    }
@@ -925,6 +928,9 @@ function goToNextSlide() {
                   if (!isMobile) {
                     const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard');
                     if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power3.out", clearProps: "--blur-amt" });
+                    
+                    if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+                    else { if (window.stopGlobalChaos) window.stopGlobalChaos(nextSectionIndex); }
                   } else {
                     nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard').forEach(el => el.style.setProperty('--blur-amt', '20px'));
                   }
@@ -946,6 +952,11 @@ function goToNextSlide() {
             gsap.fromTo(nextContent, { opacity: 0, y: 100 }, { opacity: 1, y: 0, duration: 1.5, clearProps: "all" });
             const glass = nextContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
             if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power3.out", clearProps: "--blur-amt" });
+            
+            if (!isMobile) {
+               if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+               else { if (window.stopGlobalChaos) window.stopGlobalChaos(nextSectionIndex); }
+            }
          }
          setTimeout(() => { scrollingLocked = false; }, 1200);
       }, 1500);
@@ -1121,6 +1132,11 @@ function goToPrevSlide() {
              gsap.fromTo(prevContent, { opacity: 0, y: -200 }, { opacity: 1, y: 0, duration: 1.5, clearProps: "all" });
              const glass = prevContent.querySelectorAll('.glass-panel, .glass-window, .cupboard, .levitating-door');
              if(glass.length) gsap.fromTo(glass, { "--blur-amt": "0px" }, { "--blur-amt": "20px", duration: 1.5, ease: "power3.out", clearProps: "--blur-amt" });
+             
+             if (!isMobile) {
+                if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
+                else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
+             }
           }
           setTimeout(() => { scrollingLocked = false; }, 1200);
       }, 1000);
@@ -1438,6 +1454,47 @@ function initModalLogic() {
     }
   };
 
+// =========================================
+// 🌞 THEME TOGGLE LOGIC
+// =========================================
+const themeToggleBtn = document.getElementById('theme-toggle');
+if (themeToggleBtn) {
+  // Check local storage for theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+  }
+
+  themeToggleBtn.addEventListener('click', () => {
+    // Play a gentle sound if available
+    if (SFX && SFX.component) {
+      playSound(SFX.component);
+    }
+    
+    // Toggle the theme class
+    document.body.classList.toggle('light-theme');
+    
+    // Save preference to localStorage
+    if (document.body.classList.contains('light-theme')) {
+      localStorage.setItem('theme', 'light');
+      // Subtle rotation animation for the button
+      gsap.fromTo(themeToggleBtn, { rotation: 0 }, { rotation: 360, duration: 0.8, ease: "back.out(1.7)" });
+    } else {
+      localStorage.setItem('theme', 'dark');
+      // Subtle rotation animation for the button
+      gsap.fromTo(themeToggleBtn, { rotation: 360 }, { rotation: 0, duration: 0.8, ease: "back.out(1.7)" });
+    }
+  });
+
+  // Also add hover effect to follower cursor
+  themeToggleBtn.addEventListener('mouseenter', () => {
+    if (cursorFollower) cursorFollower.classList.add('hover-active');
+  });
+  themeToggleBtn.addEventListener('mouseleave', () => {
+    if (cursorFollower) cursorFollower.classList.remove('hover-active');
+  });
+}
+
   const closeModal = () => {
     modal.classList.remove('active');
     scrollingLocked = false;
@@ -1674,3 +1731,44 @@ function initBlurTextWords() {
 }
 
 document.addEventListener('DOMContentLoaded', () => { setTimeout(initBlurTextWords, 200); });
+
+// =========================================
+// 🌞 THEME TOGGLE LOGIC
+// =========================================
+const themeToggleBtn = document.getElementById('theme-toggle');
+if (themeToggleBtn) {
+  // Check local storage for theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+  }
+
+  themeToggleBtn.addEventListener('click', () => {
+    // Play a gentle sound if available
+    if (typeof SFX !== 'undefined' && SFX.component) {
+      playSound(SFX.component);
+    }
+    
+    // Toggle the theme class
+    document.body.classList.toggle('light-theme');
+    
+    // Save preference to localStorage
+    if (document.body.classList.contains('light-theme')) {
+      localStorage.setItem('theme', 'light');
+      // Subtle rotation animation for the button
+      gsap.fromTo(themeToggleBtn, { rotation: 0 }, { rotation: 360, duration: 0.8, ease: "back.out(1.7)" });
+    } else {
+      localStorage.setItem('theme', 'dark');
+      // Subtle rotation animation for the button
+      gsap.fromTo(themeToggleBtn, { rotation: 360 }, { rotation: 0, duration: 0.8, ease: "back.out(1.7)" });
+    }
+  });
+
+  // Also add hover effect to follower cursor
+  themeToggleBtn.addEventListener('mouseenter', () => {
+    if (typeof cursorFollower !== 'undefined' && cursorFollower) cursorFollower.classList.add('hover-active');
+  });
+  themeToggleBtn.addEventListener('mouseleave', () => {
+    if (typeof cursorFollower !== 'undefined' && cursorFollower) cursorFollower.classList.remove('hover-active');
+  });
+}
