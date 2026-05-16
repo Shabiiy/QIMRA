@@ -1,21 +1,5 @@
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── Lenis Smooth Scroll Setup ───────────────────────────────────
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothWheel: true,
-  touchMultiplier: 2,
-});
-
-gsap.ticker.lagSmoothing(0);
-gsap.ticker.add((time) => lenis.raf(time * 1000));
-
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  lenis.destroy();
-  ScrollTrigger.getAll().forEach(t => t.kill());
-}
-
 // ─── Audio Manager ───────────────────────────────────────────────
 // Lazy audio: defer Audio object creation until after user gesture (iOS Safari fix)
 const _audioCache = {};
@@ -60,32 +44,7 @@ function _unlockAudio() {
   const bg = _getAudio('bg', 'assets/bg.mp3');
   bg.loop = true;
   bg.volume = 1.0;
-  
-  // Unlock for iOS Safari
-  const p = bg.play();
-  if (p && p.then) {
-    p.then(() => {
-      bg.pause();
-      bg.currentTime = 0;
-    }).catch(() => {});
-  }
-
-  const playBg = () => {
-    bg.play().catch(() => {});
-  };
-
-  if (window._loadTime) {
-    const elapsed = Date.now() - window._loadTime;
-    if (elapsed >= 25000) {
-      playBg();
-    } else {
-      setTimeout(playBg, 25000 - elapsed);
-    }
-  } else {
-    window.addEventListener('load', () => {
-      setTimeout(playBg, 25000);
-    }, { once: true });
-  }
+  bg.play().catch(() => {});
 }
 
 const _activeSFX = new Set();
@@ -356,7 +315,7 @@ function setupInteraction() {
   // Define mobile-specific tap (which also handles clicks)
   if (!handleMobileTap) {
      handleMobileTap = (e) => {
-       // e.preventDefault(); // removed for passive:true
+       e.preventDefault();
        if (window.navigator.vibrate) window.navigator.vibrate(100);
        
        // Instant feedback on current global refs
@@ -383,7 +342,7 @@ function setupInteraction() {
     holdBtn.removeEventListener('mousedown', startHold);
     window.removeEventListener('mouseup', endHold);
 
-    holdBtn.addEventListener('touchstart', handleMobileTap, {passive: true}); // fixed passive
+    holdBtn.addEventListener('touchstart', handleMobileTap, {passive: false});
     holdBtn.addEventListener('mousedown', handleMobileTap);
     holdBtn.addEventListener('click', handleMobileTap);
     return;
@@ -392,7 +351,7 @@ function setupInteraction() {
   // 💻 DESKTOP: Existing Hold Logic - NO CHANGES
   if (!startHold) {
     startHold = (e) => {
-      // e.preventDefault(); // removed
+      e.preventDefault(); 
       if (!holdFill) return;
       holdTween = gsap.to(holdFill, {
         scale: 1, duration: 1.5, ease: "power1.inOut",
@@ -428,7 +387,6 @@ setupInteraction();
 
 // Ensure loader video is at first frame on start
 window.addEventListener('load', () => {
-  window._loadTime = Date.now();
   // Hide the "LOADING" text instantly as soon as assets are ready
   const el = document.querySelector(".loading-text");
   if (el) el.style.display = "none";
@@ -661,7 +619,7 @@ function setupGlobalEventListeners() {
     if (scrollingLocked) return;
     if (e.deltaY > 30) goToNextSlide();
     else if (e.deltaY < -30) goToPrevSlide();
-  }, { passive: true }); // added passive true for scroll performance
+  });
 
   window.addEventListener("keydown", (e) => {
     if (["ArrowDown", "ArrowRight", "PageDown", " ", "ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
@@ -689,14 +647,14 @@ function setupGlobalEventListeners() {
   });
 
   let touchStartY = 0;
-  window.addEventListener("touchstart", e => { touchStartY = e.touches[0].clientY; }, {passive: true}); // fixed passive
+  window.addEventListener("touchstart", e => { touchStartY = e.touches[0].clientY; }, {passive: false});
   window.addEventListener("touchmove", e => { 
-    // removed preventDefault as part of passive:true rule
+    if (!scrollingLocked) e.preventDefault(); 
     if (scrollingLocked) {
       const currentY = e.touches[0].clientY;
       handleIntensiveScroll((touchStartY - currentY) * 2);
     }
-  }, {passive: true}); // fixed passive
+  }, {passive: false}); 
 
   window.addEventListener("touchend", e => {
     if (scrollingLocked) return;
@@ -1406,12 +1364,12 @@ function skipToSection(targetIdx) {
       if (!isMobile) {
         gsap.set(nextContent, { position: "relative" }); 
         const isSide = (targetIdx === 1 || targetIdx === 3);
-        const enterFrom = isSide ? { x: 800, y: 0, opacity: 0, scale: 0.9 } : { x: 0, y: 300, opacity: 0, scale: 0.9 }; // changed left/top to x/y
+        const enterFrom = isSide ? { left: 800, top: 0, opacity: 0, scale: 0.9 } : { left: 0, top: 300, opacity: 0, scale: 0.9 };
         
         gsap.fromTo(nextContent, enterFrom, { 
           opacity: 1, 
-          x: 0, // changed left to x
-          y: 0, // changed top to y
+          left: 0, 
+          top: 0, 
           scale: 1, 
           duration: 2.2, 
           ease: "power3.out", 

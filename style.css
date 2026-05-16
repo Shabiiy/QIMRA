@@ -102,7 +102,6 @@ body {
   overflow-x: hidden;
   /* locked until the spark is ignited */
   overflow-y: hidden;
-  overscroll-behavior: none; /* Mobile touch fix */
   -webkit-font-smoothing: antialiased;
   cursor: none;
   /* Hide default cursor */
@@ -112,7 +111,7 @@ body {
 .floating {
   animation: float 6s ease-in-out infinite;
   animation-delay: var(--d, 0s);
-  /* will-change: transform removed from infinite animation as per instructions */
+  will-change: transform;
 }
 
 @keyframes float {
@@ -466,7 +465,6 @@ p {
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  touch-action: pan-y; /* Mobile touch fix */
 }
 
 .content-wrapper {
@@ -499,7 +497,6 @@ p {
   opacity: 0;
   pointer-events: none;
   visibility: hidden;
-  contain: layout paint; /* Heavy sections optimization */
 }
 
 /* Pull Hero text exceptionally close to the left monitor edge */
