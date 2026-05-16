@@ -41,7 +41,7 @@ function _unlockAudio() {
   _getAudio('mSlide4',    'mobileview/slide 4 mv.mp3');
 
   // Background Music
-  const bg = _getAudio('bg', 'assets/bg.mp3');
+  const bg = _getAudio('bg', 'assets/bg1.mp3');
   bg.loop = true;
   bg.volume = 1.0;
   bg.play().catch(() => {});
@@ -80,7 +80,7 @@ const SFX = {
   get component()  { return _getAudio('component',  'assets/component touch.mp3'); },
   get pageFlip()   { return _getAudio('pageFlip',   'assets/page flip.mp3'); },
   get mobileBulb() { return _getAudio('mobileBulb', 'mobileview/BULB ON OFF MOBILE.mp3'); },
-  get bg()         { return _getAudio('bg',         'assets/bg.mp3'); },
+  get bg()         { return _getAudio('bg',         'assets/bg1.mp3'); },
   mobileSlides: [
     null,
     { get audio() { return _getAudio('mSlide1', 'mobileview/Slide 1 mv.mp3'); } },
