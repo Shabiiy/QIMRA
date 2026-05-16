@@ -426,9 +426,8 @@ function setupInteraction() {
 
 setupInteraction();
 
-function showLoaderContent() {
-  if (window._hasLoaded) return;
-  window._hasLoaded = true;
+// Ensure loader video is at first frame on start
+window.addEventListener('load', () => {
   window._loadTime = Date.now();
   // Hide the "LOADING" text instantly as soon as assets are ready
   const el = document.querySelector(".loading-text");
@@ -454,30 +453,7 @@ function showLoaderContent() {
         loaderVideo.style.opacity = 1; // Reveal initial state after hidden in CSS
       }
   }
-}
-
-// Faster load instead of waiting for all assets to download
-if (isMobile) {
-  const checkMobileLoader = setInterval(() => {
-    if (loaderSeq.isLoaded || (loaderSeq.frames && loaderSeq.frames[0] && loaderSeq.frames[0][0])) {
-      clearInterval(checkMobileLoader);
-      showLoaderContent();
-    }
-  }, 100);
-  window.addEventListener('load', showLoaderContent); // fallback
-} else {
-  const loaderVideo = document.getElementById('loader-video');
-  if (loaderVideo) {
-    if (loaderVideo.readyState >= 3) {
-      showLoaderContent();
-    } else {
-      loaderVideo.addEventListener('canplay', showLoaderContent, { once: true });
-      window.addEventListener('load', showLoaderContent); // fallback
-    }
-  } else {
-    window.addEventListener('load', showLoaderContent);
-  }
-}
+});
 
 const videos = [
   document.getElementById("vid-1"),
