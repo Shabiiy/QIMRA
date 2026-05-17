@@ -1737,30 +1737,23 @@ document.addEventListener('DOMContentLoaded', () => { setTimeout(initBlurTextWor
 // =========================================
 const themeToggleBtn = document.getElementById('theme-toggle');
 if (themeToggleBtn) {
-  // Check local storage for theme preference
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-theme');
-  }
-
   themeToggleBtn.addEventListener('click', () => {
     // Play a gentle sound if available
     if (typeof SFX !== 'undefined' && SFX.component) {
       playSound(SFX.component);
     }
     
-    // Toggle the theme class
-    document.body.classList.toggle('light-theme');
-    
-    // Save preference to localStorage
-    if (document.body.classList.contains('light-theme')) {
-      localStorage.setItem('theme', 'light');
-      // Subtle rotation animation for the button
-      gsap.fromTo(themeToggleBtn, { rotation: 0 }, { rotation: 360, duration: 0.8, ease: "back.out(1.7)" });
-    } else {
-      localStorage.setItem('theme', 'dark');
+    // Toggle the theme
+    if (document.documentElement.dataset.theme === 'emerald') {
+      document.documentElement.dataset.theme = 'gold';
+      localStorage.setItem('theme', 'gold');
       // Subtle rotation animation for the button
       gsap.fromTo(themeToggleBtn, { rotation: 360 }, { rotation: 0, duration: 0.8, ease: "back.out(1.7)" });
+    } else {
+      document.documentElement.dataset.theme = 'emerald';
+      localStorage.setItem('theme', 'emerald');
+      // Subtle rotation animation for the button
+      gsap.fromTo(themeToggleBtn, { rotation: 0 }, { rotation: 360, duration: 0.8, ease: "back.out(1.7)" });
     }
   });
 
