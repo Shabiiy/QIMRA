@@ -1473,11 +1473,8 @@ p {
   /* Wider to fill the monitor screen */
   height: 19.375rem;
   padding: 3rem 2rem;
-  background: rgba(var(--bg-dark-rgb), 0.5);
-  /* Slightly darker for better screen look */
-  backdrop-filter: blur(0.75rem);
-  -webkit-backdrop-filter: blur(0.75rem);
-  border: 1px solid rgba(var(--theme-primary-rgb), 0.15);
+  background: transparent;
+  border: none;
   border-radius: 0.25rem;
   text-align: center;
   display: flex;
@@ -1487,7 +1484,7 @@ p {
   margin-top: -1vh;
   margin-left: 5.5vw;
   /* Even further LEFT from 8.5vw */
-  box-shadow: inset 0 0 2.5rem rgba(var(--bg-dark-rgb), 0.9), 0 0 1.5625rem rgba(var(--theme-glow-rgb), 0.05);
+  box-shadow: none;
 }
 
 .monitor-container {
@@ -2001,8 +1998,7 @@ p {
   }
 
   /* Specific Alignment for Section 2 (Behind the Magic) */
-  .sec-2 .right-panel,
-  .sec-4 .monitor-content {
+  .sec-2 .right-panel {
     background: rgba(10, 8, 5, 0.65) !important;
     /* Restored glass look */
     border: 1px solid rgba(var(--theme-primary-rgb), 0.15) !important;
@@ -2010,6 +2006,14 @@ p {
     -webkit-backdrop-filter: blur(12px) !important;
     box-shadow: 0 4px 30px rgba(var(--bg-dark-rgb), 0.4) !important;
     border-radius: 1rem !important;
+  }
+
+  .sec-4 .monitor-content {
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
   }
 
   .sec-2 .right-panel {
