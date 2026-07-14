@@ -2991,3 +2991,21 @@ body, .glass-panel, .cupboard, .feature-item, .modal-container,
     transform-origin: center top;
   }
 }
+
+/* ------------------------------------------- */
+/* ?? MOBILE VIEWPORT FIX                      */
+/* ------------------------------------------- */
+@media (max-width: 768px), (max-aspect-ratio: 1/1) {
+  #loader,
+  #video-container,
+  #scrolly-container,
+  .sec,
+  .loader-bulb-fullscreen,
+  #mobile-canvas,
+  #loader-canvas,
+  .features-list,
+  .side-logo-wrapper {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
+}

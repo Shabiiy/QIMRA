@@ -229,8 +229,8 @@ class MobileSequence {
         
         if (!img) return;
 
-        const canvasWidth = window.innerWidth;
-        const canvasHeight = window.innerHeight;
+        const canvasWidth = window.visualViewport?.width || window.innerWidth;
+        const canvasHeight = window.visualViewport?.height || window.innerHeight;
         this.canvas.width = canvasWidth;
         this.canvas.height = canvasHeight;
         
@@ -1171,9 +1171,12 @@ function initSquaresInteraction() {
   function startChaos(sq) {
     if (!isAnySquareHovered) return;
     
+    const viewportWidth = window.visualViewport?.width || window.innerWidth;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    
     gsap.to(sq, {
-      x: gsap.utils.random(-window.innerWidth * 0.45, window.innerWidth * 0.45),
-      y: gsap.utils.random(-window.innerHeight * 0.45, window.innerHeight * 0.45),
+      x: gsap.utils.random(-viewportWidth * 0.45, viewportWidth * 0.45),
+      y: gsap.utils.random(-viewportHeight * 0.45, viewportHeight * 0.45),
       duration: gsap.utils.random(4, 6), // Slower, more flowing motion
       ease: "power1.inOut",
       onComplete: () => startChaos(sq)
@@ -1198,9 +1201,13 @@ function initSquaresInteraction() {
   
   function startFeatureChaos(item) {
     if (!window.isChaosGlobal) return;
+    
+    const viewportWidth = window.visualViewport?.width || window.innerWidth;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    
     gsap.to(item, {
-      x: gsap.utils.random(-window.innerWidth * 0.4, window.innerWidth * 0.4),
-      y: gsap.utils.random(-window.innerHeight * 0.4, window.innerHeight * 0.4),
+      x: gsap.utils.random(-viewportWidth * 0.4, viewportWidth * 0.4),
+      y: gsap.utils.random(-viewportHeight * 0.4, viewportHeight * 0.4),
       duration: gsap.utils.random(4, 8),
       ease: "power1.inOut",
       onComplete: () => startFeatureChaos(item)
