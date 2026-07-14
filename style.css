@@ -2163,7 +2163,7 @@ p {
     padding: 0 2% !important;
     box-sizing: border-box !important;
     position: absolute !important;
-    top: 52% !important;
+    top: 54% !important;
     left: 0 !important;
     transform: translateY(-50%) !important;
   }
@@ -2172,7 +2172,7 @@ p {
     scale: none !important;
     transform: none !important;
     flex: 0 0 auto !important;
-    width: 30% !important;
+    width: 26% !important;
     height: auto !important;
     aspect-ratio: 3 / 4 !important;
     min-width: 0 !important;
@@ -2192,7 +2192,7 @@ p {
 
   .shelf-label {
     position: absolute !important;
-    top: 5% !important;
+    top: 6% !important;
     left: 0 !important;
     text-align: center !important;
     margin: 0 !important;
@@ -2201,7 +2201,7 @@ p {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: clamp(0.6rem, 2.5vw, 0.9rem) !important;
+    font-size: clamp(0.55rem, 2.2vw, 0.85rem) !important;
     letter-spacing: 0.1rem !important;
     white-space: normal !important;
     word-break: break-word !important;
@@ -2211,13 +2211,13 @@ p {
 
   .bookshelf {
     position: absolute !important;
-    bottom: 5% !important;
+    bottom: 6% !important;
     left: 0 !important;
     width: 100% !important;
-    height: 75% !important;
+    height: 72% !important;
     display: flex !important;
     flex-direction: column-reverse !important;
-    gap: 2% !important;
+    gap: 3% !important;
     align-items: center !important;
     justify-content: flex-start !important;
     padding: 0 !important;
@@ -2225,8 +2225,8 @@ p {
   }
 
   .book {
-    width: 85% !important;
-    height: 22% !important;
+    width: 78% !important;
+    height: 20% !important;
     border-radius: 3px !important;
     box-shadow: 0 3px 5px rgba(var(--bg-dark-rgb), 0.6), inset 0 2px 2px rgba(255, 255, 255, 0.1) !important;
     margin: 0 !important;
@@ -2238,7 +2238,7 @@ p {
 
   .spine-text {
     writing-mode: horizontal-tb !important;
-    font-size: clamp(0.5rem, 1.8vw, 0.75rem) !important;
+    font-size: clamp(0.45rem, 1.6vw, 0.7rem) !important;
     padding: 0 !important;
     line-height: 1 !important;
     text-align: center !important;
