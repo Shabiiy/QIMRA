@@ -420,7 +420,7 @@ p {
   pointer-events: none;
 }
 
-#off-button {
+.off-button {
   position: absolute;
   bottom: var(--off-btn-bottom, 8vh);
   left: var(--off-btn-left, 49.3%);
@@ -440,7 +440,7 @@ p {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#off-button:hover {
+.off-button:hover {
   transform: translateX(-50%) scale(1.15);
   border-color: rgba(255, 100, 100, 0.8);
 }
@@ -2896,4 +2896,98 @@ body, .glass-panel, .cupboard, .feature-item, .modal-container,
 @media (min-width: 769px) and (min-aspect-ratio: 1/1) {
   .desktop-only { display: flex !important; }
   .mobile-only { display: none !important; }
+}
+
+/* ========================================================= */
+/* VIDEO FRAME ANCHORS (OBJECT-FIT: COVER EQUIVALENT)        */
+/* ========================================================= */
+.video-anchor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  container-type: size;
+}
+
+.video-anchor > * {
+  pointer-events: auto;
+}
+
+/* 16:9 Desktop Frame */
+.frame-desktop {
+  width: 100vw;
+  height: 56.25vw;
+  min-height: 100vh;
+  min-width: 177.77vh;
+}
+
+/* 9:16 Mobile Frame */
+.frame-mobile {
+  width: 100vw;
+  height: 177.77vw;
+  min-height: 100vh;
+  min-width: 56.25vh;
+}
+
+.absolute-anchor {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.absolute-anchor.hero-anchor {
+  top: 50%;
+  left: 8%;
+  transform: translateY(-50%);
+  align-items: flex-start;
+  width: 40%;
+}
+
+.absolute-anchor.right-panel-anchor {
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 35%;
+}
+
+.absolute-anchor.cupboard-anchor {
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+
+.absolute-anchor.playground-text-anchor {
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+}
+
+.absolute-anchor.monitor-anchor {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 45%;
+  height: 50%;
+}
+
+/* Scale text based on container size */
+.scale-text h2 { font-size: clamp(1.5rem, 3cqw, 5rem) !important; margin-bottom: 2cqh; }
+.scale-text h3 { font-size: clamp(1rem, 1.5cqw, 3rem) !important; margin-bottom: 2cqh; }
+.scale-text p { font-size: clamp(0.85rem, 1.1cqw, 1.8rem) !important; margin-bottom: 1.5cqh; }
+.scale-text .portfolio-desc { font-size: clamp(0.7rem, 0.9cqw, 1.5rem) !important; }
+
+/* Scale Cupboard contents */
+.video-anchor .cupboard-grid {
+  transform: scale(calc(1vw / 19.2 + 0.5)); /* Fallback relative scaling */
+}
+@container (min-width: 0px) {
+  .cupboard-grid {
+    transform: scale(calc(100cqw / 1920));
+    transform-origin: center top;
+  }
 }
