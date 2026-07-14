@@ -475,7 +475,7 @@ function revealMainContent() {
   // Ensure section 1 and background are ready
   sectionElements = document.querySelectorAll('.sec');
   // Hide contents BEFORE making section visible to prevent flashing
-  gsap.set([".logo-switcher", ".side-hero-logo", ".features-list", "#off-button", ".interactive-square"], { opacity: 0 });
+  gsap.set([".logo-switcher", ".side-hero-logo", ".features-list", ".off-button", ".interactive-square"], { opacity: 0 });
   gsap.set(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 });
   
   gsap.set(sectionElements[0], { opacity: 1, visibility: "visible", pointerEvents: "auto" });
@@ -497,7 +497,7 @@ function revealMainContent() {
     .fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" }, "-=1.2")
     .fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" }, "-=1.6")
     .fromTo(".features-list", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1.8, ease: "power3.out" }, "-=1.6")
-    .fromTo("#off-button", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 1.5, ease: "power3.out" }, "-=1.6")
+    .fromTo(".off-button", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 1.5, ease: "power3.out" }, "-=1.6")
     .fromTo(".scroll-indicator", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.5, ease: "power3.out" }, "-=1.4")
     .add(() => {
         animateSquaresIn();
@@ -611,8 +611,8 @@ function handleIntensiveScroll(delta) {
 
 // Global Event Listeners - Call once
 function setupGlobalEventListeners() {
-  const offBtn = document.getElementById("off-button");
-  if (offBtn) offBtn.addEventListener("click", turnOff);
+  const offBtns = document.querySelectorAll(".off-button");
+  offBtns.forEach(btn => btn.addEventListener("click", turnOff));
   
   window.addEventListener("wheel", (e) => {
     handleIntensiveScroll(e.deltaY);
@@ -665,7 +665,7 @@ function setupGlobalEventListeners() {
 
   // Attach mobile touch effects once
   if (isMobile) {
-    document.querySelectorAll('.feature-item, .dev-link-btn, #off-button').forEach(el => {
+    document.querySelectorAll('.feature-item, .dev-link-btn, .off-button').forEach(el => {
       el.addEventListener('touchstart', () => el.classList.add('touch-active'), {passive: true});
       el.addEventListener('touchend', () => el.classList.remove('touch-active'), {passive: true});
       el.addEventListener('touchcancel', () => el.classList.remove('touch-active'), {passive: true});
@@ -715,7 +715,7 @@ function turnOff() {
     .to(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15, duration: 0.8, stagger: -0.02, ease: "power2.inOut" }, "-=1.0")
     .to(".side-hero-logo", { x: 300, opacity: 0, duration: 1.2, ease: "power2.in" }, "-=0.8")
     .to(".features-list", { y: -150, opacity: 0, duration: 1, ease: "power2.in" }, "-=1.0")
-    .to("#off-button", { opacity: 0, duration: 0.5 }, "-=0.8")
+    .to(".off-button", { opacity: 0, duration: 0.5 }, "-=0.8")
     .add(() => animateSquaresOut(), "-=1.0")
     
     .to("#scrolly-container", { opacity: 0, duration: 0.8, ease: "power2.in" }, "-=0.6")
@@ -1427,12 +1427,12 @@ function skipToSection(targetIdx) {
 
 function initModalLogic() {
   const modal = document.getElementById('projects-modal');
-  const openBtn = document.getElementById('open-gallery');
+  const openBtns = document.querySelectorAll('.open-gallery');
   const closeBtn = document.querySelector('.close-modal');
   const overlay = document.querySelector('.modal-overlay');
   const track = document.querySelector('.gallery-track');
 
-  if (!modal || !openBtn || !track) return;
+  if (!modal || openBtns.length === 0 || !track) return;
 
   let loopTween;
   let mouseX = 0;
@@ -1528,9 +1528,11 @@ if (themeToggleBtn) {
     window.removeEventListener('mousemove', handleMouseMove);
   };
 
-  openBtn.addEventListener('click', openModal);
-  // 📱 Mobile: instant audio on touchstart (before 300ms click delay)
-  openBtn.addEventListener('touchstart', () => playSound(SFX.component), { passive: true });
+  openBtns.forEach(btn => {
+    btn.addEventListener('click', openModal);
+    // 📱 Mobile: instant audio on touchstart (before 300ms click delay)
+    btn.addEventListener('touchstart', () => playSound(SFX.component), { passive: true });
+  });
   closeBtn.addEventListener('click', closeModal);
   overlay.addEventListener('click', closeModal);
 
@@ -1566,17 +1568,17 @@ function animateSquaresOut() {
 
 // 📱 Footer Link Handler
 function initFooterLinks() {
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const instaLink = document.getElementById('insta-dev-link');
-  if (instaLink) {
-    if (isMobile) {
+  const isMobileOS = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const instaLinks = document.querySelectorAll('.insta-dev-link');
+  instaLinks.forEach(instaLink => {
+    if (isMobileOS) {
       instaLink.href = "https://www.instagram.com/intellex.web?igsh=MXR5dGZjNWF5b2E=5.437";
     } else {
       instaLink.href = "https://www.instagram.com/intellex.web?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==";
     }
     // 🔊 Component sound when Meet the Developer is clicked
     instaLink.addEventListener('click', () => playSound(SFX.component));
-  }
+  });
 }
 
 function initBookshelfLogic() {

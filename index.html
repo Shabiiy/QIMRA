@@ -149,35 +149,72 @@
     <!-- Section 1 (Hero) -->
     <section class="sec sec-1" id="sec-1">
       <div class="hero-text-container">
-        <div class="logo-switcher" onmouseenter="if(window.innerWidth > 900){ this.classList.toggle('active'); playSound(SFX.component); }" onclick="if(window.innerWidth <= 900){ this.classList.toggle('active'); playSound(SFX.component); }">
-          <div class="mobile-tap-hint">click to see magic</div>
-          <img src="assets/qimra logo arabic.png" alt="Arabic Logo" class="intellex-title logo-ara" loading="lazy" decoding="async">
-          <img src="assets/qimra logo eng.png" alt="English Logo" class="intellex-title logo-eng" loading="lazy" decoding="async">
+        <!-- DESKTOP OVERLAY -->
+        <div class="desktop-overlay-container desktop-only">
+          <div class="desktop-text-content logo-switcher" onmouseenter="if(window.innerWidth > 900){ this.classList.toggle('active'); playSound(SFX.component); }" onclick="if(window.innerWidth <= 900){ this.classList.toggle('active'); playSound(SFX.component); }">
+            <div class="mobile-tap-hint">click to see magic</div>
+            <img src="assets/qimra logo arabic.png" alt="Arabic Logo" class="intellex-title logo-ara" loading="lazy" decoding="async">
+            <img src="assets/qimra logo eng.png" alt="English Logo" class="intellex-title logo-eng" loading="lazy" decoding="async">
+          </div>
+
+          <div class="desktop-glass-panels side-logo-wrapper">
+            <img src="assets/Side logo.png" alt="Intellex Branding" class="side-hero-logo desktop-logo" loading="lazy" decoding="async">
+            <div class="interactive-square sq-green" data-color="#10b981"></div>
+            <div class="interactive-square sq-orange" data-color="#fb923c"></div>
+            <div class="interactive-square sq-blue" data-color="#3b82f6"></div>
+            <div class="interactive-square sq-yellow" data-color="#fbbf24"></div>
+            <div class="interactive-square sq-pink" data-color="#fb923c"></div>
+          </div>
+          
+          <div class="off-button glowing-hover">
+            <div class="off-fill"></div>
+          </div>
+
+          <div class="desktop-text-content hero-main-text floating" style="--d: 1s;">
+            <h1 class="theme-glow">We Make Brands Impossible to Ignore</h1>
+            <p class="hero-subtext">In a market where everyone is trying to be seen, the real power lies in being remembered.</p>
+            <p class="hero-desc">At Qimra Creation, we blend strategy, storytelling, and performance into digital experiences that do more than look beautiful—they attract attention, build trust, and turn interest into action.</p>
+            <p class="hero-desc">For brands in Qatar, this is where creativity stops being decoration and starts becoming growth.</p>
+          </div>
+
+          <div class="desktop-text-content scroll-indicator">
+            <p>SWIPE DOWN TO REVEAL THE MAGIC</p>
+            <div class="scroll-arrow"></div>
+          </div>
         </div>
 
-        <div class="side-logo-wrapper">
-          <img src="assets/Side logo.png" alt="Intellex Branding" class="side-hero-logo desktop-logo" loading="lazy" decoding="async">
-          <img src="mobileview/side logo mv.png" alt="Intellex Branding" class="side-hero-logo mobile-logo" loading="lazy" decoding="async">
-          <div class="interactive-square sq-green" data-color="#10b981"></div>
-          <div class="interactive-square sq-orange" data-color="#fb923c"></div>
-          <div class="interactive-square sq-blue" data-color="#3b82f6"></div>
-          <div class="interactive-square sq-yellow" data-color="#fbbf24"></div>
-          <div class="interactive-square sq-pink" data-color="#fb923c"></div>
-        </div>
-        <div id="off-button" class="glowing-hover">
-          <div class="off-fill"></div>
-        </div>
+        <!-- MOBILE OVERLAY -->
+        <div class="mobile-overlay-container mobile-only">
+          <div class="mobile-text-content logo-switcher" onclick="this.classList.toggle('active'); playSound(SFX.component);">
+            <div class="mobile-tap-hint">click to see magic</div>
+            <img src="assets/qimra logo arabic.png" alt="Arabic Logo" class="intellex-title logo-ara" loading="lazy" decoding="async">
+            <img src="assets/qimra logo eng.png" alt="English Logo" class="intellex-title logo-eng" loading="lazy" decoding="async">
+          </div>
 
-        <div class="hero-main-text floating" style="--d: 1s;">
-          <h1 class="theme-glow">We Make Brands Impossible to Ignore</h1>
-          <p class="hero-subtext">In a market where everyone is trying to be seen, the real power lies in being remembered.</p>
-          <p class="hero-desc">At Qimra Creation, we blend strategy, storytelling, and performance into digital experiences that do more than look beautiful—they attract attention, build trust, and turn interest into action.</p>
-          <p class="hero-desc">For brands in Qatar, this is where creativity stops being decoration and starts becoming growth.</p>
-        </div>
+          <div class="mobile-glass-panels side-logo-wrapper">
+            <img src="mobileview/side logo mv.png" alt="Intellex Branding" class="side-hero-logo mobile-logo" loading="lazy" decoding="async">
+            <div class="interactive-square sq-green" data-color="#10b981"></div>
+            <div class="interactive-square sq-orange" data-color="#fb923c"></div>
+            <div class="interactive-square sq-blue" data-color="#3b82f6"></div>
+            <div class="interactive-square sq-yellow" data-color="#fbbf24"></div>
+            <div class="interactive-square sq-pink" data-color="#fb923c"></div>
+          </div>
+          
+          <div class="off-button glowing-hover">
+            <div class="off-fill"></div>
+          </div>
 
-        <div class="scroll-indicator">
-          <p>SWIPE DOWN TO REVEAL THE MAGIC</p>
-          <div class="scroll-arrow"></div>
+          <div class="mobile-text-content hero-main-text floating" style="--d: 1s;">
+            <h1 class="theme-glow">We Make Brands Impossible to Ignore</h1>
+            <p class="hero-subtext">In a market where everyone is trying to be seen, the real power lies in being remembered.</p>
+            <p class="hero-desc">At Qimra Creation, we blend strategy, storytelling, and performance into digital experiences that do more than look beautiful—they attract attention, build trust, and turn interest into action.</p>
+            <p class="hero-desc">For brands in Qatar, this is where creativity stops being decoration and starts becoming growth.</p>
+          </div>
+
+          <div class="mobile-text-content scroll-indicator">
+            <p>SWIPE DOWN TO REVEAL THE MAGIC</p>
+            <div class="scroll-arrow"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -185,14 +222,30 @@
     <!-- Section 2 (Behind the Magic) -->
     <section class="sec sec-2" id="sec-2">
       <div class="content-wrapper" style="width: 100%;">
-        <div class="sec-content glass-panel right-panel floating" style="--d: 0.4s;">
-          <h2 class="theme-glow">Behind the Magic</h2>
-          <h3 class="module-subtitle" style="color: var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">What Your Audience Calls Magic, We Call Strategy</h3>
-          <p>Behind every high-performing campaign is more than creativity—it’s insight, timing, psychology, and precision.</p>
-          <br>
-          <p>Qimra Creation is a Qatar-based performance marketing and creative agency built for brands that want more than visibility.</p>
-          <br>
-          <p>We help businesses create a stronger presence, better perception, and measurable growth through branding, content, paid campaigns, and video storytelling.</p>
+        <!-- DESKTOP OVERLAY -->
+        <div class="desktop-overlay-container desktop-only">
+          <div class="desktop-glass-panels sec-content glass-panel right-panel floating" style="--d: 0.4s;">
+            <h2 class="theme-glow">Behind the Magic</h2>
+            <h3 class="module-subtitle" style="color: var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">What Your Audience Calls Magic, We Call Strategy</h3>
+            <p>Behind every high-performing campaign is more than creativity—it’s insight, timing, psychology, and precision.</p>
+            <br>
+            <p>Qimra Creation is a Qatar-based performance marketing and creative agency built for brands that want more than visibility.</p>
+            <br>
+            <p>We help businesses create a stronger presence, better perception, and measurable growth through branding, content, paid campaigns, and video storytelling.</p>
+          </div>
+        </div>
+
+        <!-- MOBILE OVERLAY -->
+        <div class="mobile-overlay-container mobile-only">
+          <div class="mobile-glass-panels sec-content glass-panel right-panel floating" style="--d: 0.4s;">
+            <h2 class="theme-glow">Behind the Magic</h2>
+            <h3 class="module-subtitle" style="color: var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">What Your Audience Calls Magic, We Call Strategy</h3>
+            <p>Behind every high-performing campaign is more than creativity—it’s insight, timing, psychology, and precision.</p>
+            <br>
+            <p>Qimra Creation is a Qatar-based performance marketing and creative agency built for brands that want more than visibility.</p>
+            <br>
+            <p>We help businesses create a stronger presence, better perception, and measurable growth through branding, content, paid campaigns, and video storytelling.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -200,154 +253,314 @@
     <!-- Section 3 (The Kitchen of Ideas) -->
     <section class="sec sec-3" id="sec-3">
       <div class="content-wrapper">
-        <div class="sec-content center-panel" style="margin: auto;">
-          <h2 class="module-title floating theme-glow" style="--d: 0.1s; margin-bottom: 2rem;">Our Playground</h2>
-          <div class="glass-panel floating"
-            style="--d: 0.3s; max-width: 800px; margin-bottom: 3.5rem; padding: 1.2rem 2.5rem; border-radius: 20px; text-align: center;">
-            <p style="margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 500; color: var(--gold);">Where Brands Come to Grow Bigger</p>
-            <p style="margin: 0; font-size: 1.1rem; color: #fffaea;">Every service we offer is designed to solve one business challenge: How do we make the right people notice, trust, and choose your brand?</p>
+        <!-- DESKTOP OVERLAY -->
+        <div class="desktop-overlay-container desktop-only">
+          <div class="desktop-text-content sec-content center-panel" style="margin: auto;">
+            <h2 class="module-title floating theme-glow" style="--d: 0.1s; margin-bottom: 2rem;">Our Playground</h2>
+            <div class="desktop-glass-panels glass-panel floating"
+              style="--d: 0.3s; max-width: 800px; margin-bottom: 3.5rem; padding: 1.2rem 2.5rem; border-radius: 20px; text-align: center;">
+              <p style="margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 500; color: var(--gold);">Where Brands Come to Grow Bigger</p>
+              <p style="margin: 0; font-size: 1.1rem; color: #fffaea;">Every service we offer is designed to solve one business challenge: How do we make the right people notice, trust, and choose your brand?</p>
+            </div>
+            <div class="desktop-cupboard-grid cupboard-grid">
+              <!-- Cupboard 1: Brand Building -->
+              <div class="cupboard floating glowing-hover" style="--d: 0.2s;">
+                <div class="glow-bg"></div>
+                <div class="shelf-label">1. BRAND BUILDING</div>
+                <div class="bookshelf">
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">BRANDING</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/branding & indentity design.jpeg" alt="Branding & Identity Design" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Branding & Identity Design</strong>
+                      Build a strong visual identity that makes your brand unforgettable.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">SOCIAL MEDIA</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/Social media marketing.jpeg" alt="Social Media Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Social Media Marketing</strong>
+                      Grow your brand presence through creative and strategic social campaigns.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">CONTENT</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/content writting.jpeg" alt="Content Writing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Content Writing</strong>
+                      Create compelling content that connects with your audience effectively.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">VIDEO</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/video production.jpeg" alt="Video Production" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Video Production</strong>
+                      Produce engaging videos that bring your brand story to life.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Cupboard 2: Traffic Generation -->
+              <div class="cupboard floating glowing-hover" style="--d: 0.8s;">
+                <div class="glow-bg"></div>
+                <div class="shelf-label">2. TRAFFIC GENERATION</div>
+                <div class="bookshelf">
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">GOOGLE ADS</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/google ads.jpeg" alt="Google Ads" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Google Ads</strong>
+                      Reach high-intent customers with targeted Google advertising campaigns.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">META ADS</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/meta ads.jpeg" alt="Meta Ads" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Meta Ads</strong>
+                      Drive engagement and leads through powerful Facebook and Instagram ads.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">INFLUENCER</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/influencer marketing.jpeg" alt="Influencer Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Influencer Marketing</strong>
+                      Expand your reach with authentic promotions from trusted influencers.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">SEO</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/SEO.jpeg" alt="Search Engine Optimization" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Search Engine Optimization</strong>
+                      Increase your online visibility and attract organic website traffic.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Cupboard 3: Growth & Scaling -->
+              <div class="cupboard floating glowing-hover" style="--d: 0.5s;">
+                <div class="glow-bg"></div>
+                <div class="shelf-label">3. GROWTH & SCALING</div>
+                <div class="bookshelf">
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">WEB DEV</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/web development.jpeg" alt="Web Development" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Web Development</strong>
+                      Develop modern, responsive websites built for business growth.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">LANDING</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/landing pages.jpeg" alt="Landing Pages" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Landing Pages</strong>
+                      Create conversion-focused landing pages that generate quality leads.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">CONVERSION</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/conversion optimization.jpeg" alt="Conversion Optimization" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Conversion Optimization</strong>
+                      Improve user experience to turn more visitors into customers.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">SCALING</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/campaign scaling.jpeg" alt="Campaign Scaling" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Campaign Scaling</strong>
+                      Scale successful campaigns strategically for long-term business growth.
+                    </div>
+                    <div class="book-back"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="cupboard-grid">
-            <!-- Cupboard 1: Brand Building -->
-            <div class="cupboard floating glowing-hover" style="--d: 0.2s;">
-              <div class="glow-bg"></div>
-              <div class="shelf-label">1. BRAND BUILDING</div>
-              <div class="bookshelf">
-                <div class="book book-1">
-                  <div class="book-cover"><span class="spine-text">BRANDING</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/branding & indentity design.jpeg" alt="Branding & Identity Design" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Branding & Identity Design</strong>
-                    Build a strong visual identity that makes your brand unforgettable.
+        </div>
+
+        <!-- MOBILE OVERLAY -->
+        <div class="mobile-overlay-container mobile-only">
+          <div class="mobile-text-content sec-content center-panel" style="margin: auto;">
+            <h2 class="module-title floating theme-glow" style="--d: 0.1s; margin-bottom: 2rem;">Our Playground</h2>
+            <div class="mobile-glass-panels glass-panel floating"
+              style="--d: 0.3s; max-width: 800px; margin-bottom: 3.5rem; padding: 1.2rem 2.5rem; border-radius: 20px; text-align: center;">
+              <p style="margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 500; color: var(--gold);">Where Brands Come to Grow Bigger</p>
+              <p style="margin: 0; font-size: 1.1rem; color: #fffaea;">Every service we offer is designed to solve one business challenge: How do we make the right people notice, trust, and choose your brand?</p>
+            </div>
+            <div class="mobile-cupboard-grid cupboard-grid">
+              <!-- Cupboard 1: Brand Building -->
+              <div class="cupboard floating glowing-hover" style="--d: 0.2s;">
+                <div class="glow-bg"></div>
+                <div class="shelf-label">1. BRAND BUILDING</div>
+                <div class="bookshelf">
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">BRANDING</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/branding & indentity design.jpeg" alt="Branding & Identity Design" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Branding & Identity Design</strong>
+                      Build a strong visual identity that makes your brand unforgettable.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-2">
-                  <div class="book-cover"><span class="spine-text">SOCIAL MEDIA</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/Social media marketing.jpeg" alt="Social Media Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Social Media Marketing</strong>
-                    Grow your brand presence through creative and strategic social campaigns.
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">SOCIAL MEDIA</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/Social media marketing.jpeg" alt="Social Media Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Social Media Marketing</strong>
+                      Grow your brand presence through creative and strategic social campaigns.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-1">
-                  <div class="book-cover"><span class="spine-text">CONTENT</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/content writting.jpeg" alt="Content Writing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Content Writing</strong>
-                    Create compelling content that connects with your audience effectively.
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">CONTENT</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/content writting.jpeg" alt="Content Writing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Content Writing</strong>
+                      Create compelling content that connects with your audience effectively.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-2">
-                  <div class="book-cover"><span class="spine-text">VIDEO</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/video production.jpeg" alt="Video Production" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Video Production</strong>
-                    Produce engaging videos that bring your brand story to life.
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">VIDEO</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/video production.jpeg" alt="Video Production" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Video Production</strong>
+                      Produce engaging videos that bring your brand story to life.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
                 </div>
               </div>
-            </div>
-
-            <!-- Cupboard 2: Traffic Generation -->
-            <div class="cupboard floating glowing-hover" style="--d: 0.8s;">
-              <div class="glow-bg"></div>
-              <div class="shelf-label">2. TRAFFIC GENERATION</div>
-              <div class="bookshelf">
-                <div class="book book-2">
-                  <div class="book-cover"><span class="spine-text">GOOGLE ADS</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/google ads.jpeg" alt="Google Ads" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Google Ads</strong>
-                    Reach high-intent customers with targeted Google advertising campaigns.
+  
+              <!-- Cupboard 2: Traffic Generation -->
+              <div class="cupboard floating glowing-hover" style="--d: 0.8s;">
+                <div class="glow-bg"></div>
+                <div class="shelf-label">2. TRAFFIC GENERATION</div>
+                <div class="bookshelf">
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">GOOGLE ADS</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/google ads.jpeg" alt="Google Ads" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Google Ads</strong>
+                      Reach high-intent customers with targeted Google advertising campaigns.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-1">
-                  <div class="book-cover"><span class="spine-text">META ADS</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/meta ads.jpeg" alt="Meta Ads" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Meta Ads</strong>
-                    Drive engagement and leads through powerful Facebook and Instagram ads.
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">META ADS</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/meta ads.jpeg" alt="Meta Ads" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Meta Ads</strong>
+                      Drive engagement and leads through powerful Facebook and Instagram ads.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-2">
-                  <div class="book-cover"><span class="spine-text">INFLUENCER</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/influencer marketing.jpeg" alt="Influencer Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Influencer Marketing</strong>
-                    Expand your reach with authentic promotions from trusted influencers.
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">INFLUENCER</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/influencer marketing.jpeg" alt="Influencer Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Influencer Marketing</strong>
+                      Expand your reach with authentic promotions from trusted influencers.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-1">
-                  <div class="book-cover"><span class="spine-text">SEO</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/SEO.jpeg" alt="Search Engine Optimization" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Search Engine Optimization</strong>
-                    Increase your online visibility and attract organic website traffic.
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">SEO</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/SEO.jpeg" alt="Search Engine Optimization" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Search Engine Optimization</strong>
+                      Increase your online visibility and attract organic website traffic.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
                 </div>
               </div>
-            </div>
-
-            <!-- Cupboard 3: Growth & Scaling -->
-            <div class="cupboard floating glowing-hover" style="--d: 0.5s;">
-              <div class="glow-bg"></div>
-              <div class="shelf-label">3. GROWTH & SCALING</div>
-              <div class="bookshelf">
-                <div class="book book-1">
-                  <div class="book-cover"><span class="spine-text">WEB DEV</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/web development.jpeg" alt="Web Development" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Web Development</strong>
-                    Develop modern, responsive websites built for business growth.
+  
+              <!-- Cupboard 3: Growth & Scaling -->
+              <div class="cupboard floating glowing-hover" style="--d: 0.5s;">
+                <div class="glow-bg"></div>
+                <div class="shelf-label">3. GROWTH & SCALING</div>
+                <div class="bookshelf">
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">WEB DEV</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/web development.jpeg" alt="Web Development" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Web Development</strong>
+                      Develop modern, responsive websites built for business growth.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-2">
-                  <div class="book-cover"><span class="spine-text">LANDING</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/landing pages.jpeg" alt="Landing Pages" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Landing Pages</strong>
-                    Create conversion-focused landing pages that generate quality leads.
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">LANDING</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/landing pages.jpeg" alt="Landing Pages" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Landing Pages</strong>
+                      Create conversion-focused landing pages that generate quality leads.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-1">
-                  <div class="book-cover"><span class="spine-text">CONVERSION</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/conversion optimization.jpeg" alt="Conversion Optimization" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Conversion Optimization</strong>
-                    Improve user experience to turn more visitors into customers.
+                  <div class="book book-1">
+                    <div class="book-cover"><span class="spine-text">CONVERSION</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/conversion optimization.jpeg" alt="Conversion Optimization" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Conversion Optimization</strong>
+                      Improve user experience to turn more visitors into customers.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
-                </div>
-                <div class="book book-2">
-                  <div class="book-cover"><span class="spine-text">SCALING</span></div>
-                  <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
-                  <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                    <img src="assets/cupboard/campaign scaling.jpeg" alt="Campaign Scaling" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
-                    <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Campaign Scaling</strong>
-                    Scale successful campaigns strategically for long-term business growth.
+                  <div class="book book-2">
+                    <div class="book-cover"><span class="spine-text">SCALING</span></div>
+                    <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
+                    <div class="book-page" style="font-size: 0.65rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
+                      <img src="assets/cupboard/campaign scaling.jpeg" alt="Campaign Scaling" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 0.9rem;">Campaign Scaling</strong>
+                      Scale successful campaigns strategically for long-term business growth.
+                    </div>
+                    <div class="book-back"></div>
                   </div>
-                  <div class="book-back"></div>
                 </div>
               </div>
             </div>
@@ -360,15 +573,33 @@
     <section class="sec sec-4" id="sec-4">
       <img src="assets/qimra logo arabic.png" alt="Branding" class="monitor-branding-logo" loading="lazy" decoding="async">
       <div class="content-wrapper monitor-container" style="width: 100%;">
-        <div class="sec-content glass-window monitor-content floating" style="--d: 0s; padding: 1.5rem;">
-          <h2 class="theme-glow" style="font-size: 1.5rem; margin-bottom: 0.2rem;">Made with Magic</h2>
-          <h3 style="font-size: 1rem; color: var(--gold); margin-bottom: 0.5rem;">Where Creativity Proves Its Value</h3>
-          <p class="portfolio-desc" style="margin-bottom: 0.5rem; font-size: 0.85rem;">Every campaign, visual, and video in our gallery represents more than design—it represents stronger brand perception, higher engagement, and better business outcomes.</p>
-          <p class="portfolio-desc" style="margin-bottom: 1rem; font-size: 0.85rem; font-weight: bold;">The work speaks beautifully. The results speak louder.</p>
+        <!-- DESKTOP OVERLAY -->
+        <div class="desktop-overlay-container desktop-only">
+          <div class="desktop-glass-panels sec-content glass-window monitor-content floating" style="--d: 0s; padding: 1.5rem;">
+            <h2 class="theme-glow" style="font-size: 1.5rem; margin-bottom: 0.2rem;">Made with Magic</h2>
+            <h3 style="font-size: 1rem; color: var(--gold); margin-bottom: 0.5rem;">Where Creativity Proves Its Value</h3>
+            <p class="portfolio-desc" style="margin-bottom: 0.5rem; font-size: 0.85rem;">Every campaign, visual, and video in our gallery represents more than design—it represents stronger brand perception, higher engagement, and better business outcomes.</p>
+            <p class="portfolio-desc" style="margin-bottom: 1rem; font-size: 0.85rem; font-weight: bold;">The work speaks beautifully. The results speak louder.</p>
+  
+            <div class="view-trigger glowing-hover open-gallery">
+              <div class="glow-bg"></div>
+              <span>CLICK TO VIEW PROJECTS</span>
+            </div>
+          </div>
+        </div>
 
-          <div class="view-trigger glowing-hover" id="open-gallery">
-            <div class="glow-bg"></div>
-            <span>CLICK TO VIEW PROJECTS</span>
+        <!-- MOBILE OVERLAY -->
+        <div class="mobile-overlay-container mobile-only">
+          <div class="mobile-glass-panels sec-content glass-window monitor-content floating" style="--d: 0s; padding: 1.5rem;">
+            <h2 class="theme-glow" style="font-size: 1.5rem; margin-bottom: 0.2rem;">Made with Magic</h2>
+            <h3 style="font-size: 1rem; color: var(--gold); margin-bottom: 0.5rem;">Where Creativity Proves Its Value</h3>
+            <p class="portfolio-desc" style="margin-bottom: 0.5rem; font-size: 0.85rem;">Every campaign, visual, and video in our gallery represents more than design—it represents stronger brand perception, higher engagement, and better business outcomes.</p>
+            <p class="portfolio-desc" style="margin-bottom: 1rem; font-size: 0.85rem; font-weight: bold;">The work speaks beautifully. The results speak louder.</p>
+  
+            <div class="view-trigger glowing-hover open-gallery">
+              <div class="glow-bg"></div>
+              <span>CLICK TO VIEW PROJECTS</span>
+            </div>
           </div>
         </div>
       </div>
@@ -377,31 +608,63 @@
     <!-- Section 5 (Contact) -->
     <section class="sec sec-5" id="sec-5">
       <div class="content-wrapper" style="width: 100%;">
-        <div class="sec-content levitating-door floating center-panel" style="--d: 0.1s; margin: auto;">
-          <div class="door-frame">
-            <h2 class="neon-text theme-glow" style="text-transform: uppercase;">KNOCK ON OUR DOOR</h2>
-            <h3 style="color: var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">Let’s Build the Brand They Remember First</h3>
-            <p style="margin-bottom: 1rem; max-width: 500px; margin-left: auto; margin-right: auto;">Whether you need stronger branding, better-performing ads, or content that truly connects, Qimra Creation is built to help Qatar businesses grow with clarity and confidence.</p>
-            <p style="margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; font-weight: bold;">Bring us your vision. We’ll turn it into strategy, creativity, and measurable results.</p>
-            <div class="contact-info">
-              <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">hello@qimracreations.com</p>
-              <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">1-800-LIGHT-UP</p>
+        <!-- DESKTOP OVERLAY -->
+        <div class="desktop-overlay-container desktop-only">
+          <div class="desktop-glass-panels sec-content levitating-door floating center-panel" style="--d: 0.1s; margin: auto;">
+            <div class="door-frame">
+              <h2 class="neon-text theme-glow" style="text-transform: uppercase;">KNOCK ON OUR DOOR</h2>
+              <h3 style="color: var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">Let’s Build the Brand They Remember First</h3>
+              <p style="margin-bottom: 1rem; max-width: 500px; margin-left: auto; margin-right: auto;">Whether you need stronger branding, better-performing ads, or content that truly connects, Qimra Creation is built to help Qatar businesses grow with clarity and confidence.</p>
+              <p style="margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; font-weight: bold;">Bring us your vision. We’ll turn it into strategy, creativity, and measurable results.</p>
+              <div class="contact-info">
+                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">hello@qimracreations.com</p>
+                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">1-800-LIGHT-UP</p>
+              </div>
             </div>
           </div>
+  
+          <!-- Footer -->
+          <footer class="footer">
+            <a href="#" class="insta-dev-link dev-link-btn" target="_blank" rel="noopener noreferrer">
+              <span>Meet the Developers</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </footer>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-          <a href="#" id="insta-dev-link" target="_blank" rel="noopener noreferrer" class="dev-link-btn">
-            <span>Meet the Developers</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          </a>
-        </footer>
+        <!-- MOBILE OVERLAY -->
+        <div class="mobile-overlay-container mobile-only">
+          <div class="mobile-glass-panels sec-content levitating-door floating center-panel" style="--d: 0.1s; margin: auto;">
+            <div class="door-frame">
+              <h2 class="neon-text theme-glow" style="text-transform: uppercase;">KNOCK ON OUR DOOR</h2>
+              <h3 style="color: var(--gold); margin-bottom: 1rem; font-size: 1.2rem;">Let’s Build the Brand They Remember First</h3>
+              <p style="margin-bottom: 1rem; max-width: 500px; margin-left: auto; margin-right: auto;">Whether you need stronger branding, better-performing ads, or content that truly connects, Qimra Creation is built to help Qatar businesses grow with clarity and confidence.</p>
+              <p style="margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; font-weight: bold;">Bring us your vision. We’ll turn it into strategy, creativity, and measurable results.</p>
+              <div class="contact-info">
+                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">hello@qimracreations.com</p>
+                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">1-800-LIGHT-UP</p>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Footer -->
+          <footer class="footer">
+            <a href="#" class="insta-dev-link dev-link-btn" target="_blank" rel="noopener noreferrer">
+              <span>Meet the Developers</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+          </footer>
+        </div>
       </div>
     </section>
   </div>
