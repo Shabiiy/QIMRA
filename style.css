@@ -24,7 +24,7 @@
   --glow-color: rgba(255, 196, 54, 0.6);
 
   /* Fluid Scaling Multiplier */
-  --base-font-size: clamp(14px, 0.6vw + 0.4vh + 0.3vmin, 20px);
+  --base-font-size: clamp(14px, 0.6vw + 0.4dvh + 0.3vmin, 20px);
 
   /* ------------------------------------------- */
   /* 🛠️ ALIGNMENT TUNING VARIABLES FOR SLIDE 3 */
@@ -34,7 +34,7 @@
   /* Horizontal space between the 3 text boxes */
   --cupboard-width: 17vw;
   /* Width of each text box */
-  --cupboard-y-offset: -2vh;
+  --cupboard-y-offset: -2dvh;
   /* Move the grid up (negative) or down (positive) */
   --cupboard-x-offset: 6vw;
   /* Move the grid left (negative) or right (positive) */
@@ -43,12 +43,12 @@
   /* 💡 BULB ON & OFF BUTTONS POSITIONING        */
   /* Adjust these values to move the buttons     */
   /* ------------------------------------------- */
-  --on-btn-bottom: 10vh;
+  --on-btn-bottom: 10dvh;
   /* Move ON button up (higher) or down (lower) */
   --on-btn-left: 48.8%;
   /* Move ON button left (lower %) or right (higher %) */
 
-  --off-btn-bottom: 6vh;
+  --off-btn-bottom: 6dvh;
   /* Move OFF button up (higher) or down (lower) */
   --off-btn-left: 50.6%;
   /* Move OFF button left (lower %) or right (higher %) */
@@ -60,7 +60,7 @@
   --orbit-center-x: 50.5%;
   --orbit-center-y: 52.5%;
   /* Midpoint lowered to bring the entire cluster visually down */
-  --orbit-radius: 15.5vh;
+  --orbit-radius: 15.5dvh;
   /* Lowered, so it closely hugs the glass bounds */
 
   /* Static Placement Around the Bulb */
@@ -216,7 +216,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   z-index: -1;
   opacity: 0;
   /* Hidden initially, reveals after bulb turn on */
@@ -286,7 +286,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -301,7 +301,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   object-fit: cover;
   z-index: 0;
   opacity: 0;
@@ -334,7 +334,7 @@ p {
 
 #loader-content {
   position: absolute;
-  bottom: var(--on-btn-bottom, 8vh);
+  bottom: var(--on-btn-bottom, 8dvh);
   left: var(--on-btn-left, 50%);
   transform: translateX(-50%);
   /* Moved further down below the bulb */
@@ -422,7 +422,7 @@ p {
 
 .off-button {
   position: absolute;
-  bottom: var(--off-btn-bottom, 8vh);
+  bottom: var(--off-btn-bottom, 8dvh);
   left: var(--off-btn-left, 49.3%);
   /* Nudged slightly right from 48.5% */
   transform: translateX(-50%);
@@ -476,7 +476,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   z-index: 10;
 }
 
@@ -499,7 +499,7 @@ p {
 
 /* Each slide overlaps */
 .sec {
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   position: absolute;
   top: 0;
@@ -533,7 +533,7 @@ p {
 
 .scroll-indicator {
   position: absolute;
-  bottom: 2vh;
+  bottom: 2dvh;
   left: var(--off-btn-left, 49.3%);
   transform: translateX(-50%);
   display: flex;
@@ -580,7 +580,7 @@ p {
 
 .logo-switcher {
   position: absolute;
-  top: 15vh;
+  top: 15dvh;
   left: 1.2rem;
   width: 100%;
   max-width: 31rem;
@@ -651,7 +651,7 @@ p {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  height: 100vh;
+  height: 100dvh;
   width: 45vw;
   /* Adjust to better fit the 'pattern' area on the side */
   z-index: 5;
@@ -665,7 +665,7 @@ p {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  height: 110vh;
+  height: 110dvh;
   width: auto;
   max-width: 65vw;
   object-fit: contain;
@@ -740,7 +740,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   /* Center anchor for orbiting items */
   z-index: 20;
   pointer-events: none;
@@ -973,7 +973,7 @@ p {
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: var(--cupboard-y-offset, -2vh);
+  margin-top: var(--cupboard-y-offset, -2dvh);
   /* Nudge up more into the cupboard space */
   margin-left: var(--cupboard-x-offset, 0vw);
   /* Nudge left or right */
@@ -1465,7 +1465,7 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .monitor-content {
@@ -1481,7 +1481,7 @@ p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: -1vh;
+  margin-top: -1dvh;
   margin-left: 5.5vw;
   /* Even further LEFT from 8.5vw */
   box-shadow: none;
@@ -1495,7 +1495,7 @@ p {
   position: absolute;
   /* Control its position via the variables at the top of this file */
   left: calc(50% + var(--monitor-logo-x-offset, 2vw));
-  bottom: calc(50% - var(--monitor-logo-y-offset, 15rem) + 1vh);
+  bottom: calc(50% - var(--monitor-logo-y-offset, 15rem) + 1dvh);
   transform: translateX(-50%);
   width: var(--monitor-logo-width, 4rem);
   opacity: 0;
@@ -1540,7 +1540,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   z-index: 10000;
   display: flex;
   justify-content: center;
@@ -1573,7 +1573,7 @@ p {
   position: relative;
   width: 80vw;
   max-width: 62.5rem;
-  max-height: 80vh;
+  max-height: 80dvh;
   padding: 3.75rem;
   border-radius: 2.5rem;
   overflow: visible;
@@ -1777,7 +1777,7 @@ p {
   }
 
   .side-hero-logo {
-    height: 80vh;
+    height: 80dvh;
     max-width: 65vw;
   }
 }
@@ -1851,7 +1851,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background: var(--bg-dark);
   z-index: 9999999;
   flex-direction: column;
@@ -1957,7 +1957,7 @@ p {
   }
 
   .hero-text-container {
-    padding: 2vh 5vw;
+    padding: 2dvh 5vw;
     width: 100%;
     height: 100%;
     display: flex;
@@ -1965,7 +1965,7 @@ p {
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 1.5vh;
+    gap: 1.5dvh;
   }
 
   .glass-panel,
@@ -2026,7 +2026,7 @@ p {
 
   .logo-switcher {
     position: absolute !important;
-    top: 5vh !important;
+    top: 5dvh !important;
     left: 0 !important;
     right: 0 !important;
     margin: 0 auto !important;
@@ -2038,7 +2038,7 @@ p {
   .mobile-tap-hint {
     display: block !important;
     position: absolute;
-    top: -3.5vh;
+    top: -3.5dvh;
     left: 0;
     right: 0;
     text-align: center;
@@ -2054,7 +2054,7 @@ p {
     position: absolute !important;
     width: 100vw !important;
     /* Reset to screen width to avoid clipping */
-    height: 100vh !important;
+    height: 100dvh !important;
     top: 0 !important;
     left: 0 !important;
     /* Center definitively on the viewport */
@@ -2090,7 +2090,7 @@ p {
   }
 
   .features-list {
-    transform: scale(0.7) translateY(-3vh) !important;
+    transform: scale(0.7) translateY(-3dvh) !important;
     transform-origin: center center !important;
   }
 
@@ -2122,7 +2122,7 @@ p {
 
   .sec-3 .module-title {
     position: absolute !important;
-    top: 4vh !important;
+    top: 4dvh !important;
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
@@ -2134,7 +2134,7 @@ p {
   .sec-3 .glass-panel {
     scale: 0.70 !important;
     position: absolute !important;
-    top: 11vh !important;
+    top: 11dvh !important;
     left: 0 !important;
     right: 0 !important;
     padding: 1.25rem !important;
@@ -2163,7 +2163,7 @@ p {
     padding: 0 !important;
     box-sizing: border-box !important;
     position: absolute !important;
-    top: 52vh !important;
+    top: 52dvh !important;
     left: 0 !important;
     transform: translateY(-50%) !important;
   }
@@ -2172,7 +2172,7 @@ p {
     scale: 0.7 !important;
     flex: 0 0 auto !important;
     width: 32vw !important;
-    height: 22vh !important;
+    height: 22dvh !important;
     min-width: 0 !important;
     margin: 0 !important;
     padding: 10px !important;
@@ -2274,7 +2274,7 @@ p {
   /* Section 4 Monitor */
   .sec-4 .monitor-container {
     position: absolute !important;
-    top: 16.5vh !important;
+    top: 16.5dvh !important;
     left: 3vw !important;
     width: 100vw !important;
     height: 100% !important;
@@ -2349,7 +2349,7 @@ p {
   /* Section 5 Door */
   .sec-5 .content-wrapper {
     position: absolute !important;
-    top: 10vh !important;
+    top: 10dvh !important;
     left: 0 !important;
     width: 100vw !important;
     height: 100% !important;
@@ -2422,7 +2422,7 @@ p {
 
   .project-card {
     min-width: 75vw !important;
-    height: 45vh !important;
+    height: 45dvh !important;
     scroll-snap-align: center;
     margin-right: 15px;
     scale: 0.95;
@@ -2474,11 +2474,11 @@ p {
   }
 
   .scroll-indicator {
-    bottom: 2vh;
+    bottom: 2dvh;
   }
 
   #off-button {
-    bottom: 4vh;
+    bottom: 4dvh;
     width: 1.875rem;
     height: 1.875rem;
   }
@@ -2498,7 +2498,7 @@ p {
 
   .cupboard-grid {
     gap: 8vw;
-    margin-top: -5vh;
+    margin-top: -5dvh;
     margin-left: 0 !important;
   }
 
@@ -2573,13 +2573,13 @@ p {
   /* Modal Gallery */
   .modal-container {
     width: 95vw;
-    height: 90vh;
+    height: 90dvh;
     padding: 1rem;
   }
 
   .project-card {
     min-width: 40vw;
-    height: 70vh;
+    height: 70dvh;
     padding: 0;
     display: flex;
     align-items: center;
@@ -2638,7 +2638,7 @@ p {
 
 @media (max-width: 768px) {
   .footer {
-    padding-bottom: 6vh;
+    padding-bottom: 6dvh;
   }
 
   .dev-link-btn {
@@ -2701,7 +2701,7 @@ p {
 .hero-main-text {
   position: relative;
   margin-left: 2.5rem;
-  margin-top: 18vh;
+  margin-top: 18dvh;
   max-width: 26vw;
   z-index: 50;
   padding: 0;
@@ -2737,7 +2737,7 @@ p {
     margin: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    top: 14vh !important;
+    top: 14dvh !important;
     bottom: auto !important;
     transform: none !important;
     text-align: left !important;
@@ -2918,16 +2918,16 @@ body, .glass-panel, .cupboard, .feature-item, .modal-container,
 .frame-desktop {
   width: 100vw;
   height: 56.25vw;
-  min-height: 100vh;
-  min-width: 177.77vh;
+  min-height: 100dvh;
+  min-width: 177.77dvh;
 }
 
 /* 9:16 Mobile Frame */
 .frame-mobile {
   width: 100vw;
   height: 177.77vw;
-  min-height: 100vh;
-  min-width: 56.25vh;
+  min-height: 100dvh;
+  min-width: 56.25dvh;
 }
 
 .absolute-anchor {
