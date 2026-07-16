@@ -1010,7 +1010,7 @@ p {
 
 .shelf-label {
   position: absolute;
-  top: 1.875rem;
+  top: 2.875rem;
   left: 0;
   width: 100%;
   text-align: center;
@@ -2194,7 +2194,7 @@ p {
     top: auto !important;
     left: auto !important;
     text-align: center !important;
-    margin: 0 0 12px 0 !important;
+    margin: 15px 0 12px 0 !important;
     width: 100% !important;
     font-size: 0.75rem !important;
     letter-spacing: 0.1rem !important;
