@@ -1019,7 +1019,7 @@ p {
   letter-spacing: 0.25rem;
   color: var(--gold);
   opacity: 0.6;
-  transition: all 0.5s ease;
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
 .bookshelf {
@@ -1044,7 +1044,7 @@ p {
   transform-style: preserve-3d;
   perspective: 125rem;
   /* Local perspective for better 3D depth */
-  transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1) !important;
   box-shadow: 0 0.3125rem 0.9375rem rgba(var(--bg-dark-rgb), 0.5);
   cursor: pointer;
   border-radius: 0.125rem 0.375rem 0.375rem 0.125rem;
@@ -1161,7 +1161,7 @@ p {
   transform-origin: left;
   transform: rotateY(0deg) translateZ(-1px);
   opacity: 0;
-  transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+  transition: all 1s cubic-bezier(0.2, 1, 0.3, 1) !important;
   pointer-events: none;
   /* Thick page stack simulation */
   box-shadow:
@@ -1371,7 +1371,7 @@ p {
     0 4px 12px rgba(var(--bg-dark-rgb), 0.6);
 
   filter: drop-shadow(0 0 8px rgba(var(--theme-glow-rgb), 0.2));
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
   opacity: 0.95;
   z-index: 10;
   width: fit-content;
@@ -1392,7 +1392,6 @@ p {
 .cupboard:hover {
   background: rgba(var(--bg-elevated-rgb), 0.4);
   border-color: rgba(var(--theme-primary-rgb), 0.4);
-  transform: translateY(-10px) scale(1.05);
   box-shadow: 0 50px 120px rgba(var(--bg-dark-rgb), 0.9), 0 0 40px rgba(var(--theme-primary-rgb), 0.1);
 }
 
@@ -1402,41 +1401,7 @@ p {
   transform: translateY(-5px);
 }
 
-.cupboard:hover .bookshelf {
-  transform: translateZ(50px);
-}
-
-.cupboard:hover .book {
-  transform: translateZ(40px) translateY(-5px);
-  box-shadow: 15px 5px 25px rgba(var(--bg-dark-rgb), 0.7);
-}
-
-.cupboard:hover .book:nth-child(odd) {
-  transform: translateZ(45px) translateY(-8px) rotateZ(1deg);
-}
-
-.cupboard:hover .book:nth-child(even) {
-  transform: translateZ(35px) translateY(-4px) rotateZ(-1deg);
-}
-
-.cupboard:hover .book-1 {
-  transition-delay: 0.05s;
-  transform: translateZ(45px) translateY(-5px) rotateZ(-0.5deg);
-}
-
-.cupboard:hover .book-2 {
-  transition-delay: 0.1s;
-  transform: translateZ(35px) translateY(-3px) rotateZ(0.3deg) translateX(1px);
-}
-
-.cupboard:hover .book-3 {
-  transition-delay: 0.15s;
-  transform: translateZ(40px) translateY(-7px) rotateZ(-0.2deg) translateX(-1px);
-}
-
-.cupboard:hover .spine-text {
-  opacity: 1;
-}
+/* Removed book and bookshelf hover transforms to keep them strictly static */
 
 .glow-bg {
   position: absolute;
@@ -1447,7 +1412,7 @@ p {
   background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
-  transition: transform 0.8s ease, opacity 0.8s ease;
+  transition: transform 0.8s ease !important, opacity 0.8s ease !important;
   z-index: -1;
   pointer-events: none;
 }
@@ -2212,7 +2177,8 @@ p {
     align-items: center !important;
     justify-content: center !important;
     padding: 0 !important;
-    margin-top: 15px !important;
+    margin-top: 0 !important;
+    transform: translateY(-15px) !important;
   }
 
   .book {

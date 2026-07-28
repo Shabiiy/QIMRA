@@ -782,6 +782,23 @@ function turnOff() {
   }
 }
 
+function handleMobileFeaturesVisibility(targetIdx) {
+    if (!isMobile) return;
+    if (targetIdx === 0) {
+        gsap.set(".features-list", { display: "block" });
+        gsap.to(".features-list", { opacity: 1, visibility: 'visible', duration: 0.5 });
+    } else {
+        gsap.killTweensOf(".features-list");
+        gsap.killTweensOf(".feature-item");
+        gsap.killTweensOf(".features-list *");
+        gsap.set(".features-list", { opacity: 0, visibility: 'hidden', display: 'none', clearProps: 'transform' });
+        gsap.set(".feature-item", { clearProps: 'all' });
+        document.querySelectorAll('.feature-item').forEach(item => {
+            item.classList.remove('active');
+        });
+    }
+}
+
 function goToNextSlide() {
   if (currentSectionIndex >= totalSections - 1) return;
   scrollingLocked = true;
@@ -804,8 +821,7 @@ function goToNextSlide() {
      gsap.to(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15, duration: 0.8, stagger: 0.02, ease: "power2.inOut" });
      
      if (isMobile) {
-         if (nextSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
-         else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+         handleMobileFeaturesVisibility(nextSectionIndex);
      } else {
          gsap.to(".features-list", { opacity: 1, duration: 1 }); // Carry over on desktop
          if (nextSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
@@ -1025,8 +1041,7 @@ function goToPrevSlide() {
               gsap.fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" });
               gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
               if (isMobile) {
-                  if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
-                  else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+                  handleMobileFeaturesVisibility(prevSectionIndex);
               } else {
                   if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
                   else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
@@ -1034,8 +1049,7 @@ function goToPrevSlide() {
               animateSquaresIn();
           } else if (prevContent) {
               if (isMobile) {
-                  if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
-                  else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+                  handleMobileFeaturesVisibility(prevSectionIndex);
               } else {
                   if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
                   else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
@@ -1078,8 +1092,7 @@ function goToPrevSlide() {
                  gsap.fromTo(".blur-word", { filter: "blur(10px)", opacity: 0, y: 15 }, { filter: "blur(0px)", opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: "power2.out" });
                  gsap.fromTo(".side-hero-logo", { x: 400, opacity: 0 }, { x: 0, opacity: 1, duration: 1.8, ease: "power3.out" });
                  if (isMobile) {
-                     if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
-                     else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+                     handleMobileFeaturesVisibility(prevSectionIndex);
                  } else {
                      if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
                      else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
@@ -1087,8 +1100,7 @@ function goToPrevSlide() {
                  animateSquaresIn();
               } else if (prevContent) {
                  if (isMobile) {
-                     if (prevSectionIndex === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
-                     else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+                     handleMobileFeaturesVisibility(prevSectionIndex);
                  } else {
                      if (prevSectionIndex === 4) { if (window.triggerGlobalChaos) window.triggerGlobalChaos(); }
                      else { if (window.stopGlobalChaos) window.stopGlobalChaos(prevSectionIndex); }
@@ -1418,8 +1430,7 @@ function skipToSection(targetIdx) {
     }
 
     if (isMobile) {
-        if (targetIdx === 0) gsap.to(".features-list", { opacity: 1, duration: 0.5 });
-        else gsap.to(".features-list", { opacity: 0, duration: 0.5 });
+        handleMobileFeaturesVisibility(targetIdx);
     } else {
         if (targetIdx === 4) {
           if (window.triggerGlobalChaos) window.triggerGlobalChaos();
@@ -1765,7 +1776,99 @@ function initBlurTextWords() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => { setTimeout(initBlurTextWords, 200); });
+function initPlaygroundHover() {
+  const playgroundData = {
+    default: {
+      title: "Our Playground",
+      subtitle: "Where Brands Come to Grow Bigger",
+      desc: "Every service we offer is designed to solve one business challenge: How do we make the right people notice, trust, and choose your brand?"
+    },
+    0: { // Cupboard 1: Brand Building
+      title: "Brand Building",
+      subtitle: "Build a Brand They Can't Forget",
+      desc: "Create a strong visual identity and connect with your audience through creative social campaigns, compelling content, and engaging video production."
+    },
+    1: { // Cupboard 2: Traffic Generation
+      title: "Traffic Generation",
+      subtitle: "Reach the Right Audience at the Right Time",
+      desc: "Drive high-intent customers to your business with targeted Google and Meta advertising, authentic influencer promotions, and organic SEO visibility."
+    },
+    2: { // Cupboard 3: Growth & Scaling
+      title: "Growth & Scaling",
+      subtitle: "Turn Interest Into Measurable Results",
+      desc: "Optimize your user experience and generate quality leads with modern responsive websites, conversion-focused landing pages, and strategic campaign scaling."
+    }
+  };
+
+  let currentPlaygroundIndex = 'default';
+
+  function getContainer(isMobile) {
+    const prefix = isMobile ? '.mobile-overlay-container' : '.desktop-overlay-container';
+    return {
+      title: document.querySelector(`${prefix} .sec-3 .module-title`),
+      subtitle: document.querySelector(`${prefix} .sec-3 .pg-subtitle`),
+      desc: document.querySelector(`${prefix} .sec-3 .pg-desc`)
+    };
+  }
+
+  function crossfadeElement(el, newText) {
+    if (!el) return;
+    const activeSpan = el.querySelector('.text-active');
+    const nextSpan = el.querySelector('.text-next');
+    if (!activeSpan || !nextSpan) return;
+    
+    if (activeSpan.innerText === newText) return; 
+    
+    nextSpan.innerText = newText;
+    
+    const tl = gsap.timeline();
+    
+    tl.fromTo(activeSpan, 
+      { opacity: 1, y: 0, filter: "blur(0px)" },
+      { opacity: 0, y: -10, filter: "blur(6px)", duration: 0.4, ease: "cubic-bezier(0.22, 1, 0.36, 1)" }, 0
+    );
+    
+    tl.fromTo(nextSpan,
+      { opacity: 0, y: 10, filter: "blur(6px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "cubic-bezier(0.22, 1, 0.36, 1)" }, 0
+    );
+    
+    tl.add(() => {
+      activeSpan.innerText = newText;
+      gsap.set(activeSpan, { opacity: 1, y: 0, filter: "blur(0px)" });
+      gsap.set(nextSpan, { opacity: 0, y: 0, filter: "blur(0px)" });
+    });
+  }
+
+  function handleHover(index, isMobile) {
+    if (currentPlaygroundIndex === index) return;
+    currentPlaygroundIndex = index;
+    const data = playgroundData[index] || playgroundData['default'];
+    const container = getContainer(isMobile);
+    
+    crossfadeElement(container.title, data.title);
+    crossfadeElement(container.subtitle, data.subtitle);
+    crossfadeElement(container.desc, data.desc);
+  }
+
+  const cupboardsDesktop = document.querySelectorAll('.desktop-cupboard-grid .cupboard');
+  const cupboardsMobile = document.querySelectorAll('.mobile-cupboard-grid .cupboard');
+
+  cupboardsDesktop.forEach((cupboard, idx) => {
+    cupboard.addEventListener('mouseenter', () => handleHover(idx, false));
+    cupboard.addEventListener('mouseleave', () => handleHover('default', false));
+  });
+
+  cupboardsMobile.forEach((cupboard, idx) => {
+    cupboard.addEventListener('mouseenter', () => handleHover(idx, true));
+    cupboard.addEventListener('mouseleave', () => handleHover('default', true));
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => { 
+  setTimeout(initBlurTextWords, 200); 
+  initPlaygroundHover();
+});
 
 // =========================================
 // 🌞 THEME TOGGLE LOGIC
