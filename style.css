@@ -2269,7 +2269,7 @@ p {
   }
 
   .monitor-content {
-    scale: 0.60 !important;
+    scale: 0.55 !important;
     width: 65vw !important;
     max-width: 230px !important;
     height: auto !important;
