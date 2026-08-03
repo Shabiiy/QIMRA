@@ -64,6 +64,61 @@
       document.documentElement.dataset.theme = 'emerald';
     }
   </script>
+  <style>
+    .book-carousel-wrapper {
+      position: relative;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .book-carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 10px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .book-carousel::-webkit-scrollbar {
+      display: none;
+    }
+    .book-carousel-item {
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      position: relative;
+    }
+    .book-carousel-item img, .book-carousel-item video {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .carousel-btn:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .carousel-btn.prev-btn { left: 4px; }
+    .carousel-btn.next-btn { right: 4px; }
+  </style>
 </head>
 
 <body>
@@ -302,7 +357,24 @@
                     <div class="book-cover"><span class="spine-text">VIDEO</span></div>
                     <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
                     <div class="book-page" style="font-size: 1rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                      <img src="assets/cupboard/video production.jpeg" alt="Video Production" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <div class="book-carousel-wrapper">
+                        <button class="carousel-btn prev-btn">❮</button>
+                        <button class="carousel-btn next-btn">❯</button>
+                        <div class="book-carousel">
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/prod video .jpeg" alt="Video Production">
+                          </div>
+                          <div class="book-carousel-item">
+                            <video src="assets/cupboard/prod video 3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                          </div>
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/prod video 2.jpeg" alt="Video Production">
+                          </div>
+                          <div class="book-carousel-item">
+                            <video src="assets/cupboard/prod video 4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                          </div>
+                        </div>
+                      </div>
                       <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 1.3rem;">Video Production</strong>
                       Produce engaging videos that bring your brand story to life.
                     </div>
@@ -340,7 +412,21 @@
                     <div class="book-cover"><span class="spine-text">INFLUENCER</span></div>
                     <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
                     <div class="book-page" style="font-size: 1rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                      <img src="assets/cupboard/influencer marketing.jpeg" alt="Influencer Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <div class="book-carousel-wrapper">
+                        <button class="carousel-btn prev-btn">❮</button>
+                        <button class="carousel-btn next-btn">❯</button>
+                        <div class="book-carousel">
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/influencer thumbnail.jpg.jpeg" alt="Influencer Marketing">
+                          </div>
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/influencer grid 3.jpg.jpeg" alt="Influencer Marketing">
+                          </div>
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/influencer Grid 12-3.jpg.jpeg" alt="Influencer Marketing">
+                          </div>
+                        </div>
+                      </div>
                       <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 1.3rem;">Influencer Marketing</strong>
                       Expand your reach with authentic promotions from trusted influencers.
                     </div>
@@ -459,7 +545,24 @@
                     <div class="book-cover"><span class="spine-text">VIDEO</span></div>
                     <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
                     <div class="book-page" style="font-size: 1rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                      <img src="assets/cupboard/video production.jpeg" alt="Video Production" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <div class="book-carousel-wrapper">
+                        <button class="carousel-btn prev-btn">❮</button>
+                        <button class="carousel-btn next-btn">❯</button>
+                        <div class="book-carousel">
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/prod video .jpeg" alt="Video Production">
+                          </div>
+                          <div class="book-carousel-item">
+                            <video src="assets/cupboard/prod video 3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                          </div>
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/prod video 2.jpeg" alt="Video Production">
+                          </div>
+                          <div class="book-carousel-item">
+                            <video src="assets/cupboard/prod video 4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                          </div>
+                        </div>
+                      </div>
                       <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 1.3rem;">Video Production</strong>
                       Produce engaging videos that bring your brand story to life.
                     </div>
@@ -497,7 +600,21 @@
                     <div class="book-cover"><span class="spine-text">INFLUENCER</span></div>
                     <div class="book-pg book-pg--1"></div><div class="book-pg book-pg--2"></div><div class="book-pg book-pg--3"></div><div class="book-pg book-pg--4"></div><div class="book-pg book-pg--5"></div><div class="book-pg book-pg--6"></div>
                     <div class="book-page" style="font-size: 1rem; line-height: 1.3; overflow-y: auto; padding: 1rem 0.6rem;">
-                      <img src="assets/cupboard/influencer marketing.jpeg" alt="Influencer Marketing" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 0.5rem; display: block;">
+                      <div class="book-carousel-wrapper">
+                        <button class="carousel-btn prev-btn">❮</button>
+                        <button class="carousel-btn next-btn">❯</button>
+                        <div class="book-carousel">
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/influencer thumbnail.jpg.jpeg" alt="Influencer Marketing">
+                          </div>
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/influencer grid 3.jpg.jpeg" alt="Influencer Marketing">
+                          </div>
+                          <div class="book-carousel-item">
+                            <img src="assets/cupboard/influencer Grid 12-3.jpg.jpeg" alt="Influencer Marketing">
+                          </div>
+                        </div>
+                      </div>
                       <strong style="color:var(--gold); display:block; margin-bottom: 0.3rem; font-size: 1.3rem;">Influencer Marketing</strong>
                       Expand your reach with authentic promotions from trusted influencers.
                     </div>
@@ -618,7 +735,7 @@
               <p style="margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; font-weight: bold;">Bring us your vision. We’ll turn it into strategy, creativity, and measurable results.</p>
               <div class="contact-info">
                 <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">hello@qimracreations.com</p>
-                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">1-800-LIGHT-UP</p>
+                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">3161 1220</p>
               </div>
             </div>
           </div>
@@ -647,7 +764,7 @@
               <p style="margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; font-weight: bold;">Bring us your vision. We’ll turn it into strategy, creativity, and measurable results.</p>
               <div class="contact-info">
                 <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">hello@qimracreations.com</p>
-                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">1-800-LIGHT-UP</p>
+                <p class="glow-text" style="font-size: 1.5rem; font-weight: 500;">3161 1220</p>
               </div>
             </div>
           </div>
@@ -678,17 +795,8 @@
       <h2 class="theme-glow">OUR MASTERPIECES</h2>
       <div class="gallery-track-container">
         <div class="gallery-track">
-          <div class="project-card floating" style="--d: 0.1s">
-            <img class="project-img" src="projects/proj1.jpg" alt="Project" loading="lazy">
-          </div>
-          <div class="project-card floating" style="--d: 0.2s">
-            <img class="project-img" src="projects/proj2.jpg" alt="Project" loading="lazy">
-          </div>
           <div class="project-card floating" style="--d: 0.3s">
             <img class="project-img" src="projects/proj3.jpg" alt="Project" loading="lazy">
-          </div>
-          <div class="project-card floating" style="--d: 0.4s">
-            <img class="project-img" src="projects/proj4.jpg" alt="Project" loading="lazy">
           </div>
           <div class="project-card floating" style="--d: 0.5s">
             <img class="project-img" src="projects/proj5.jpg" alt="Project" loading="lazy">
@@ -701,19 +809,46 @@
           </div>
           <div class="project-card floating" style="--d: 0.8s">
             <img class="project-img" src="projects/pic 5.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.1s">
+            <img class="project-img" src="projects/Grid 1.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.2s">
+            <img class="project-img" src="projects/grid 2.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.3s">
+            <img class="project-img" src="projects/grid 3.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.4s">
+            <img class="project-img" src="projects/Grid 10-1.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.5s">
+            <img class="project-img" src="projects/Grid 10-2.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.6s">
+            <img class="project-img" src="projects/Grid 10-3.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.7s">
+            <img class="project-img" src="projects/Grid 12-1.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.8s">
+            <img class="project-img" src="projects/Grid 12-2.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.1s">
+            <img class="project-img" src="projects/Grid 12-3.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.2s">
+            <img class="project-img" src="projects/Grid.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.3s">
+            <img class="project-img" src="projects/Grid2.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.4s">
+            <img class="project-img" src="projects/Grid3.jpeg" alt="Project" loading="lazy">
           </div>
           <!-- Duplicate Group for looping -->
-          <div class="project-card floating" style="--d: 0.1s">
-            <img class="project-img" src="projects/proj1.jpg" alt="Project" loading="lazy">
-          </div>
-          <div class="project-card floating" style="--d: 0.2s">
-            <img class="project-img" src="projects/proj2.jpg" alt="Project" loading="lazy">
-          </div>
           <div class="project-card floating" style="--d: 0.3s">
             <img class="project-img" src="projects/proj3.jpg" alt="Project" loading="lazy">
-          </div>
-          <div class="project-card floating" style="--d: 0.4s">
-            <img class="project-img" src="projects/proj4.jpg" alt="Project" loading="lazy">
           </div>
           <div class="project-card floating" style="--d: 0.5s">
             <img class="project-img" src="projects/proj5.jpg" alt="Project" loading="lazy">
@@ -726,6 +861,42 @@
           </div>
           <div class="project-card floating" style="--d: 0.8s">
             <img class="project-img" src="projects/pic 5.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.1s">
+            <img class="project-img" src="projects/Grid 1.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.2s">
+            <img class="project-img" src="projects/grid 2.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.3s">
+            <img class="project-img" src="projects/grid 3.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.4s">
+            <img class="project-img" src="projects/Grid 10-1.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.5s">
+            <img class="project-img" src="projects/Grid 10-2.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.6s">
+            <img class="project-img" src="projects/Grid 10-3.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.7s">
+            <img class="project-img" src="projects/Grid 12-1.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.8s">
+            <img class="project-img" src="projects/Grid 12-2.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.1s">
+            <img class="project-img" src="projects/Grid 12-3.jpg.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.2s">
+            <img class="project-img" src="projects/Grid.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.3s">
+            <img class="project-img" src="projects/Grid2.jpeg" alt="Project" loading="lazy">
+          </div>
+          <div class="project-card floating" style="--d: 0.4s">
+            <img class="project-img" src="projects/Grid3.jpeg" alt="Project" loading="lazy">
           </div>
         </div>
       </div>
@@ -737,6 +908,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".book-carousel-wrapper").forEach(wrapper => {
+        // Prevent clicks from bubbling up to close the book
+        wrapper.addEventListener("click", e => e.stopPropagation());
+        wrapper.addEventListener("touchstart", e => e.stopPropagation(), {passive: true});
+
+        const track = wrapper.querySelector(".book-carousel");
+        const prev = wrapper.querySelector(".prev-btn");
+        const next = wrapper.querySelector(".next-btn");
+
+        if(prev && next && track) {
+          prev.addEventListener("click", (e) => {
+            e.stopPropagation();
+            track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+          });
+          next.addEventListener("click", (e) => {
+            e.stopPropagation();
+            track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+          });
+        }
+
+      });
+    });
+  </script>
 </body>
 
 </html>
