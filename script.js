@@ -1903,3 +1903,24 @@ if (themeToggleBtn) {
     if (typeof cursorFollower !== 'undefined' && cursorFollower) cursorFollower.classList.remove('hover-active');
   });
 }
+function initCarousels() {
+  const carousels = document.querySelectorAll('.book-carousel-wrapper');
+  carousels.forEach(wrapper => {
+    const track = wrapper.querySelector('.book-carousel');
+    const prevBtn = wrapper.querySelector('.prev-btn');
+    const nextBtn = wrapper.querySelector('.next-btn');
+    
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      track.scrollBy({ left: -track.offsetWidth, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      track.scrollBy({ left: track.offsetWidth, behavior: 'smooth' });
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', initCarousels);
