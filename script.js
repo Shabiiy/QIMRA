@@ -1564,9 +1564,7 @@ initModalLogic();
 
 function animateSquaresIn() {
   gsap.to(".interactive-square", { 
-    opacity: 1, 
-    scale: 1,
-    rotate: 45, 
+    opacity: 1, scale: 1, xPercent: -50, yPercent: -50, rotate: 45, 
     duration: 0.8, // Snappier
     stagger: 0.1,  // Faster sequence
     ease: "power2.out"
@@ -1575,10 +1573,7 @@ function animateSquaresIn() {
 
 function animateSquaresOut() {
   gsap.to(".interactive-square", { 
-    opacity: 0, 
-    scale: 0.5,
-    x: 0, 
-    y: 0, 
+    opacity: 0, scale: 0.5, xPercent: -50, yPercent: -50, x: 0, y: 0, 
     duration: 0.5,
     ease: "power2.in"
   });
@@ -1924,3 +1919,131 @@ function initCarousels() {
   });
 }
 document.addEventListener('DOMContentLoaded', initCarousels);
+
+// =========================================
+// 📐 LOGO ART FRAME SYNC LOGIC
+// =========================================
+function syncLogoArtFrames() {
+  const wrappers = document.querySelectorAll('.side-logo-wrapper');
+  wrappers.forEach(wrapper => {
+    const img = wrapper.querySelector('.side-hero-logo');
+    const frame = wrapper.querySelector('.logo-art-frame');
+    if (!img || !frame) return;
+    
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+    if (!nw || !nh) return; // Image not loaded yet
+
+    // Use layout dimensions to ignore CSS transforms (like GSAP x animations)
+    const boxW = img.offsetWidth;
+    const boxH = img.offsetHeight;
+    
+    if (boxW === 0 || boxH === 0) return; // Display none
+    
+    const imgRatio = nw / nh;
+    const boxRatio = boxW / boxH;
+    
+    let renderedWidth, renderedHeight;
+    if (boxRatio > imgRatio) {
+      // letterboxed on left/right
+      renderedHeight = boxH;
+      renderedWidth = renderedHeight * imgRatio;
+    } else {
+      // letterboxed on top/bottom
+      renderedWidth = boxW;
+      renderedHeight = renderedWidth / imgRatio;
+    }
+    
+    // The image has right: 0; top: 50%; transform: translateY(-50%)
+    // The rendered image is centered within boxW x boxH
+    const wrapperW = wrapper.offsetWidth;
+    const wrapperH = wrapper.offsetHeight;
+    
+    const boxLeft = wrapperW - boxW;
+    const boxTop = (wrapperH - boxH) / 2;
+    
+    const relativeLeft = boxLeft + (boxW - renderedWidth) / 2;
+    const relativeTop = boxTop + (boxH - renderedHeight) / 2;
+    
+    frame.style.width = `${renderedWidth}px`;
+    frame.style.height = `${renderedHeight}px`;
+    frame.style.left = `${relativeLeft}px`;
+    frame.style.top = `${relativeTop}px`;
+  });
+}
+
+window.addEventListener('load', syncLogoArtFrames);
+window.addEventListener('resize', syncLogoArtFrames);
+window.addEventListener('orientationchange', syncLogoArtFrames);
+
+const ro = new ResizeObserver(() => syncLogoArtFrames());
+document.querySelectorAll('.side-logo-wrapper').forEach(w => ro.observe(w));
+
+document.querySelectorAll('.side-hero-logo').forEach(img => {
+  if (img.complete) syncLogoArtFrames();
+  img.addEventListener('load', syncLogoArtFrames);
+});
+
+// =========================================
+// 🛠️ TEMPORARY DESIGN MODE (DRAGGABLE SQUARES)
+// =========================================
+if (window.location.search.includes('design=1')) {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const squares = document.querySelectorAll('.interactive-square');
+      console.log('🛠️ DESIGN MODE ACTIVE: Drag the squares to reposition them. Check console on drop for CSS values.');
+      
+      squares.forEach(sq => {
+        // Kill existing animations so they don't fight us
+        gsap.killTweensOf(sq);
+        
+        let isDragging = false;
+        
+        sq.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          sq.style.cursor = 'grabbing';
+          sq.style.transition = 'none'; // disable CSS transitions during drag
+        });
+        
+        window.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          
+          const frame = sq.closest('.logo-art-frame');
+          if (!frame) return;
+          const frameRect = frame.getBoundingClientRect();
+          
+          // Calculate dropX, dropY relative to frame bounds
+          let relativeX = e.clientX - frameRect.left;
+          let relativeY = e.clientY - frameRect.top;
+          
+          // Apply raw pixels for immediate smooth visual feedback
+          sq.style.left = `${relativeX}px`;
+          sq.style.top = `${relativeY}px`;
+        });
+        
+        window.addEventListener('mouseup', () => {
+          if (!isDragging) return;
+          isDragging = false;
+          sq.style.cursor = 'pointer';
+          
+          const frame = sq.closest('.logo-art-frame');
+          if (!frame) return;
+          
+          const frameRect = frame.getBoundingClientRect();
+          
+          const currentLeftPx = parseFloat(sq.style.left) || 0;
+          const currentTopPx = parseFloat(sq.style.top) || 0;
+          
+          const percentX = (currentLeftPx / frameRect.width) * 100;
+          const percentY = (currentTopPx / frameRect.height) * 100;
+          
+          // Find class name to identify which diamond this is
+          const classes = Array.from(sq.classList).filter(c => c.startsWith('sq-'));
+          const idName = classes.length > 0 ? classes[0] : 'unknown-square';
+          
+          console.log(`✅ ${idName}: top: ${percentY.toFixed(2)}%; left: ${percentX.toFixed(2)}%;`);
+        });
+      });
+    }, 2500); // Wait for entrance animations to finish
+  });
+}
