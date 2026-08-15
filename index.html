@@ -142,9 +142,9 @@
   <!-- Loader / Interactive Hold Switch -->
   <div id="loader">
     <video id="loader-video" src="assets/BULB ON&OFF.mp4" poster="assets/1.BULB off.jpeg" playsinline
-      preload="auto" class="loader-bulb-fullscreen desktop-only-vid"></video>
+      preload="none" class="loader-bulb-fullscreen desktop-only-vid"></video>
     <video id="loader-video-rev" src="assets/BULB ON&OFF Reverse.mp4" poster="assets/BULBON still.png" playsinline
-      preload="auto" class="loader-bulb-fullscreen desktop-only-vid" style="opacity: 0;"></video>
+      preload="none" class="loader-bulb-fullscreen desktop-only-vid" style="opacity: 0;"></video>
     
     <!-- Mobile Loader Canvas -->
     <canvas id="loader-canvas" class="loader-bulb-fullscreen mobile-only-vid"></canvas>
@@ -161,10 +161,10 @@
   <!-- BG Videos instead of sequence -->
   <div id="video-container">
     <canvas id="mobile-canvas"></canvas>
-    <video id="vid-1" src="assets/SLIDE 1.mp4" poster="assets/BULBON still.png" playsinline preload="auto"
+    <video id="vid-1" src="assets/SLIDE 1.mp4" poster="assets/BULBON still.png" playsinline preload="none"
       class="bg-vid desktop-only-vid"></video>
     <video id="vid-1-rev" src="assets/SLIDE 1 Reverse.mp4" poster="assets/Behind the magic still.jpeg" playsinline
-      preload="auto" class="bg-vid desktop-only-vid"></video>
+      preload="none" class="bg-vid desktop-only-vid"></video>
     <video id="vid-2" src="assets/SLIDE2.mp4" poster="assets/Behind the magic still.jpeg" playsinline
       preload="none" class="bg-vid desktop-only-vid"></video>
     <video id="vid-2-rev" src="assets/SLIDE2 Reverse.mp4" poster="assets/playground still.png" playsinline
@@ -369,28 +369,28 @@
                             <img src="assets/cupboard/prod video .jpeg" alt="Video Production">
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/prod video 3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/prod video 3.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
                             <img src="assets/cupboard/prod video 2.jpeg" alt="Video Production">
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/prod video 4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/prod video 4.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_1.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_1.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_2.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_2.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_3.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_4.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_5.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_5.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                         </div>
                       </div>
@@ -445,19 +445,19 @@
                             <img src="assets/cupboard/influencer Grid 12-3.jpg.jpeg" alt="Influencer Marketing">
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_1.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_1.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_2.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_2.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_3.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_4.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_5.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_5.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                         </div>
                       </div>
@@ -587,28 +587,28 @@
                             <img src="assets/cupboard/prod video .jpeg" alt="Video Production">
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/prod video 3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/prod video 3.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
                             <img src="assets/cupboard/prod video 2.jpeg" alt="Video Production">
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/prod video 4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/prod video 4.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_1.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_1.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_2.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_2.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_3.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_4.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_5.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_5.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                         </div>
                       </div>
@@ -663,19 +663,19 @@
                             <img src="assets/cupboard/influencer Grid 12-3.jpg.jpeg" alt="Influencer Marketing">
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_1.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_1.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_2.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_2.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_3.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_3.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_4.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_4.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                           <div class="book-carousel-item">
-                            <video src="assets/cupboard/influ_video_5.mp4" autoplay loop muted playsinline preload="auto"></video>
+                            <video data-src="assets/cupboard/influ_video_5.mp4" loop muted playsinline preload="none" class="lazy-video"></video>
                           </div>
                         </div>
                       </div>

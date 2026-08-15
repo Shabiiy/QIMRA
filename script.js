@@ -1,3 +1,17 @@
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!isMobile) {
+    document.querySelectorAll('.desktop-only-vid').forEach(v => {
+      v.preload = 'auto';
+    });
+  } else {
+    // Aggressive mobile cleanup to prevent background fetching
+    document.querySelectorAll('.desktop-only-vid').forEach(v => {
+      v.removeAttribute('src');
+      v.load();
+    });
+  }
+});
 gsap.registerPlugin(ScrollTrigger);
 
 // ─── Audio Manager ───────────────────────────────────────────────
@@ -1619,6 +1633,7 @@ function initBookshelfLogic() {
         b.classList.remove('open');
         const c = b.closest('.cupboard');
         if (c) c.style.zIndex = "10";
+        b.querySelectorAll('video.lazy-video').forEach(v => v.pause());
       });
       
       if (!isOpen && cupboard) {
@@ -1645,6 +1660,18 @@ function initBookshelfLogic() {
         }
         
         book.classList.add('open');
+        
+        // Lazy load any videos in this book
+        const lazyVideos = book.querySelectorAll('video.lazy-video');
+        lazyVideos.forEach(vid => {
+          if (vid.hasAttribute('data-src')) {
+            vid.src = vid.getAttribute('data-src');
+            vid.removeAttribute('data-src');
+            vid.load();
+          }
+          vid.play().catch(e => console.log('Autoplay prevented', e));
+        });
+
         
         // Apply the offset
         book.style.setProperty('--center-x', `${moveX}px`);
